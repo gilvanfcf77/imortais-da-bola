@@ -229,9 +229,14 @@ const GOAL_STYLE_EVENT_TYPE = {
   goalkeeperBlunder: EVENT_TYPES.GOAL_GOALKEEPER_BLUNDER,
 };
 
-function pickGoalStyle(rng) {
+function pickGoalStyle(rng, finisher) {
+  const dribblerIntensity = getTraitIntensity(finisher, 'dribbler');
   const styles = Object.keys(GOAL_STYLE.WEIGHTS);
-  const weights = styles.map((style) => GOAL_STYLE.WEIGHTS[style]);
+  const weights = styles.map((style) => {
+    const base = GOAL_STYLE.WEIGHTS[style];
+    if (style !== 'individual') return base;
+    return base * (1 + dribblerIntensity * TRAIT_WEIGHTS.DRIBBLER_INDIVIDUAL_GOAL_WEIGHT);
+  });
   return rng.pickWeighted(styles, weights);
 }
 
@@ -410,7 +415,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     const isFirstGoalForTeam = score[attackingTeam.side] === 1;
     const tookTheLead = !wasWinningBefore && scoreSituation(attackingTeam.side, score) === 'winning';
 
-    const style = pickGoalStyle(rng);
+    const style = pickGoalStyle(rng, finisher);
     const context = { player: finisher.name, team: attackingTeam.config.name };
     let goalEventType = GOAL_STYLE_EVENT_TYPE[style];
     let assistPlayerId = null;

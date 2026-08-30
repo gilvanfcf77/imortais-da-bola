@@ -107,6 +107,7 @@ export const TRAIT_WEIGHTS = {
   FREE_KICK_GOAL_CHANCE: 0.04, // base chance a foul in range becomes a scored free kick
   FREE_KICK_SPECIALIST_WEIGHT: 0.1, // per point of intensity
   PLAYMAKER_ASSIST_WEIGHT: 0.5, // extra weight per point of intensity, when picking who gets credited with the assist
+  DRIBBLER_INDIVIDUAL_GOAL_WEIGHT: 0.5, // multiplies GOAL_STYLE.WEIGHTS.individual, per point of the scorer's dribbler intensity
 };
 
 // A `wall` trait's last-ditch save reads very differently depending on who
@@ -130,7 +131,13 @@ export const WALL_SAVE = {
 export const GOAL_STYLE = {
   WEIGHTS: {
     plain: 25,
-    individual: 20,
+    // Base weight for a player with no dribbler intensity — a real solo
+    // goal should be a rare highlight, not one in five. Boosted per point of
+    // dribbler intensity for the actual finisher, see TRAIT_WEIGHTS.
+    // DRIBBLER_INDIVIDUAL_GOAL_WEIGHT and pickGoalStyle() in match.js — a
+    // max-intensity dribbler lands back near the old 20/91 (~22%) baseline.
+    // Not yet calibrated.
+    individual: 8,
     assisted: 20,
     corner: 12,
     // First pass (12) landed at 12.0% of open-play goals (measured via
