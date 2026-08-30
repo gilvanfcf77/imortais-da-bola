@@ -32,7 +32,7 @@ export async function drawEraSquad(clubSlug) {
 // across positions, same as scripts/sample-match.js does). Builds a
 // synthetic formation with just the missing slot counts and reuses
 // draftEleven as-is — no engine change needed.
-export async function completeSquadRandomly(clubSlug, currentSquad) {
+export async function completeSquadRandomly(clubSlug, currentSquad, formationName = '4-4-2') {
   const pickedIds = new Set(currentSquad.map((p) => p.id));
   const pool = getClubPool(clubSlug).filter((p) => !pickedIds.has(p.id));
 
@@ -40,7 +40,7 @@ export async function completeSquadRandomly(clubSlug, currentSquad) {
     acc[p.position] = (acc[p.position] ?? 0) + 1;
     return acc;
   }, {});
-  const remainingSlots = FORMATIONS['4-4-2'].slots
+  const remainingSlots = FORMATIONS[formationName].slots
     .map((slot) => ({ position: slot.position, count: slot.count - (filledByPosition[slot.position] ?? 0) }))
     .filter((slot) => slot.count > 0);
 
@@ -116,9 +116,9 @@ function drawSingleEraOpponent(clubEntry, rng) {
 // Plays a single already-determined match — the semifinal or the final,
 // whichever the caller is currently on. Doesn't pick an opponent itself
 // (see startCup for that) so it can be reused for either stage.
-export async function playMatch({ homeName, squad, awayName, awayEra, awayLineup }) {
+export async function playMatch({ homeName, squad, awayName, awayEra, awayLineup, posture = 'balanced', gamesmanship }) {
   const rng = createRng(Date.now());
-  const home = { name: homeName, lineup: squad, posture: 'balanced', gamesmanship: defaultGamesmanship(squad) };
+  const home = { name: homeName, lineup: squad, posture, gamesmanship: gamesmanship ?? defaultGamesmanship(squad) };
   const away = {
     name: awayName,
     lineup: awayLineup,

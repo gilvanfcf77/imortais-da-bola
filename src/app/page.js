@@ -24,6 +24,12 @@ export default function Page() {
   const [screen, setScreen] = useState('home');
   const [club, setClub] = useState(null);
   const [squad, setSquad] = useState(null);
+  // Chosen on SquadScreen once the squad is complete — carried through
+  // every match the player plays this cup run (see CupScreen's playMatch
+  // call). NPC opponents always keep their own defaults; these only ever
+  // describe the player's own team.
+  const [posture, setPosture] = useState('balanced');
+  const [gamesmanship, setGamesmanship] = useState(0);
   const [roundIndex, setRoundIndex] = useState(0);
   const [bracket, setBracket] = useState(null);
   const [matchData, setMatchData] = useState(null);
@@ -36,6 +42,8 @@ export default function Page() {
   function restart() {
     setClub(null);
     setSquad(null);
+    setPosture('balanced');
+    setGamesmanship(0);
     setRoundIndex(0);
     setBracket(null);
     setMatchData(null);
@@ -59,8 +67,10 @@ export default function Page() {
     return (
       <SquadScreen
         club={club}
-        onComplete={(finishedSquad) => {
+        onComplete={(finishedSquad, finishedPosture, finishedGamesmanship) => {
           setSquad(finishedSquad);
+          setPosture(finishedPosture);
+          setGamesmanship(finishedGamesmanship);
           setScreen('cup');
         }}
       />
@@ -71,6 +81,8 @@ export default function Page() {
       <CupScreen
         club={club}
         squad={squad}
+        posture={posture}
+        gamesmanship={gamesmanship}
         roundIndex={roundIndex}
         bracket={bracket}
         onBracketReady={setBracket}

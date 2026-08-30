@@ -8,7 +8,7 @@ import BracketTable from './BracketTable.jsx';
 // in page.js state, not here — this screen gets re-mounted once per round,
 // and re-drawing on a later visit would throw away the rest of the bracket
 // startCup already determined.
-export default function CupScreen({ club, squad, roundIndex, bracket, onBracketReady, onMatchReady }) {
+export default function CupScreen({ club, squad, posture, gamesmanship, roundIndex, bracket, onBracketReady, onMatchReady }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -25,6 +25,8 @@ export default function CupScreen({ club, squad, roundIndex, bracket, onBracketR
     const matchData = await playMatch({
       homeName: club.name,
       squad,
+      posture,
+      gamesmanship,
       awayName: opponent.name,
       awayEra: opponent.era,
       awayLineup: opponent.lineup,

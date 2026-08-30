@@ -1,8 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { FORMATIONS } from '../../engine/index.js';
+import { FORMATIONS, defaultGamesmanship } from '../../engine/index.js';
 import { drawEraSquad, completeSquadRandomly } from '../actions.js';
+
+const POSTURE_LABELS = { attacking: 'ofensiva', balanced: 'equilibrada', defensive: 'defensiva' };
+const FORMATION_NAMES = Object.keys(FORMATIONS);
 
 const POSITION_LABELS = { GK: 'GOL', CB: 'ZAG', FB: 'LAT', MF: 'MEI', FW: 'ATA' };
 
@@ -71,11 +74,28 @@ function LineupPanel({ clubName, formation, squad }) {
 }
 
 export default function SquadScreen({ club, onComplete }) {
-  const formation = FORMATIONS['4-4-2'];
+  const [formationName, setFormationName] = useState('4-4-2');
+  const formation = FORMATIONS[formationName];
   const totalSlots = useMemo(() => formation.slots.reduce((sum, s) => sum + s.count, 0), [formation]);
   const [squad, setSquad] = useState([]);
   const [drawnEra, setDrawnEra] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [posture, setPosture] = useState('balanced');
+  // 'auto' resolves to defaultGamesmanship(squad) — same default the game
+  // always used before this selector existed — right when the squad is
+  // handed off, so a fixed number (not the sentinel) is what actually
+  // reaches playMatch.
+  const [gamesmanshipChoice, setGamesmanshipChoice] = useState('auto');
+
+  // Changing formation mid-pick would leave already-picked players sitting
+  // in slots that may no longer exist (e.g. dropping from 4-3-3's 3 FWs to
+  // 4-4-2's 2) — simplest correct behavior is to start the squad over,
+  // rather than trying to reconcile which picks still fit.
+  function handleFormationChange(name) {
+    setFormationName(name);
+    setSquad([]);
+    setDrawnEra(null);
+  }
 
   const pickedIds = new Set(squad.map((p) => p.id));
   const totalByPosition = useMemo(() => {
@@ -102,7 +122,7 @@ export default function SquadScreen({ club, onComplete }) {
 
   async function handleCompleteRandomly() {
     setLoading(true);
-    const completedSquad = await completeSquadRandomly(club.slug, squad);
+    const completedSquad = await completeSquadRandomly(club.slug, squad, formationName);
     setSquad(completedSquad);
     setDrawnEra(null);
     setLoading(false);
@@ -114,11 +134,33 @@ export default function SquadScreen({ club, onComplete }) {
     setDrawnEra(null);
   }
 
+  function handleStartCup() {
+    const gamesmanship = gamesmanshipChoice === 'auto' ? defaultGamesmanship(squad) : Number(gamesmanshipChoice);
+    onComplete(squad, posture, gamesmanship);
+  }
+
   return (
     <div className="flex min-h-screen">
       <LineupPanel clubName={club.name} formation={formation} squad={squad} />
 
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8">
+        <label className="flex w-fit items-center gap-2 text-sm text-slate-400">
+          Formação
+          <select
+            value={formationName}
+            onChange={(e) => handleFormationChange(e.target.value)}
+            disabled={squad.length > 0}
+            className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-slate-100 disabled:opacity-50"
+          >
+            {FORMATION_NAMES.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+          {squad.length > 0 && <span className="text-xs text-slate-500">(trava depois do 1º jogador escolhido)</span>}
+        </label>
+
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleDraw}
@@ -137,8 +179,41 @@ export default function SquadScreen({ club, onComplete }) {
         </div>
 
         {complete && (
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-400">
+              Postura
+              <select
+                value={posture}
+                onChange={(e) => setPosture(e.target.value)}
+                className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-slate-100"
+              >
+                {Object.entries(POSTURE_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-400">
+              Catimba
+              <select
+                value={gamesmanshipChoice}
+                onChange={(e) => setGamesmanshipChoice(e.target.value)}
+                className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-slate-100"
+              >
+                <option value="auto">automática</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+          </div>
+        )}
+
+        {complete && (
           <button
-            onClick={() => onComplete(squad)}
+            onClick={handleStartCup}
             className="w-fit rounded-lg bg-emerald-500 px-6 py-3 text-lg font-semibold text-slate-950 transition hover:bg-emerald-400"
           >
             Iniciar Copa
