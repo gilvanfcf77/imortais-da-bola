@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Scoreboard pulse, retriggered by remounting the element (see MatchScreen.jsx pulseKeys). */
+@keyframes score-pulse {
+  0% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-score-pulse {
+  display: inline-block;
+  animation: score-pulse 0.6s ease-out;
+}

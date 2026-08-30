@@ -1,0 +1,553 @@
+{
+  "slug": "uniao-da-porrada",
+  "name": "União da Porrada",
+  "era": 2026,
+  "pool": [
+    {
+      "id": "up-gk-1",
+      "name": "Cão Danado",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-gk-2",
+      "name": "Facada Ferreira",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-gk-3",
+      "name": "Punho de Ferro",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-cb-1",
+      "name": "Dedé Guilhotina",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-cb-2",
+      "name": "Trator Sem Freio",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-cb-3",
+      "name": "Machado Bruno",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-cb-4",
+      "name": "Foice Nogueira",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-cb-5",
+      "name": "Britador Silva",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fb-1",
+      "name": "Chicote Aranha",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fb-2",
+      "name": "Navalha Costa",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fb-3",
+      "name": "Presa Vieira",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fb-4",
+      "name": "Garra Ramalho",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-1",
+      "name": "Punhal Moraes",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-2",
+      "name": "Marreta Nunes",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-3",
+      "name": "Coronhada Reis",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-4",
+      "name": "Machadinho Duarte",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-5",
+      "name": "Chibata Farias",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-6",
+      "name": "Estilhaço Prado",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-7",
+      "name": "Capitão Fúria",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-mf-8",
+      "name": "Cutelo Marques",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-1",
+      "name": "Carrasco Lopes",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-2",
+      "name": "Guilhotina Jr.",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-3",
+      "name": "Fera Bragança",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-4",
+      "name": "Sangue Frio Teles",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-5",
+      "name": "Punição Alves",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "up-fw-6",
+      "name": "Trovão Selvagem",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    }
+  ]
+}

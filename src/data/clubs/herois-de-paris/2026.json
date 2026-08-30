@@ -1,0 +1,345 @@
+{
+  "slug": "herois-de-paris",
+  "name": "Heróis de Paris",
+  "era": 2026,
+  "pool": [
+    {
+      "id": "hp-gk-1",
+      "name": "Max Kanté",
+      "position": "GK",
+      "overall": 74,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-gk-2",
+      "name": "Nathaniel Kurtzberg",
+      "position": "GK",
+      "overall": 68,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-gk-3",
+      "name": "Wayhem",
+      "position": "GK",
+      "overall": 58,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-cb-1",
+      "name": "Ivan Bruel",
+      "position": "CB",
+      "overall": 76,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-cb-2",
+      "name": "Carapace",
+      "position": "CB",
+      "overall": 78,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-cb-3",
+      "name": "Théo Barbot",
+      "position": "CB",
+      "overall": 68,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-cb-4",
+      "name": "Mylène Haprèle",
+      "position": "CB",
+      "overall": 65,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-cb-5",
+      "name": "Juleka Couffaine",
+      "position": "CB",
+      "overall": 66,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fb-1",
+      "name": "Bunnyx",
+      "position": "FB",
+      "overall": 79,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fb-2",
+      "name": "Queen Bee",
+      "position": "FB",
+      "overall": 77,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fb-3",
+      "name": "Chris Lahiffe",
+      "position": "FB",
+      "overall": 60,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fb-4",
+      "name": "Sabrina Raincomprix",
+      "position": "FB",
+      "overall": 63,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-1",
+      "name": "Rena Rouge",
+      "position": "MF",
+      "overall": 80,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-2",
+      "name": "Ryuko",
+      "position": "MF",
+      "overall": 82,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-3",
+      "name": "Viperion",
+      "position": "MF",
+      "overall": 75,
+      "traits": [
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-4",
+      "name": "Lila Rossi",
+      "position": "MF",
+      "overall": 74,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-5",
+      "name": "Félix Graham de Vanily",
+      "position": "MF",
+      "overall": 76,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-6",
+      "name": "Zoé Lee",
+      "position": "MF",
+      "overall": 68,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-7",
+      "name": "Ondine",
+      "position": "MF",
+      "overall": 66,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-mf-8",
+      "name": "Aurore Beauréal",
+      "position": "MF",
+      "overall": 64,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fw-1",
+      "name": "Ladybug",
+      "position": "FW",
+      "overall": 90,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 3
+        },
+        {
+          "slug": "playmaker",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": {
+        "chancePerMinute": 0.01,
+        "conversionMultiplier": 1.6,
+        "templates": [
+          "{player} usa o Talismã e um objeto misterioso cai em campo — algo vai ajudar {team} nessa jogada!",
+          "Um brilho vermelho com pintas pretas aparece do nada perto de {player}. É a sorte do Talismã entrando em campo para {team}!",
+          "{player} invoca o Talismã e já sabe exatamente o que fazer com o que apareceu."
+        ]
+      }
+    },
+    {
+      "id": "hp-fw-2",
+      "name": "Cat Noir",
+      "position": "FW",
+      "overall": 90,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": {
+        "chancePerMinute": 0.004,
+        "conversionMultiplier": 2.8,
+        "templates": [
+          "{player} grita \"Cataclismo!\" e nada nessa jogada resiste — {team} parte pro ataque!",
+          "Uma energia negra toma conta da mão de {player}. O que ele tocar agora, desmorona — inclusive a defesa adversária."
+        ]
+      }
+    },
+    {
+      "id": "hp-fw-3",
+      "name": "Kim Le Chien",
+      "position": "FW",
+      "overall": 78,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fw-4",
+      "name": "Rose Lavillant",
+      "position": "FW",
+      "overall": 65,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fw-5",
+      "name": "Marc Anciel",
+      "position": "FW",
+      "overall": 62,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "hp-fw-6",
+      "name": "Manon Chamack",
+      "position": "FW",
+      "overall": 55,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    }
+  ]
+}

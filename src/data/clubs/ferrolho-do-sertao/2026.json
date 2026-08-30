@@ -1,0 +1,525 @@
+{
+  "slug": "ferrolho-do-sertao",
+  "name": "Ferrolho do Sertão",
+  "era": 2026,
+  "pool": [
+    {
+      "id": "fs-gk-1",
+      "name": "Zé Ferrolho",
+      "position": "GK",
+      "overall": 68,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-gk-2",
+      "name": "Bento Tranca",
+      "position": "GK",
+      "overall": 60,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-gk-3",
+      "name": "Chico Grade",
+      "position": "GK",
+      "overall": 55,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-cb-1",
+      "name": "Duda Cascavel",
+      "position": "CB",
+      "overall": 66,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-cb-2",
+      "name": "Nem Pedra",
+      "position": "CB",
+      "overall": 63,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-cb-3",
+      "name": "Toco Bezerra",
+      "position": "CB",
+      "overall": 60,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-cb-4",
+      "name": "Grosso Aderaldo",
+      "position": "CB",
+      "overall": 58,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-cb-5",
+      "name": "Cabra Seco",
+      "position": "CB",
+      "overall": 54,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fb-1",
+      "name": "Zezinho Espinho",
+      "position": "FB",
+      "overall": 64,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fb-2",
+      "name": "Bode Solto",
+      "position": "FB",
+      "overall": 61,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fb-3",
+      "name": "Rasteira Chagas",
+      "position": "FB",
+      "overall": 57,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fb-4",
+      "name": "Cangaço Vieira",
+      "position": "FB",
+      "overall": 53,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-1",
+      "name": "Capiau Duro",
+      "position": "MF",
+      "overall": 70,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-2",
+      "name": "Sertanejo Bruto",
+      "position": "MF",
+      "overall": 67,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-3",
+      "name": "Coice Amaral",
+      "position": "MF",
+      "overall": 65,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-4",
+      "name": "Espora Ferreira",
+      "position": "MF",
+      "overall": 63,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "wall",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-5",
+      "name": "Jagunço Vale",
+      "position": "MF",
+      "overall": 61,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-6",
+      "name": "Cabresto Melo",
+      "position": "MF",
+      "overall": 59,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-7",
+      "name": "Facão Torto",
+      "position": "MF",
+      "overall": 57,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-mf-8",
+      "name": "Xingó Bravo",
+      "position": "MF",
+      "overall": 54,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-1",
+      "name": "Gavião Cego",
+      "position": "FW",
+      "overall": 72,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-2",
+      "name": "Urubu Manso",
+      "position": "FW",
+      "overall": 65,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        },
+        {
+          "slug": "sharpshooter",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-3",
+      "name": "Bacurau Fera",
+      "position": "FW",
+      "overall": 60,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-4",
+      "name": "Tição Aceso",
+      "position": "FW",
+      "overall": 57,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-5",
+      "name": "Beiço Rachado",
+      "position": "FW",
+      "overall": 54,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "fs-fw-6",
+      "name": "Sol a Pino",
+      "position": "FW",
+      "overall": 50,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        },
+        {
+          "slug": "cynicalFouler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    }
+  ]
+}

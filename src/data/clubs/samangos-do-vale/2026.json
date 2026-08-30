@@ -1,0 +1,284 @@
+{
+  "slug": "samangos-do-vale",
+  "name": "Samangos do Vale",
+  "era": 2026,
+  "pool": [
+    {
+      "id": "ev-gk-1",
+      "name": "Adao Ventura",
+      "position": "GK",
+      "overall": 82,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-gk-2",
+      "name": "Rui Barbante",
+      "position": "GK",
+      "overall": 71,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-gk-3",
+      "name": "Nino Salvador",
+      "position": "GK",
+      "overall": 66,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-cb-1",
+      "name": "Beto Muralha",
+      "position": "CB",
+      "overall": 79,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-cb-2",
+      "name": "Cacau Ferro",
+      "position": "CB",
+      "overall": 74,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-cb-3",
+      "name": "Dedé Trator",
+      "position": "CB",
+      "overall": 70,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-cb-4",
+      "name": "Elias Rocha",
+      "position": "CB",
+      "overall": 68,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-cb-5",
+      "name": "Fabinho Prego",
+      "position": "CB",
+      "overall": 65,
+      "traits": [
+        {
+          "slug": "cynicalFouler",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fb-1",
+      "name": "Gil Relampago",
+      "position": "FB",
+      "overall": 76,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fb-2",
+      "name": "Heitor Bala",
+      "position": "FB",
+      "overall": 73,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fb-3",
+      "name": "Ivo Corredor",
+      "position": "FB",
+      "overall": 69,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fb-4",
+      "name": "Juca Vento",
+      "position": "FB",
+      "overall": 64,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-1",
+      "name": "Kaká Batuta",
+      "position": "MF",
+      "overall": 88,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-2",
+      "name": "Lino Craque",
+      "position": "MF",
+      "overall": 91,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        },
+        {
+          "slug": "leader",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-3",
+      "name": "Mano Cerebral",
+      "position": "MF",
+      "overall": 77,
+      "traits": [
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-4",
+      "name": "Nando Chinelo",
+      "position": "MF",
+      "overall": 75,
+      "traits": [
+        {
+          "slug": "shortFuse",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-5",
+      "name": "Otavio Régua",
+      "position": "MF",
+      "overall": 72,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-6",
+      "name": "Pedro Bicicleta",
+      "position": "MF",
+      "overall": 70,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-7",
+      "name": "Quinzinho Alma",
+      "position": "MF",
+      "overall": 67,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-mf-8",
+      "name": "Renan Sereno",
+      "position": "MF",
+      "overall": 63,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-1",
+      "name": "Sabiá Artilheiro",
+      "position": "FW",
+      "overall": 93,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-2",
+      "name": "Tuca Faro",
+      "position": "FW",
+      "overall": 80,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-3",
+      "name": "Ubiratã Foguete",
+      "position": "FW",
+      "overall": 74,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-4",
+      "name": "Valter Ponta",
+      "position": "FW",
+      "overall": 71,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 1
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-5",
+      "name": "Xandão Cabeça",
+      "position": "FW",
+      "overall": 68,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "ev-fw-6",
+      "name": "Zeca Retranca",
+      "position": "FW",
+      "overall": 62,
+      "traits": [],
+      "specialAbility": null
+    }
+  ]
+}

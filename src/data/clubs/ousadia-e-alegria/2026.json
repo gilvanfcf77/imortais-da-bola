@@ -1,0 +1,345 @@
+{
+  "slug": "ousadia-e-alegria",
+  "name": "Ousadia e Alegria",
+  "era": 2026,
+  "pool": [
+    {
+      "id": "oa-gk-1",
+      "name": "Sorriso Bezerra",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-gk-2",
+      "name": "Leveza Martins",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-gk-3",
+      "name": "Encanto Rocha",
+      "position": "GK",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-cb-1",
+      "name": "Doçura Andrade",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-cb-2",
+      "name": "Gentileza Farias",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-cb-3",
+      "name": "Harmonia Castro",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-cb-4",
+      "name": "Ternura Basílio",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-cb-5",
+      "name": "Serenidade Prado",
+      "position": "CB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "wall",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fb-1",
+      "name": "Ginga Alencar",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fb-2",
+      "name": "Molejo Barros",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fb-3",
+      "name": "Balanço Correia",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fb-4",
+      "name": "Cadência Nunes",
+      "position": "FB",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-1",
+      "name": "Poesia Cardoso",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-2",
+      "name": "Magia Teixeira",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-3",
+      "name": "Feitiço Ribas",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-4",
+      "name": "Embaixadinha Rosa",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-5",
+      "name": "Batucada Freitas",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-6",
+      "name": "Samba Vilela",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "leader",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-7",
+      "name": "Alegria Sabino",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "playmaker",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-mf-8",
+      "name": "Encantamento Dias",
+      "position": "MF",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "freeKickSpecialist",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-1",
+      "name": "Ousadia Franco",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-2",
+      "name": "Malabares Costa",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-3",
+      "name": "Arte Lima",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-4",
+      "name": "Fantasia Guedes",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "dribbler",
+          "intensity": 3
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-5",
+      "name": "Show Bonito Reis",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "oa-fw-6",
+      "name": "Gol de Placa Neto",
+      "position": "FW",
+      "overall": 99,
+      "traits": [
+        {
+          "slug": "sharpshooter",
+          "intensity": 2
+        }
+      ],
+      "specialAbility": null
+    }
+  ]
+}

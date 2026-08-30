@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Imortais da Bola — Visualizador</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --home: #3b82f6;
+    --away: #f97316;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  header {
+    padding: 16px 20px;
+    background: var(--panel);
+    border-bottom: 1px solid #334155;
+  }
+  h1 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  #scoreboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  #scoreboard .team-home { color: var(--home); text-align: right; flex: 1; }
+  #scoreboard .team-away { color: var(--away); text-align: left; flex: 1; }
+  #scoreboard .score { font-variant-numeric: tabular-nums; }
+  #scoreboard .score.pulse { animation: pulse 0.6s ease-out; }
+  #clock {
+    font-variant-numeric: tabular-nums;
+    background: #0f172a;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+  }
+
+  #controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  #controls label { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+  #controls input, #controls select {
+    background: #0f172a;
+    color: var(--text);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 110px;
+  }
+  #controls #homeClub, #controls #awayClub { width: 160px; }
+  #playBtn {
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #playBtn:disabled { background: #334155; cursor: default; }
+  #status { color: var(--muted); font-size: 0.85rem; margin-left: 8px; }
+
+  #matchArea {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .lineup {
+    width: 190px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    padding: 10px 0;
+    border-color: #334155;
+  }
+  .lineup.side-home { border-right: 1px solid #334155; }
+  .lineup.side-away { border-left: 1px solid #334155; }
+  .lineup .player {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    font-size: 0.82rem;
+    border-left: 3px solid transparent;
+  }
+  .lineup.side-home .player { border-left-color: var(--home); }
+  .lineup.side-away .player { border-right: 3px solid var(--away); border-left: none; }
+  .lineup .player.sent-off { opacity: 0.45; }
+  .lineup .pos {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.72rem;
+    min-width: 28px;
+  }
+  .lineup .name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lineup .era {
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .lineup .badges {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    font-size: 9px;
+    line-height: 1;
+    border-radius: 2px;
+  }
+  .badge-yellow { background: #eab308; }
+  .badge-red { background: #dc2626; }
+  .badge-injury {
+    background: #dc2626;
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+  }
+  .badge-goal { width: auto; font-size: 11px; }
+
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  #log .hint { text-align: center; color: var(--muted); margin-top: 40px; }
+  .event {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 16px;
+    border-left: 4px solid transparent;
+  }
+  .event[data-side="home"] { border-left-color: var(--home); }
+  .event[data-side="away"] { border-left-color: var(--away); }
+  .event .minute {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 34px;
+  }
+  .event .text { flex: 1; }
+
+  .event.ev-goal { font-weight: 700; }
+  .event.ev-goal[data-side="home"] { background: rgba(59, 130, 246, 0.18); }
+  .event.ev-goal[data-side="away"] { background: rgba(249, 115, 22, 0.18); }
+  .event.ev-yellow .text { color: #eab308; }
+  .event.ev-red { background: rgba(220, 38, 38, 0.12); }
+  .event.ev-red .text { color: #f87171; font-weight: 600; }
+  .event.ev-comedy { background: rgba(168, 85, 247, 0.15); font-style: italic; }
+  .event.ev-scandalous { background: rgba(249, 115, 22, 0.18); font-style: italic; font-weight: 600; }
+  .event.ev-disallowed { background: rgba(220, 38, 38, 0.12); font-weight: 700; }
+  .event.ev-disallowed .text { color: #f87171; }
+  .event.ev-injury { background: rgba(220, 38, 38, 0.1); }
+  .event.ev-injury .text { color: #fca5a5; }
+  .event.ev-injustice { background: rgba(220, 38, 38, 0.16); font-style: italic; font-weight: 700; }
+  .event.ev-injustice .text { color: #f87171; }
+  .event.ev-trash-talk { font-style: italic; }
+  .event.ev-trash-talk .text { color: #facc15; }
+  .event.ev-whiff { font-style: italic; }
+  .event.ev-whiff .text { color: #94a3b8; }
+  .event.ev-save .text { color: #60a5fa; }
+  .event.ev-special { background: rgba(250, 204, 21, 0.16); font-weight: 700; }
+  .event.ev-time-wasting .text { color: var(--muted); font-size: 0.9em; }
+  .event.ev-divider {
+    justify-content: center;
+    border-left: none;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 8px 0;
+  }
+  .event.ev-divider .minute { display: none; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Imortais da Bola — visualizador de partida</h1>
+    <div id="scoreboard">
+      <span class="team-home" id="homeName">—</span>
+      <span class="score"><span id="homeScore">0</span> x <span id="awayScore">0</span></span>
+      <span class="team-away" id="awayName">—</span>
+    </div>
+    <div id="controls">
+      <span id="clock">0'</span>
+      <label>Casa <select id="homeClub"></select></label>
+      <label>Visitante <select id="awayClub"></select></label>
+      <label>Seed <input id="seedInput" type="number" placeholder="aleatória" /></label>
+      <label>Velocidade
+        <select id="speed">
+          <option value="600">lenta</option>
+          <option value="300" selected>normal</option>
+          <option value="120">rápida</option>
+        </select>
+      </label>
+      <button id="playBtn">Nova partida</button>
+      <span id="status"></span>
+    </div>
+  </header>
+  <div id="matchArea">
+    <aside id="homeLineup" class="lineup side-home"></aside>
+    <main id="log"><p class="hint">Clique em "Nova partida" para simular um confronto.</p></main>
+    <aside id="awayLineup" class="lineup side-away"></aside>
+  </div>
+
+  <script type="module">
+    import { createRng, FORMATIONS, draftEleven, simulateMatch, EVENT_TYPES, GOAL_EVENT_TYPES, defaultGamesmanship } from './src/engine/index.js';
+
+    // Each club's data lives in its own folder under src/data/clubs/ (see
+    // src/data/clubs/index.js for the Node-side equivalent of this same
+    // loading/merging step, including why era files get combined into one
+    // pool). The browser can't use fs, and `import ... with { type: 'json'
+    // }` isn't reliably supported across browsers yet, so this just fetches
+    // each file — a top-level await here works because this is a
+    // <script type="module">.
+    const CLUBS = [
+      { slug: 'samangos-do-vale', files: ['2005.json', '2012.json', '2026.json'] },
+      { slug: 'capetas-da-serra', files: ['2005.json', '2012.json', '2026.json'] },
+      { slug: 'uniao-da-porrada', files: ['2026.json'] },
+      { slug: 'ferrolho-do-sertao', files: ['2026.json'] },
+      { slug: 'ousadia-e-alegria', files: ['2026.json'] },
+      { slug: 'herois-de-paris', files: ['2026.json'] },
+    ];
+    const SAMPLE_CLUBS = await Promise.all(
+      CLUBS.map(async ({ slug, files }) => {
+        const parts = await Promise.all(
+          files.map((file) => fetch(`./src/data/clubs/${slug}/${file}`).then((response) => response.json()))
+        );
+        const pool = parts.flatMap((part) => part.pool.map((player) => ({ ...player, era: part.era ?? null })));
+        return { slug: parts[0].slug, name: parts[0].name, pool };
+      })
+    );
+
+    const FORMATION = FORMATIONS['4-4-2'];
+
+    const els = {
+      homeName: document.getElementById('homeName'),
+      awayName: document.getElementById('awayName'),
+      homeScore: document.getElementById('homeScore'),
+      awayScore: document.getElementById('awayScore'),
+      clock: document.getElementById('clock'),
+      log: document.getElementById('log'),
+      homeClubSelect: document.getElementById('homeClub'),
+      awayClubSelect: document.getElementById('awayClub'),
+      seedInput: document.getElementById('seedInput'),
+      speedSelect: document.getElementById('speed'),
+      playBtn: document.getElementById('playBtn'),
+      status: document.getElementById('status'),
+      homeLineup: document.getElementById('homeLineup'),
+      awayLineup: document.getElementById('awayLineup'),
+    };
+
+    for (const select of [els.homeClubSelect, els.awayClubSelect]) {
+      select.innerHTML = SAMPLE_CLUBS.map((club, i) => `<option value="${i}">${club.name}</option>`).join('');
+    }
+    els.awayClubSelect.value = SAMPLE_CLUBS.findIndex((club) => club.slug === 'uniao-da-porrada');
+
+    const POSITION_LABELS = { GK: 'GOL', CB: 'ZAG', FB: 'LAT', MF: 'MEI', FW: 'ATA' };
+
+    // playerId -> { row, badges } DOM refs, rebuilt every match. Ids are
+    // unique across both teams, so one map covers both lineup panels.
+    let playerRefs = new Map();
+
+    function renderLineup(container, lineup) {
+      container.innerHTML = '';
+      for (const player of lineup) {
+        const row = document.createElement('div');
+        row.className = 'player';
+
+        const pos = document.createElement('span');
+        pos.className = 'pos';
+        pos.textContent = POSITION_LABELS[player.position] ?? player.position;
+
+        const name = document.createElement('span');
+        name.className = 'name';
+        name.textContent = player.name;
+        name.title = player.era ? `${player.name} (${player.era})` : player.name;
+
+        const badges = document.createElement('span');
+        badges.className = 'badges';
+
+        if (player.era) {
+          const era = document.createElement('span');
+          era.className = 'era';
+          era.textContent = `'${String(player.era).slice(-2)}`;
+          row.append(pos, name, era, badges);
+        } else {
+          row.append(pos, name, badges);
+        }
+        container.appendChild(row);
+        playerRefs.set(player.id, { row, badges });
+      }
+    }
+
+    function addBadge(playerId, className, text) {
+      const ref = playerRefs.get(playerId);
+      if (!ref) return;
+      const badge = document.createElement('span');
+      badge.className = `badge ${className}`;
+      if (text) badge.textContent = text;
+      ref.badges.appendChild(badge);
+    }
+
+    function applyPlayerEffects(event) {
+      if (event.victimId) {
+        addBadge(event.victimId, 'badge-injury', '+');
+      }
+      if (event.cardType && event.playerId) {
+        addBadge(event.playerId, event.cardType === 'red' ? 'badge-red' : 'badge-yellow');
+        if (event.cardType === 'red') {
+          const ref = playerRefs.get(event.playerId);
+          if (ref) ref.row.classList.add('sent-off');
+        }
+      }
+      if (event.playerId && GOAL_EVENT_TYPES.has(event.type)) {
+        addBadge(event.playerId, 'badge-goal', '⚽');
+      }
+    }
+
+    const EVENT_CLASS = {
+      [EVENT_TYPES.GOAL]: 'ev-goal',
+      [EVENT_TYPES.GOAL_ANOTHER]: 'ev-goal',
+      [EVENT_TYPES.GOAL_INDIVIDUAL]: 'ev-goal',
+      [EVENT_TYPES.GOAL_ASSISTED]: 'ev-goal',
+      [EVENT_TYPES.GOAL_CORNER]: 'ev-goal',
+      [EVENT_TYPES.GOAL_LONG_SHOT]: 'ev-goal',
+      [EVENT_TYPES.GOAL_REFEREE_DEFLECTION]: 'ev-goal',
+      [EVENT_TYPES.PLAYER_SPECIAL]: 'ev-special',
+      [EVENT_TYPES.GOAL_DEFENSIVE_BLUNDER]: 'ev-goal',
+      [EVENT_TYPES.GOAL_GOALKEEPER_BLUNDER]: 'ev-goal',
+      [EVENT_TYPES.GOAL_PENALTY]: 'ev-goal',
+      [EVENT_TYPES.FREE_KICK_GOAL]: 'ev-goal',
+      [EVENT_TYPES.YELLOW_CARD]: 'ev-yellow',
+      [EVENT_TYPES.SECOND_YELLOW_RED]: 'ev-red',
+      [EVENT_TYPES.STRAIGHT_RED]: 'ev-red',
+      [EVENT_TYPES.SCANDALOUS_FOUL]: 'ev-scandalous',
+      [EVENT_TYPES.DISALLOWED_GOAL]: 'ev-disallowed',
+      [EVENT_TYPES.OFFICIAL_ASSAULTED]: 'ev-red',
+      [EVENT_TYPES.PENALTY_NOT_GIVEN]: 'ev-disallowed',
+      [EVENT_TYPES.PENALTY_PHANTOM]: 'ev-disallowed',
+      [EVENT_TYPES.PENALTY_WRONG_LOCATION]: 'ev-disallowed',
+      [EVENT_TYPES.PENALTY_AWARDED]: 'ev-scandalous',
+      [EVENT_TYPES.PENALTY_MIND_GAMES]: 'ev-trash-talk',
+      [EVENT_TYPES.PENALTY_MISSED]: 'ev-whiff',
+      [EVENT_TYPES.GOALKEEPER_FORWARD]: 'ev-scandalous',
+      [EVENT_TYPES.CROWD_SILENCED]: 'ev-trash-talk',
+      [EVENT_TYPES.SHOWBOATING]: 'ev-comedy',
+      [EVENT_TYPES.SEVERE_INJURY]: 'ev-injury',
+      [EVENT_TYPES.NO_CARD_DESPITE_INJURY]: 'ev-injustice',
+      [EVENT_TYPES.SCANDALOUS_FOUL_IGNORED]: 'ev-injustice',
+      [EVENT_TYPES.NUTMEG_TAUNT]: 'ev-comedy',
+      [EVENT_TYPES.TRASH_TALK]: 'ev-trash-talk',
+      [EVENT_TYPES.FIGHT_CALLOUT]: 'ev-comedy',
+      [EVENT_TYPES.BRAWL]: 'ev-comedy',
+      [EVENT_TYPES.BRAWL_CARD_FIRST]: 'ev-red',
+      [EVENT_TYPES.BRAWL_CARD]: 'ev-red',
+      [EVENT_TYPES.KICKOFF]: 'ev-divider',
+      [EVENT_TYPES.HALFTIME]: 'ev-divider',
+      [EVENT_TYPES.FULLTIME]: 'ev-divider',
+      [EVENT_TYPES.STOPPAGE_TIME_ANNOUNCED]: 'ev-divider',
+      [EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT]: 'ev-trash-talk',
+      [EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG]: 'ev-trash-talk',
+      [EVENT_TYPES.WHIFF]: 'ev-whiff',
+      [EVENT_TYPES.WALL_SAVE]: 'ev-save',
+      [EVENT_TYPES.GOAL_LINE_CLEARANCE]: 'ev-save',
+      [EVENT_TYPES.HANDBALL_ON_THE_LINE]: 'ev-scandalous',
+      [EVENT_TYPES.TIME_WASTING]: 'ev-time-wasting',
+      [EVENT_TYPES.THROW_IN_DELAY]: 'ev-time-wasting',
+      [EVENT_TYPES.GOAL_KICK_DELAY]: 'ev-time-wasting',
+    };
+
+    let timers = [];
+    let playToken = 0;
+
+    function clearTimers() {
+      timers.forEach(clearTimeout);
+      timers = [];
+    }
+
+    function appendEvent(event) {
+      const row = document.createElement('div');
+      row.className = `event ${EVENT_CLASS[event.type] ?? ''}`;
+      if (event.side) row.dataset.side = event.side;
+
+      const minute = document.createElement('span');
+      minute.className = 'minute';
+      minute.textContent = `${event.minute}'`;
+
+      const text = document.createElement('span');
+      text.className = 'text';
+      text.textContent = event.description;
+
+      row.append(minute, text);
+      els.log.appendChild(row);
+      els.log.scrollTop = els.log.scrollHeight;
+    }
+
+    function updateScore(event, score) {
+      // A disallowed goal now fires AFTER the goal it's taking back was
+      // already announced and counted (see match.js resolveAttack), so it
+      // has to walk the scoreboard back down instead of being just another
+      // non-scoring event.
+      if (!GOAL_EVENT_TYPES.has(event.type) && event.type !== EVENT_TYPES.DISALLOWED_GOAL) return;
+      score[event.side] += event.type === EVENT_TYPES.DISALLOWED_GOAL ? -1 : 1;
+      els.homeScore.textContent = score.home;
+      els.awayScore.textContent = score.away;
+      const scoringEl = event.side === 'home' ? els.homeScore : els.awayScore;
+      scoringEl.classList.remove('pulse');
+      void scoringEl.offsetWidth; // restart animation
+      scoringEl.classList.add('pulse');
+    }
+
+    function playMatch() {
+      const token = ++playToken;
+      clearTimers();
+      els.log.innerHTML = '';
+      els.homeScore.textContent = '0';
+      els.awayScore.textContent = '0';
+      els.clock.textContent = "0'";
+      els.playBtn.disabled = true;
+      els.status.textContent = 'sorteando os times...';
+
+      const seed = els.seedInput.value ? Number(els.seedInput.value) : Math.floor(Math.random() * 1e9);
+      els.seedInput.value = seed;
+
+      const homeClub = SAMPLE_CLUBS[Number(els.homeClubSelect.value)];
+      const awayClub = SAMPLE_CLUBS[Number(els.awayClubSelect.value)];
+
+      const rng = createRng(seed);
+      const homeLineup = draftEleven(homeClub.pool, FORMATION, rng);
+      const awayLineup = draftEleven(awayClub.pool, FORMATION, rng);
+
+      const home = {
+        name: homeClub.name,
+        lineup: homeLineup,
+        posture: 'balanced',
+        gamesmanship: defaultGamesmanship(homeLineup),
+      };
+      const away = {
+        name: awayClub.name,
+        lineup: awayLineup,
+        posture: 'balanced',
+        gamesmanship: defaultGamesmanship(awayLineup),
+      };
+      els.homeName.textContent = home.name;
+      els.awayName.textContent = away.name;
+
+      playerRefs = new Map();
+      renderLineup(els.homeLineup, homeLineup);
+      renderLineup(els.awayLineup, awayLineup);
+
+      const result = simulateMatch({ home, away, rng });
+      const msPerMinute = Number(els.speedSelect.value);
+      // However far apart two events are on the match clock, never show them
+      // less than this many ms apart in real time — otherwise events that
+      // land in the same minute (a foul immediately followed by a card, say)
+      // fly by too fast to read, regardless of the speed setting.
+      const minEventGap = Math.max(500, msPerMinute * 2.2);
+      const score = { home: 0, away: 0 };
+
+      let delay = 300;
+      let lastMinute = 0;
+
+      for (const event of result.events) {
+        const minuteBasedDelay = delay + (event.minute - lastMinute) * msPerMinute;
+        delay = Math.max(minuteBasedDelay, delay + minEventGap);
+        lastMinute = event.minute;
+
+        timers.push(
+          setTimeout(() => {
+            if (token !== playToken) return;
+            els.clock.textContent = `${event.minute}'`;
+            appendEvent(event);
+            updateScore(event, score);
+            applyPlayerEffects(event);
+            if (event.type === EVENT_TYPES.FULLTIME) {
+              els.status.textContent = 'fim de jogo';
+              els.playBtn.disabled = false;
+            }
+          }, delay)
+        );
+      }
+
+      timers.push(
+        setTimeout(() => {
+          if (token !== playToken) return;
+          els.status.textContent = 'em andamento...';
+        }, 300)
+      );
+    }
+
+    els.playBtn.addEventListener('click', playMatch);
+  </script>
+</body>
+</html>

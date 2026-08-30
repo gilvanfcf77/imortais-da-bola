@@ -1,0 +1,11 @@
+// Public entry point of the engine. Per DECISOES.md #12, the engine never
+// imports anything from outside this folder — it receives data, returns
+// events. Anything outside (future API routes, frontend, scripts) should
+// import only from here, not from the individual engine files.
+
+export { createRng } from './rng.js';
+export { FORMATIONS, totalPlayers } from './formations.js';
+export { TRAITS, getTraitIntensity, sumTraitIntensity, combineMultipliers, defaultGamesmanship } from './traits.js';
+export { draftEleven } from './draft.js';
+export { simulateMatch, resolvePenaltyShootout } from './match.js';
+export { EVENT_TYPES, GOAL_EVENT_TYPES, narrate } from './narration.js';
