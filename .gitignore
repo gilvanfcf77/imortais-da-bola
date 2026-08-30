@@ -1,5 +1,6 @@
 node_modules/
 logs/
 .next/
+info/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
