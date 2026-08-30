@@ -432,6 +432,21 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         context.assist = assistProvider.name;
         assistPlayerId = assistProvider.id;
       }
+    } else if (style === 'corner') {
+      // Same fallback as 'assisted' above: with nobody left to have taken
+      // the corner (last man standing after red cards), there's no assist
+      // to credit — narrate it as a plain goal instead.
+      const teammates = activePlayers(attackingTeam).filter((p) => p.id !== finisher.id);
+      if (teammates.length === 0) {
+        goalEventType = EVENT_TYPES.GOAL;
+      } else {
+        const kicker = rng.pickWeighted(
+          teammates,
+          teammates.map((p) => 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT)
+        );
+        context.assist = kicker.name;
+        assistPlayerId = kicker.id;
+      }
     } else if (style === 'defensiveBlunder') {
       context.victim = pickTauntVictim(defendingTeam, rng).name;
     } else if (style === 'goalkeeperBlunder') {

@@ -142,8 +142,8 @@ const TEMPLATES = {
     '{assist} enfia a bola no espaço certo e {player} só precisa completar para {team}.',
   ],
   [EVENT_TYPES.GOAL_CORNER]: [
-    'Na cobrança de escanteio, {player} sobe mais que a marcação e cabeceia para o gol de {team}!',
-    'Escanteio na área, {player} aparece livre e testa para as redes — gol de {team}.',
+    'Na cobrança de escanteio de {assist}, {player} sobe mais que a marcação e cabeceia para o gol de {team}!',
+    '{assist} bate o escanteio, {player} aparece livre na área e testa para as redes — gol de {team}.',
   ],
   [EVENT_TYPES.GOAL_LONG_SHOT]: [
     '{player} arrisca de longe e acerta um voleio incrível! Gol de {team}.',
@@ -158,12 +158,12 @@ const TEMPLATES = {
     '{player} arrisca de longe, a bola bate em cheio no árbitro e entra! Ninguém sabe se ri ou reclama, mas o gol é de {team}.',
   ],
   [EVENT_TYPES.GOAL_DEFENSIVE_BLUNDER]: [
-    '{victim} erra feio o passe e entrega de bandeja para {player}, que não perdoa. Gol de {team}!',
-    'Zagueiro {victim} escorrega na hora errada e {player} aproveita a lambança para marcar para {team}.',
+    'Gol de {team}! {victim} erra feio o passe e entrega de bandeja para {player}, que não perdoa.',
+    'GOOOOL! Zagueiro {victim} escorrega na hora errada e {player} aproveita a lambança para marcar para {team}.',
   ],
   [EVENT_TYPES.GOAL_GOALKEEPER_BLUNDER]: [
-    'Frango! {keeper} deixa a bola escapar das mãos e {player} só empurra para o gol de {team}.',
-    '{keeper} falha feio na saída e {player} aproveita o vacilo para marcar para {team}. Vexame do goleiro!',
+    'GOOOOL! Frango! {keeper} deixa a bola escapar das mãos e {player} só empurra para o gol de {team}.',
+    'GOOOOL! {keeper} falha feio na saída e {player} aproveita o vacilo para marcar para {team}. Que vexame do goleiro!',
   ],
   [EVENT_TYPES.GOAL_PENALTY]: [
     '{player} não trai a confiança e converte a cobrança de pênalti para {team}!',
