@@ -44,31 +44,44 @@ export function possessionPctBySide(shots) {
   };
 }
 
-// Tallies how many times `extractId` returns a truthy player id across
-// events, and resolves whoever has the most to a name + which side they
-// played on. Returns null if nobody qualifies (e.g. a 0-0 with no assists).
-function topByTally(events, extractId, homeLineup, awayLineup) {
-  const tally = {};
-  for (const event of events) {
-    const id = extractId(event);
-    if (id) tally[id] = (tally[id] ?? 0) + 1;
+// A real "artilheiro da copa" spans the whole competition, not just the
+// player's own matches or their own squad — it needs every goal/assist from
+// every match actually played in the tournament, including the parts of the
+// bracket the player never sees (see `otherMatches` on each round, built by
+// resolveGroup in actions.js). Each entry here is one match, normalized to
+// `{ events, homeLineup, awayLineup }` regardless of whether it came from
+// the player's own matchHistory (page.js) or a round's `otherMatches`.
+function buildPlayerNameMap(matches) {
+  const names = {};
+  for (const m of matches) {
+    for (const p of m.homeLineup) names[p.id] = p.name;
+    for (const p of m.awayLineup) names[p.id] = p.name;
   }
-  const entries = Object.entries(tally);
-  if (entries.length === 0) return null;
-  const [topId, count] = entries.reduce((best, entry) => (entry[1] > best[1] ? entry : best));
-  const home = homeLineup.find((p) => p.id === topId);
-  if (home) return { name: home.name, side: 'home', count };
-  const away = awayLineup.find((p) => p.id === topId);
-  if (away) return { name: away.name, side: 'away', count };
-  return null;
+  return names;
 }
 
-export function topScorer(events, homeLineup, awayLineup) {
-  return topByTally(events, (e) => (GOAL_EVENT_TYPES.has(e.type) ? e.playerId : null), homeLineup, awayLineup);
+function tallyLeaderboard(matches, extractId, limit) {
+  const tally = {};
+  for (const m of matches) {
+    for (const event of m.events) {
+      const id = extractId(event);
+      if (id) tally[id] = (tally[id] ?? 0) + 1;
+    }
+  }
+  const names = buildPlayerNameMap(matches);
+  return Object.entries(tally)
+    .map(([id, count]) => ({ id, name: names[id] ?? '???', count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
 }
 
-// Only GOAL_ASSISTED goals carry an assistPlayerId (see match.js resolveAttack)
-// — penalties and direct free kicks have no assist concept in this model.
-export function topAssister(events, homeLineup, awayLineup) {
-  return topByTally(events, (e) => e.assistPlayerId ?? null, homeLineup, awayLineup);
+export function cupScorerLeaderboard(matches, limit = 10) {
+  return tallyLeaderboard(matches, (e) => (GOAL_EVENT_TYPES.has(e.type) ? e.playerId : null), limit);
+}
+
+// Only GOAL_ASSISTED and GOAL_CORNER goals carry an assistPlayerId (see
+// match.js resolveAttack) — penalties and direct free kicks have no assist
+// concept in this model.
+export function cupAssisterLeaderboard(matches, limit = 10) {
+  return tallyLeaderboard(matches, (e) => e.assistPlayerId ?? null, limit);
 }

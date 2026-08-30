@@ -1,14 +1,30 @@
 'use client';
 
-import { countShotsBySide, possessionPctBySide, topScorer, topAssister } from './matchStats.js';
+import { cupScorerLeaderboard, cupAssisterLeaderboard } from './matchStats.js';
 import BracketTable from './BracketTable.jsx';
 
-function StatRow({ label, home, away }) {
+function Leaderboard({ title, entries }) {
+  if (entries.length === 0) return null;
   return (
-    <div className="grid grid-cols-3 items-center gap-4 py-2">
-      <span className="text-right text-lg tabular-nums">{home}</span>
-      <span className="text-center text-sm text-slate-400">{label}</span>
-      <span className="text-left text-lg tabular-nums">{away}</span>
+    <div className="w-full rounded-lg border border-slate-800 bg-slate-900 px-6 py-4">
+      <p className="mb-2 text-center text-xs uppercase tracking-wide text-slate-500">{title}</p>
+      <ol className="space-y-1">
+        {entries.map((entry, i) => (
+          <li
+            key={entry.id}
+            className={
+              i === 0
+                ? 'flex items-center justify-between rounded bg-emerald-500/10 px-2 py-1 text-base font-bold text-emerald-400'
+                : 'flex items-center justify-between px-2 py-1 text-sm text-slate-300'
+            }
+          >
+            <span className="truncate">
+              {i === 0 ? '🥇' : `${i + 1}.`} {entry.name}
+            </span>
+            <span className="tabular-nums">{entry.count}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
@@ -20,16 +36,32 @@ function StatRow({ label, home, away }) {
 // loss that isn't in the last round (a non-final win goes back to CupScreen
 // for the next round instead), so "not the last round" here can only mean
 // elimination, never a title.
-export default function CupOutcomeScreen({ matchData, roundIndex, bracket, onRestart }) {
-  const { result, homeName, awayName, homeLineup, awayLineup, shootout } = matchData;
-  const won = shootout ? shootout.winnerSide === 'home' : result.homeGoals > result.awayGoals;
+//
+// Per-match stats (possession, shots, fouls, cards) live on ResultScreen now
+// — page.js always shows that right after the match, before landing here —
+// so this screen sticks to the outcome itself plus the cup-wide leaderboards.
+export default function CupOutcomeScreen({ matchData, matchHistory, roundIndex, bracket, onRestart }) {
+  const { result, homeName, awayName, shootout } = matchData;
+  // Forfeit outright beats the goal count — see wonMatch in src/app/actions.js.
+  const won = result.abandoned
+    ? result.abandonedSide === 'away'
+    : shootout
+      ? shootout.winnerSide === 'home'
+      : result.homeGoals > result.awayGoals;
   const isLastRound = roundIndex === bracket.rounds.length - 1;
   const eliminated = !isLastRound;
 
-  const shots = countShotsBySide(result.events);
-  const possession = possessionPctBySide(shots);
-  const scorer = topScorer(result.events, homeLineup, awayLineup);
-  const assister = topAssister(result.events, homeLineup, awayLineup);
+  // A cup-wide leaderboard spans every match actually played in the
+  // tournament, not just the player's own — matchHistory covers the
+  // player's matches, and each round's otherMatches (set by resolveGroup in
+  // actions.js) covers the rest of the bracket, already simulated up front
+  // in startCup regardless of how far the player has gotten.
+  const allMatches = [
+    ...matchHistory.map((m) => ({ events: m.result.events, homeLineup: m.homeLineup, awayLineup: m.awayLineup })),
+    ...bracket.rounds.flatMap((r) => r.otherMatches),
+  ];
+  const scorers = cupScorerLeaderboard(allMatches);
+  const assisters = cupAssisterLeaderboard(allMatches);
 
   const title = eliminated ? `❌ Eliminado na ${bracket.rounds[roundIndex].name.toLowerCase()}` : won ? '🏆 Campeão!' : '🥈 Vice-campeão';
   const titleOutcome = eliminated ? bracket.rounds[roundIndex].ifEliminatedHere : null;
@@ -47,6 +79,7 @@ export default function CupOutcomeScreen({ matchData, roundIndex, bracket, onRes
               (pên. {shootout.homeScore}-{shootout.awayScore})
             </span>
           )}
+          {result.abandoned && <span className="text-slate-400"> (WO)</span>}
         </p>
         {titleOutcome && (
           <p className="mt-3 text-sm text-slate-400">
@@ -58,14 +91,6 @@ export default function CupOutcomeScreen({ matchData, roundIndex, bracket, onRes
         )}
       </div>
 
-      {(scorer || assister) && (
-        <p className="text-sm text-slate-400">
-          {scorer && `⚽ Artilheiro: ${scorer.name} (${scorer.count})`}
-          {scorer && assister && ' · '}
-          {assister && `🎯 Líder de assistências: ${assister.name} (${assister.count})`}
-        </p>
-      )}
-
       <BracketTable
         rounds={bracket.rounds}
         upToRoundIndex={roundIndex}
@@ -73,31 +98,9 @@ export default function CupOutcomeScreen({ matchData, roundIndex, bracket, onRes
         lastRoundOutcome={won ? 'won' : 'lost'}
       />
 
-      <div className="w-full rounded-lg border border-slate-800 bg-slate-900 px-6 py-4">
-        <p className="mb-2 text-center text-xs uppercase tracking-wide text-slate-500">
-          Estatísticas gerais do campeonato
-        </p>
-        {/* Ainda mostra só a última partida jogada, não uma agregação de
-            todas as rodadas disputadas. Falta virar uma agregação de
-            verdade quando isso importar de fato. */}
-        <div className="grid grid-cols-3 gap-4 border-b border-slate-800 pb-2 text-sm font-semibold text-slate-300">
-          <span className="truncate text-right">{homeName}</span>
-          <span></span>
-          <span className="truncate text-left">{awayName}</span>
-        </div>
-        <StatRow label="Posse de bola" home={`${possession.home}%`} away={`${possession.away}%`} />
-        <StatRow label="Finalizações" home={shots.home} away={shots.away} />
-        <StatRow label="Faltas" home={result.stats.foulsBySide.home} away={result.stats.foulsBySide.away} />
-        <StatRow
-          label="Cartões amarelos"
-          home={result.stats.yellowCardsBySide.home}
-          away={result.stats.yellowCardsBySide.away}
-        />
-        <StatRow
-          label="Cartões vermelhos"
-          home={result.stats.redCardsBySide.home}
-          away={result.stats.redCardsBySide.away}
-        />
+      <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+        <Leaderboard title="⚽ Artilheiros da copa" entries={scorers} />
+        <Leaderboard title="🎯 Assistências da copa" entries={assisters} />
       </div>
 
       <button

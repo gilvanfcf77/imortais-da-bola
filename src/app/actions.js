@@ -175,6 +175,13 @@ function resolveGroup(list, rng) {
         away: { name: right.winner.name, era: right.winner.era },
         scoreLabel: matchScoreLabel(result, shootout),
         winnerName: winner.name,
+        // Carried so a true cup-wide leaderboard (see cupScorerLeaderboard/
+        // cupAssisterLeaderboard in matchStats.js) can count goals/assists
+        // from matches the player never plays too, not just their own —
+        // this is the whole rest of the bracket, already simulated here.
+        events: result.events,
+        homeLineup: home.lineup,
+        awayLineup: away.lineup,
       },
     ],
   };
