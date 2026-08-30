@@ -24,6 +24,7 @@ export default function ResultScreen({ matchData, onContinue }) {
         <h2 className="text-3xl font-bold">
           {homeName} {result.homeGoals} x {result.awayGoals} {awayName}
           {awayEra ? ` (${awayEra})` : ''}
+          {result.abandoned ? ' (WO)' : ''}
         </h2>
       </div>
 

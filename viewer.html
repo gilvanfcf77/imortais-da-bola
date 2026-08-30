@@ -379,6 +379,7 @@
       [EVENT_TYPES.SCANDALOUS_FOUL]: 'ev-scandalous',
       [EVENT_TYPES.DISALLOWED_GOAL]: 'ev-disallowed',
       [EVENT_TYPES.OFFICIAL_ASSAULTED]: 'ev-red',
+      [EVENT_TYPES.MATCH_ABANDONED]: 'ev-red',
       [EVENT_TYPES.PENALTY_NOT_GIVEN]: 'ev-disallowed',
       [EVENT_TYPES.PENALTY_PHANTOM]: 'ev-disallowed',
       [EVENT_TYPES.PENALTY_WRONG_LOCATION]: 'ev-disallowed',
@@ -440,6 +441,23 @@
     }
 
     function updateScore(event, score) {
+      // A WO overwrites the live score with the fixed scoreline (see
+      // checkMatchAbandoned in match.js) — snap to it instead of trying to
+      // keep incrementing from whatever was on the board. event.side here
+      // is the offending team, so the winner's score is the other side.
+      if (event.type === EVENT_TYPES.MATCH_ABANDONED) {
+        score.home = event.homeGoals;
+        score.away = event.awayGoals;
+        els.homeScore.textContent = score.home;
+        els.awayScore.textContent = score.away;
+        const winningSide = event.side === 'home' ? 'away' : 'home';
+        const scoringEl = winningSide === 'home' ? els.homeScore : els.awayScore;
+        scoringEl.classList.remove('pulse');
+        void scoringEl.offsetWidth; // restart animation
+        scoringEl.classList.add('pulse');
+        return;
+      }
+
       // A disallowed goal now fires AFTER the goal it's taking back was
       // already announced and counted (see match.js resolveAttack), so it
       // has to walk the scoreboard back down instead of being just another

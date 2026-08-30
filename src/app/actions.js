@@ -64,7 +64,10 @@ function eligibleForShootout(lineup, sentOffIds, injuries) {
 // semifinal, simulated silently) — resolves a penalty shootout whenever
 // regulation ends level, so a knockout match always has a winner.
 function maybeResolveShootout(result, home, away, rng) {
-  if (result.homeGoals !== result.awayGoals) return null;
+  // An abandoned match (see EVENT_TYPES.MATCH_ABANDONED) is already decided
+  // by forfeit — never send it to penalties, even if the score happened to
+  // be level at the moment the referee stopped play.
+  if (result.abandoned || result.homeGoals !== result.awayGoals) return null;
   const shootoutHome = { ...home, lineup: eligibleForShootout(home.lineup, result.homeSentOffIds, result.homeInjuries) };
   const shootoutAway = { ...away, lineup: eligibleForShootout(away.lineup, result.awaySentOffIds, result.awayInjuries) };
   const lastMinute = result.events[result.events.length - 1].minute;
@@ -72,10 +75,14 @@ function maybeResolveShootout(result, home, away, rng) {
 }
 
 function wonMatch(result, shootout) {
+  // Forfeit outright beats the goal count — the side that dropped below 7
+  // players lost regardless of what the score happened to be at that point.
+  if (result.abandoned) return result.abandonedSide === 'away';
   return shootout ? shootout.winnerSide === 'home' : result.homeGoals > result.awayGoals;
 }
 
 function matchScoreLabel(result, shootout) {
+  if (result.abandoned) return 'WO';
   return shootout
     ? `${shootout.homeScore}-${shootout.awayScore} nos pênaltis (${result.homeGoals}-${result.awayGoals} no tempo normal)`
     : `${result.homeGoals}-${result.awayGoals}`;

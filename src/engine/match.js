@@ -240,6 +240,51 @@ function pickGoalStyle(rng, finisher) {
   return rng.pickWeighted(styles, weights);
 }
 
+// IFAB Law 3: a match can't continue once a side drops below 7 players.
+// Checked once per minute, after that minute's own events have already
+// fired, so a card issued mid-minute still gets its own event before the
+// match is cut short. What happens to the result after an abandonment isn't
+// an IFAB rule — it's a competition-regulation call, but the common
+// Brazilian convention (and the one this follows) is: WO for the offending
+// side at a fixed MATCH.WO_SCORE, UNLESS the winning side was already ahead
+// by that much or more on the field, in which case the real score on the
+// board stands instead (no reason to shrink a 5-1 lead down to a 3-0 WO).
+// The final score is carried on the MATCH_ABANDONED event itself
+// (homeGoals/awayGoals in `meta`) so a caller replaying events one at a
+// time for a live scoreboard (MatchScreen.jsx, viewer.html) can snap to it
+// instead of trying to track it incrementally.
+function checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats) {
+  const homeCount = activePlayers(homeTeam).length;
+  const awayCount = activePlayers(awayTeam).length;
+  if (homeCount >= MATCH.MIN_PLAYERS_TO_CONTINUE && awayCount >= MATCH.MIN_PLAYERS_TO_CONTINUE) return null;
+
+  // Both sides collapsing in the same minute (e.g. a mass brawl sending off
+  // players on both teams at once) is a rare edge case — whichever has
+  // fewer players is treated as the offending side, ties defaulting to home.
+  const offendingSide = homeCount <= awayCount ? 'home' : 'away';
+  const offendingTeam = offendingSide === 'home' ? homeTeam : awayTeam;
+  const winningSide = offendingSide === 'home' ? 'away' : 'home';
+  const winningTeam = offendingSide === 'home' ? awayTeam : homeTeam;
+
+  if (score[winningSide] - score[offendingSide] < MATCH.WO_SCORE) {
+    score[winningSide] = MATCH.WO_SCORE;
+    score[offendingSide] = 0;
+  }
+
+  const events = [];
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.MATCH_ABANDONED,
+    offendingSide,
+    { team: offendingTeam.config.name, opponent: winningTeam.config.name },
+    rng,
+    { homeGoals: score.home, awayGoals: score.away }
+  );
+  stats.matchAbandoned = true;
+  return { events, offendingSide };
+}
+
 // Away-team-only: taunting the home crowd only makes sense for the visiting
 // side breaking a hostile stadium's heart, not a home player taunting their
 // own fans. Only fires on the specific goal that flips the match into the
@@ -1172,6 +1217,7 @@ export function simulateMatch({ home, away, rng }) {
     goalKickDelays: 0,
     officialsAssaulted: 0,
     handballsOnTheLine: 0,
+    matchAbandoned: false,
   };
   const events = [];
 
@@ -1183,9 +1229,20 @@ export function simulateMatch({ home, away, rng }) {
   const secondHalfAnnounceMinute = firstHalfEnd + MATCH.HALF_MINUTES;
   const totalMinutes = MATCH.HALF_MINUTES * 2 + firstHalfStoppage + secondHalfStoppage;
 
+  let finalMinute = totalMinutes;
+  let abandonedSide = null;
+
   for (let minute = 1; minute <= totalMinutes; minute++) {
     const isSecondHalf = minute > firstHalfEnd;
     events.push(...simulateMinute(minute, homeTeam, awayTeam, score, rng, stats, isSecondHalf));
+
+    const abandonment = checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats);
+    if (abandonment) {
+      events.push(...abandonment.events);
+      finalMinute = minute;
+      abandonedSide = abandonment.offendingSide;
+      break;
+    }
 
     if (minute === MATCH.HALF_MINUTES) {
       events.push(
@@ -1231,7 +1288,7 @@ export function simulateMatch({ home, away, rng }) {
 
   pushEvent(
     events,
-    totalMinutes,
+    finalMinute,
     EVENT_TYPES.FULLTIME,
     null,
     { team: home.name, opponent: away.name, homeGoals: score.home, awayGoals: score.away },
@@ -1241,6 +1298,8 @@ export function simulateMatch({ home, away, rng }) {
   return {
     homeGoals: score.home,
     awayGoals: score.away,
+    abandoned: abandonedSide !== null,
+    abandonedSide,
     events,
     // Exposed so a caller can resolve a penalty shootout on a draw with the
     // correct eligibility: a player sent off during regulation can't take a
@@ -1283,6 +1342,7 @@ export function simulateMatch({ home, away, rng }) {
       goalKickDelays: stats.goalKickDelays,
       officialsAssaulted: stats.officialsAssaulted,
       handballsOnTheLine: stats.handballsOnTheLine,
+      matchAbandoned: stats.matchAbandoned,
     },
   };
 }

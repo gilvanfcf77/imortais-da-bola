@@ -11,6 +11,19 @@ export const MATCH = {
   // while the home side isn't already winning (nothing to complain about
   // if you're ahead). Not yet calibrated.
   STOPPAGE_BOO_CHANCE: 0.3,
+  // IFAB Law 3: a match may not continue if a team has fewer than 7
+  // players. Red cards are the only way a side loses players mid-match
+  // here (no injury-forced permanent substitutions), so this is checked
+  // once per minute in simulateMatch's loop.
+  MIN_PLAYERS_TO_CONTINUE: 7,
+  // What the recorded result should be after an abandonment isn't an IFAB
+  // rule — Law 3 only says the match must stop, not what the score becomes
+  // after. This follows the common Brazilian competition-regulation
+  // convention: WO for the side that collapsed, fixed at 3x0 for the
+  // opponent — UNLESS the opponent was already ahead by 3 or more on the
+  // field, in which case that real score stands instead. See
+  // checkMatchAbandoned in match.js.
+  WO_SCORE: 3,
 };
 
 export const SHOOTOUT = {

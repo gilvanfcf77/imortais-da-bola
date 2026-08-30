@@ -59,6 +59,7 @@ export const EVENT_TYPES = {
   SHOOTOUT_KICK_SCORED: 'shootoutKickScored',
   SHOOTOUT_KICK_MISSED: 'shootoutKickMissed',
   SHOOTOUT_WINNER: 'shootoutWinner',
+  MATCH_ABANDONED: 'matchAbandoned',
   // Not looked up in TEMPLATES below — a player-specific special event's
   // text comes from that player's own data (see `specialAbility.templates`
   // in the club data and `narrateCustom` / `resolveSpecialAbility`), since
@@ -70,6 +71,10 @@ const TEMPLATES = {
   [EVENT_TYPES.KICKOFF]: ['Bola rolando! {team} contra {opponent}.'],
   [EVENT_TYPES.HALFTIME]: ['Fim de primeiro tempo: {team} {homeGoals} x {awayGoals} {opponent}.'],
   [EVENT_TYPES.FULLTIME]: ['Apito final! {team} {homeGoals} x {awayGoals} {opponent}.'],
+  [EVENT_TYPES.MATCH_ABANDONED]: [
+    'O árbitro suspende a partida! Com menos de 7 jogadores em campo, o {team} não tem como continuar — WO decretado a favor do {opponent}.',
+    'Fim de jogo antes da hora: o {team} fica com menos de 7 em campo e o árbitro é obrigado a encerrar a partida. WO para o {opponent}.',
+  ],
   [EVENT_TYPES.STOPPAGE_TIME_ANNOUNCED]: [
     'O quarto árbitro levanta a placa: {minutes} minutos de acréscimo.',
     'Acréscimo confirmado: mais {minutes} minutos até o fim desta etapa.',
