@@ -75,11 +75,11 @@ const TEMPLATES = {
     'Acréscimo confirmado: mais {minutes} minutos até o fim desta etapa.',
   ],
   [EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT]: [
-    'A torcida do {crowd} vaia o acréscimo — acha pouco tempo pra buscar o resultado.',
+    'A torcida do {crowd} vaia o acréscimo — pouco tempo pra buscar o resultado.',
     'Vaias nas arquibancadas: a torcida do {crowd} queria mais minutos de bola rolando.',
   ],
   [EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG]: [
-    'A torcida do {crowd} vaia o acréscimo — acha tempo demais e teme o susto no fim do jogo.',
+    'A torcida do {crowd} vaia o acréscimo — tempo demais.',
     'Reclamação geral da torcida do {crowd}: tanto acréscimo assim só dá mais chance pro adversário.',
   ],
 
@@ -88,7 +88,7 @@ const TEMPLATES = {
     '{player} finaliza e o goleiro espalma.',
     '{player} tenta o chute, mas a bola sobra fraca para o goleiro.',
     'Boa jogada de {team}, mas {player} desperdiça a chance.',
-    '{player} bate todo torto e a bola sai varrendo, longe do gol.',
+    '{player} bate todo torto e a bola passa longe do gol.',
     'Que perna torta! {player} chuta torto e nem assusta o goleiro.',
   ],
   [EVENT_TYPES.WHIFF]: [
@@ -107,12 +107,12 @@ const TEMPLATES = {
     '{player} tenta a finalização, fura completamente e cai. Muita lamentação nas arquibancadas.',
   ],
   [EVENT_TYPES.WALL_SAVE]: [
-    '{player} finaliza, mas {defender} faz a defesaça e segura tudo.',
+    '{player} finaliza, mas {defender} faz uma defesaça.',
     '{player} bate forte, mas {defender} sai bem e evita o gol com uma defesa espetacular.',
-    'Na hora certa, {defender} aparece para bloquear o chute de {player}.',
+    'Na hora certa, {defender} aparece para defender o chute de {player}.',
   ],
   [EVENT_TYPES.GOAL_LINE_CLEARANCE]: [
-    '{defender} aparece do nada e tira em cima da linha! Estava tudo consumado no chute de {player}.',
+    'Inacreditável! {defender} aparece do nada e tira o chute de {player} em cima da linha!',
     '{defender} salva o time, tirando a bola quase dentro do gol depois do chute de {player}.',
     'Que corte! {defender} evita o gol de {player} tirando em cima da linha.',
   ],
@@ -124,6 +124,7 @@ const TEMPLATES = {
   [EVENT_TYPES.GOAL]: [
     'GOOOOL! {player} balança as redes para {team}!',
     '{player} não perdoa e marca para {team}!',
+    'GOOOOL! Que golaço de {player} para deixar o {team} na frente do placar!',
   ],
   [EVENT_TYPES.GOAL_ANOTHER]: [
     'É gol! {player} completa a jogada e faz mais um para {team}.',
