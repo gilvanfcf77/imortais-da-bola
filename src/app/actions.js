@@ -71,7 +71,14 @@ function maybeResolveShootout(result, home, away, rng) {
   const shootoutHome = { ...home, lineup: eligibleForShootout(home.lineup, result.homeSentOffIds, result.homeInjuries) };
   const shootoutAway = { ...away, lineup: eligibleForShootout(away.lineup, result.awaySentOffIds, result.awayInjuries) };
   const lastMinute = result.events[result.events.length - 1].minute;
-  return resolvePenaltyShootout({ home: shootoutHome, away: shootoutAway, rng, startMinute: lastMinute + 1 });
+  return resolvePenaltyShootout({
+    home: shootoutHome,
+    away: shootoutAway,
+    rng,
+    startMinute: lastMinute + 1,
+    homeStandInGoalkeeperId: result.homeStandInGoalkeeperId,
+    awayStandInGoalkeeperId: result.awayStandInGoalkeeperId,
+  });
 }
 
 function wonMatch(result, shootout) {

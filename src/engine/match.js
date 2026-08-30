@@ -21,6 +21,7 @@ import {
   DESPERATION,
   WALL_SAVE,
   SHOOTOUT,
+  GOALKEEPER,
 } from './constants.js';
 import { getTraitIntensity, sumTraitIntensity, combineMultipliers } from './traits.js';
 import { EVENT_TYPES, narrate, narrateCustom } from './narration.js';
@@ -36,6 +37,9 @@ function createTeamState(config, side) {
     redCards: new Set(),
     yellowCards: new Set(),
     injuries: new Map(), // playerId -> overall penalty, for the rest of the match
+    // Set once the team has no goalkeeper-position player left on the pitch
+    // — see maybeAssignStandInGoalkeeper below.
+    standInGoalkeeperId: null,
   };
 }
 
@@ -62,10 +66,14 @@ function teamPower(team) {
   // proportional one above, defense only.
   const defenseFactor =
     active.length < team.config.lineup.length ? numericFactor * CARDS.SHORT_HANDED_DEFENSE_PENALTY : numericFactor;
+  // On top of the short-handed cut above — an outfield player standing in
+  // for a sent-off goalkeeper (see maybeAssignStandInGoalkeeper) is that
+  // much more exposed on his own, independent of just being a man down.
+  const standInGoalkeeperFactor = team.standInGoalkeeperId ? GOALKEEPER.STAND_IN_DEFENSE_PENALTY : 1;
   const mods = POSTURE_MODIFIERS[team.config.posture];
   return {
     attack: sectorStrength(active, ['FW', 'MF']) * mods.attack * numericFactor,
-    defense: sectorStrength(active, ['CB', 'FB', 'GK']) * mods.defense * defenseFactor,
+    defense: sectorStrength(active, ['CB', 'FB', 'GK']) * mods.defense * defenseFactor * standInGoalkeeperFactor,
   };
 }
 
@@ -96,9 +104,37 @@ function pushCustomEvent(events, minute, type, side, templates, context, rng, me
   events.push({ minute, type, side, description: narrateCustom(templates, context, rng), ...meta });
 }
 
-function sendOff(team, player, stats) {
+// If this dismissal leaves the team with no goalkeeper-position player on
+// the pitch, an outfield player is immediately drawn to fill in — a real
+// keeper being sent off doesn't leave the team playing with 10, it leaves
+// them playing with a keeper who's never trained for the job. Re-triggers
+// if that stand-in later gets sent off too, drawing a new one each time.
+function maybeAssignStandInGoalkeeper(team, minute, rng, stats) {
+  const active = activePlayers(team);
+  if (active.length === 0) return [];
+  if (active.some((p) => p.position === 'GK')) return [];
+  if (team.standInGoalkeeperId && active.some((p) => p.id === team.standInGoalkeeperId)) return [];
+
+  const chosen = rng.pick(active);
+  team.standInGoalkeeperId = chosen.id;
+  stats.standInGoalkeepers++;
+  const events = [];
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.OUTFIELD_PLAYER_IN_GOAL,
+    team.side,
+    { player: chosen.name, team: team.config.name },
+    rng,
+    { playerId: chosen.id }
+  );
+  return events;
+}
+
+function sendOff(team, player, minute, rng, stats) {
   team.redCards.add(player.id);
   stats.redCards[team.side]++;
+  return maybeAssignStandInGoalkeeper(team, minute, rng, stats);
 }
 
 // Shared by resolveFoul and any other situation (throw-in/goal-kick delay)
@@ -111,7 +147,7 @@ function issueYellowCard(team, player, minute, rng, stats) {
       playerId: player.id,
       cardType: 'red',
     });
-    sendOff(team, player, stats);
+    events.push(...sendOff(team, player, minute, rng, stats));
   } else {
     team.yellowCards.add(player.id);
     stats.yellowCards[team.side]++;
@@ -215,6 +251,15 @@ function pickTauntVictim(team, rng) {
 
 function pickGoalkeeper(team, rng) {
   const active = activePlayers(team);
+  // Once a specific outfield player has taken over in goal (see
+  // maybeAssignStandInGoalkeeper), every later "the goalkeeper does X"
+  // moment should keep naming that same player, not a fresh random pick
+  // each time — same person, whole rest of the match, same as a real
+  // improvised keeper.
+  if (team.standInGoalkeeperId) {
+    const standIn = active.find((p) => p.id === team.standInGoalkeeperId);
+    if (standIn) return standIn;
+  }
   const keepers = active.filter((p) => p.position === 'GK');
   return rng.pick(keepers.length > 0 ? keepers : active);
 }
@@ -229,13 +274,18 @@ const GOAL_STYLE_EVENT_TYPE = {
   goalkeeperBlunder: EVENT_TYPES.GOAL_GOALKEEPER_BLUNDER,
 };
 
-function pickGoalStyle(rng, finisher) {
+// `opponentHasStandInGoalkeeper`: the attacking side deliberately shoots
+// from distance more often against an outfield player standing in as
+// goalkeeper (see maybeAssignStandInGoalkeeper) — a tactical choice by the
+// attackers, not some automatic side effect of the defense being weaker.
+function pickGoalStyle(rng, finisher, opponentHasStandInGoalkeeper) {
   const dribblerIntensity = getTraitIntensity(finisher, 'dribbler');
   const styles = Object.keys(GOAL_STYLE.WEIGHTS);
   const weights = styles.map((style) => {
     const base = GOAL_STYLE.WEIGHTS[style];
-    if (style !== 'individual') return base;
-    return base * (1 + dribblerIntensity * TRAIT_WEIGHTS.DRIBBLER_INDIVIDUAL_GOAL_WEIGHT);
+    if (style === 'individual') return base * (1 + dribblerIntensity * TRAIT_WEIGHTS.DRIBBLER_INDIVIDUAL_GOAL_WEIGHT);
+    if (style === 'longShot' && opponentHasStandInGoalkeeper) return base * GOALKEEPER.OPPONENT_LONG_SHOT_WEIGHT;
+    return base;
   });
   return rng.pickWeighted(styles, weights);
 }
@@ -377,11 +427,16 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
 
   const wallIntensity = getTraitIntensity(keeper, 'wall');
   const sharpshooterIntensity = getTraitIntensity(finisher, 'sharpshooter');
+  // An outfield player standing in for a sent-off goalkeeper (see
+  // maybeAssignStandInGoalkeeper) has no idea how to read a penalty —
+  // easier for the kicker to convert than against a real keeper.
+  const standInMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER : 1;
   const missChance = clamp(
     PENALTY.BASE_MISS_CHANCE *
       (1 + wallIntensity * PENALTY.WALL_MISS_WEIGHT) *
       (1 - sharpshooterIntensity * PENALTY.SHARPSHOOTER_MISS_REDUCTION) *
-      mindGamesMultiplier,
+      mindGamesMultiplier *
+      standInMultiplier,
     PENALTY.MISS_CHANCE_FLOOR,
     PENALTY.MISS_CHANCE_CEIL
   );
@@ -450,8 +505,17 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
   const wallMultiplier = wallReductionMultiplier(defendingTeam);
   const holdMultiplier = leaderHoldMultiplier(defendingTeam, minute, score);
   const defenseMultiplier = wallMultiplier * holdMultiplier;
+  // Not a defense number — this is the attacking side choosing to press an
+  // outfield player standing in as goalkeeper (see
+  // maybeAssignStandInGoalkeeper), so it's kept as its own factor rather
+  // than folded into defenseMultiplier above.
+  const standInGoalkeeperMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.OPPONENT_ATTACK_BOOST : 1;
 
-  const finalChance = clamp(baseConversion * attackMultiplier * defenseMultiplier, 0, 0.95);
+  const finalChance = clamp(
+    baseConversion * attackMultiplier * defenseMultiplier * standInGoalkeeperMultiplier,
+    0,
+    0.95
+  );
 
   if (rng.chance(finalChance)) {
     const wasWinningBefore = scoreSituation(attackingTeam.side, score) === 'winning';
@@ -460,7 +524,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     const isFirstGoalForTeam = score[attackingTeam.side] === 1;
     const tookTheLead = !wasWinningBefore && scoreSituation(attackingTeam.side, score) === 'winning';
 
-    const style = pickGoalStyle(rng, finisher);
+    const style = pickGoalStyle(rng, finisher, Boolean(defendingTeam.standInGoalkeeperId));
     const context = { player: finisher.name, team: attackingTeam.config.name };
     let goalEventType = GOAL_STYLE_EVENT_TYPE[style];
     let assistPlayerId = null;
@@ -563,7 +627,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
           rng,
           { playerId: instigator.id, cardType: 'red' }
         );
-        sendOff(attackingTeam, instigator, stats);
+        events.push(...sendOff(attackingTeam, instigator, minute, rng, stats));
         stats.officialsAssaulted++;
       }
     }
@@ -714,7 +778,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       playerId: offender.id,
       cardType: 'red',
     });
-    sendOff(offendingTeam, offender, stats);
+    events.push(...sendOff(offendingTeam, offender, minute, rng, stats));
     stats.officialsAssaulted++;
     return events;
   }
@@ -727,7 +791,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       playerId: offender.id,
       cardType: 'red',
     });
-    sendOff(offendingTeam, offender, stats);
+    events.push(...sendOff(offendingTeam, offender, minute, rng, stats));
     return events;
   }
 
@@ -822,7 +886,7 @@ function triggerBrawl(instigatingTeam, opposingTeam, minute, victimName, rng, st
     });
     cardsGiven++;
     if (becomesRed) {
-      sendOff(side, player, stats);
+      events.push(...sendOff(side, player, minute, rng, stats));
     } else {
       side.yellowCards.add(player.id);
       stats.yellowCards[side.side]++;
@@ -1218,6 +1282,7 @@ export function simulateMatch({ home, away, rng }) {
     officialsAssaulted: 0,
     handballsOnTheLine: 0,
     matchAbandoned: false,
+    standInGoalkeepers: 0,
   };
   const events = [];
 
@@ -1304,11 +1369,16 @@ export function simulateMatch({ home, away, rng }) {
     // Exposed so a caller can resolve a penalty shootout on a draw with the
     // correct eligibility: a player sent off during regulation can't take a
     // kick, and an injured one should carry the same overall penalty they
-    // played the rest of the match with.
+    // played the rest of the match with. Same reasoning for the stand-in
+    // goalkeeper (see maybeAssignStandInGoalkeeper) — if regulation ended
+    // with an outfield player in goal, the shootout should keep facing that
+    // same player, not roll a fresh random one for every kick.
     homeSentOffIds: [...homeTeam.redCards],
     awaySentOffIds: [...awayTeam.redCards],
     homeInjuries: Object.fromEntries(homeTeam.injuries),
     awayInjuries: Object.fromEntries(awayTeam.injuries),
+    homeStandInGoalkeeperId: homeTeam.standInGoalkeeperId,
+    awayStandInGoalkeeperId: awayTeam.standInGoalkeeperId,
     stats: {
       fouls: stats.fouls.home + stats.fouls.away,
       foulsBySide: stats.fouls,
@@ -1343,6 +1413,7 @@ export function simulateMatch({ home, away, rng }) {
       officialsAssaulted: stats.officialsAssaulted,
       handballsOnTheLine: stats.handballsOnTheLine,
       matchAbandoned: stats.matchAbandoned,
+      standInGoalkeepers: stats.standInGoalkeepers,
     },
   };
 }
@@ -1354,15 +1425,29 @@ export function simulateMatch({ home, away, rng }) {
 // homeInjuries/awayInjuries on simulateMatch's return value) — this function
 // itself has no idea a regulation match even happened. `startMinute` just
 // keeps the shootout's events numbered right after the match's own, so a
-// combined event log stays chronological.
+// combined event log stays chronological. `homeStandInGoalkeeperId`/
+// `awayStandInGoalkeeperId` (also from simulateMatch's return value, if
+// regulation ended with an outfield player in goal) keep the shootout
+// facing that same player on every kick, instead of pickGoalkeeper falling
+// back to a fresh random pick each time (there's no real GK left in the
+// lineup for it to find).
 //
 // Reuses resolvePenalty's own miss-chance formula and mind-games flavor for
 // every kick; the only genuinely new mechanic here is the alternating-kicks-
 // then-sudden-death structure. Always resolves to a winner — there's no draw
 // outcome, sudden death continues until the tie breaks.
-export function resolvePenaltyShootout({ home, away, rng, startMinute }) {
+export function resolvePenaltyShootout({
+  home,
+  away,
+  rng,
+  startMinute,
+  homeStandInGoalkeeperId = null,
+  awayStandInGoalkeeperId = null,
+}) {
   const homeTeam = createTeamState(home, 'home');
   const awayTeam = createTeamState(away, 'away');
+  homeTeam.standInGoalkeeperId = homeStandInGoalkeeperId;
+  awayTeam.standInGoalkeeperId = awayStandInGoalkeeperId;
   const events = [];
   const score = { home: 0, away: 0 };
   const taken = { home: new Set(), away: new Set() };
@@ -1393,11 +1478,16 @@ export function resolvePenaltyShootout({ home, away, rng, startMinute }) {
 
     const wallIntensity = getTraitIntensity(keeper, 'wall');
     const sharpshooterIntensity = getTraitIntensity(kicker, 'sharpshooter');
+    // An outfield player standing in for a sent-off goalkeeper (see
+    // maybeAssignStandInGoalkeeper) has no idea how to read a penalty —
+    // easier for the kicker to convert than against a real keeper.
+    const standInMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER : 1;
     const missChance = clamp(
       PENALTY.BASE_MISS_CHANCE *
         (1 + wallIntensity * PENALTY.WALL_MISS_WEIGHT) *
         (1 - sharpshooterIntensity * PENALTY.SHARPSHOOTER_MISS_REDUCTION) *
-        mindGamesMultiplier,
+        mindGamesMultiplier *
+        standInMultiplier,
       PENALTY.MISS_CHANCE_FLOOR,
       PENALTY.MISS_CHANCE_CEIL
     );

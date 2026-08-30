@@ -91,6 +91,31 @@ export const CARDS = {
   SHORT_HANDED_DEFENSE_PENALTY: 0.85,
 };
 
+// Once a team has no goalkeeper-position player left on the pitch (their GK
+// was sent off), an outfield player is drawn to fill in — see
+// EVENT_TYPES.OUTFIELD_PLAYER_IN_GOAL and maybeAssignStandInGoalkeeper in
+// match.js. Not yet calibrated.
+export const GOALKEEPER = {
+  // On top of CARDS.SHORT_HANDED_DEFENSE_PENALTY (which already applies for
+  // simply being a player short) — this extra cut is specifically about that
+  // one player being an outfielder with no real goalkeeping skill, not about
+  // the team being down a man in general.
+  STAND_IN_DEFENSE_PENALTY: 0.8,
+  // This part isn't the defense getting worse — it's the opposing team
+  // noticing the makeshift keeper and deliberately choosing to attack more
+  // and shoot from distance more, so it's applied to the attacking side's
+  // own chance, not folded into the defending side's numbers above.
+  OPPONENT_ATTACK_BOOST: 1.2,
+  OPPONENT_LONG_SHOT_WEIGHT: 2.5, // multiplies GOAL_STYLE.WEIGHTS.longShot for the attacking side
+  // Multiplies the kicker's miss chance (PENALTY.BASE_MISS_CHANCE and
+  // friends, in resolvePenalty and resolvePenaltyShootout's takeKick) when
+  // whoever's defending is the stand-in rather than a real goalkeeper — an
+  // outfield player has no idea how to read a penalty, so the kicker is
+  // more likely to convert. Below 1 on purpose: it makes the kicker miss
+  // LESS often, not more.
+  STAND_IN_PENALTY_MISS_MULTIPLIER: 0.6,
+};
+
 export const GAMESMANSHIP = {
   // Tactical-foul rate increase per gamesmanship level (0-3) — applies
   // regardless of having cynicalFouler players, same as the card risk below.

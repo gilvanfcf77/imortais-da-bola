@@ -149,6 +149,7 @@ const EVENT_CATEGORY_CLASS = {
   [EVENT_TYPES.NO_CARD_DESPITE_INJURY]: 'text-red-400 italic font-bold',
   [EVENT_TYPES.SCANDALOUS_FOUL_IGNORED]: 'text-red-400 italic font-bold',
   [EVENT_TYPES.OFFICIAL_ASSAULTED]: 'text-red-400 font-bold',
+  [EVENT_TYPES.OUTFIELD_PLAYER_IN_GOAL]: 'text-amber-400 italic font-semibold',
   [EVENT_TYPES.MATCH_ABANDONED]: 'text-red-400 font-bold',
   [EVENT_TYPES.TRASH_TALK]: 'text-yellow-300 italic',
   [EVENT_TYPES.PENALTY_MIND_GAMES]: 'text-yellow-300 italic',

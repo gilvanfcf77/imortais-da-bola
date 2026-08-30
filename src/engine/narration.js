@@ -45,6 +45,7 @@ export const EVENT_TYPES = {
   YELLOW_CARD: 'yellowCard',
   SECOND_YELLOW_RED: 'secondYellowRed',
   STRAIGHT_RED: 'straightRed',
+  OUTFIELD_PLAYER_IN_GOAL: 'outfieldPlayerInGoal',
   NUTMEG_TAUNT: 'nutmegTaunt',
   TRASH_TALK: 'trashTalk',
   FIGHT_CALLOUT: 'fightCallout',
@@ -290,6 +291,18 @@ const TEMPLATES = {
     '{player} recebe cartão vermelho direto e deixa o time com um a menos.',
   ],
 
+  // Fires once the team has no goalkeeper-position player left on the
+  // pitch — see maybeAssignStandInGoalkeeper in match.js. Some variants
+  // already gesture at the opponent's reaction (GOALKEEPER.
+  // OPPONENT_ATTACK_BOOST/OPPONENT_LONG_SHOT_WEIGHT in constants.js): the
+  // rival team choosing to press more and shoot from distance more, not
+  // this team's defense somehow getting automatically worse.
+  [EVENT_TYPES.OUTFIELD_PLAYER_IN_GOAL]: [
+    'Sem goleiro no banco, {player} veste a camisa 1 e assume a meta improvisado pelo {team}.',
+    '{player} calça as luvas emprestadas para defender o gol do {team} — do outro lado, o adversário já farejou a fragilidade e promete arriscar mais de longe.',
+    'Emergência no {team}: {player} vira goleiro de linha. Um pouco de despreparo, uma grande dose de coragem.',
+  ],
+
   [EVENT_TYPES.NUTMEG_TAUNT]: [
     '{player} dá um chapéu em {victim} e ainda manda um beijo! A torcida vai à loucura.',
     'Depois de humilhar {victim} com um chapéu, {player} manda um beijo para ele. Isso não vai ficar barato.',
@@ -343,8 +356,8 @@ const TEMPLATES = {
     'O goleiro {player} segura a bola e não tem pressa nenhuma pra sair jogando.',
   ],
   [EVENT_TYPES.SHOWBOATING]: [
-    '{player} começa a fazer embaixadinhas no meio de campo, provocando o adversário com {team} já goleando.',
-    'Com o placar tranquilo, {player} não resiste e solta embaixadinhas na cara da marcação.',
+    '{player} começa a fazer embaixadinhas no meio de campo, provocando o adversário.',
+    'Com um placar confortável, {player} não hesita em fazer embaixadinhas diante da marcação.',
     '{player} humilha a marcação com embaixadinhas — {team} está confortável no placar e não perde a chance de se exibir.',
   ],
 };
