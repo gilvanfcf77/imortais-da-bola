@@ -61,7 +61,7 @@
     100% { transform: scale(1); }
   }
 
-  #controls {
+  #teamControls, .action-row {
     display: flex;
     gap: 12px;
     align-items: center;
@@ -69,8 +69,10 @@
     flex-wrap: wrap;
     font-size: 0.9rem;
   }
-  #controls label { display: flex; align-items: center; gap: 6px; color: var(--muted); }
-  #controls input, #controls select {
+  #teamControls { padding-bottom: 10px; border-bottom: 1px dashed #334155; margin-bottom: 10px; }
+  #teamControls label, .action-row label { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+  #teamControls select, #teamControls input,
+  .action-row input, .action-row select {
     background: #0f172a;
     color: var(--text);
     border: 1px solid #334155;
@@ -78,8 +80,20 @@
     padding: 4px 8px;
     width: 110px;
   }
-  #controls #homeClub, #controls #awayClub { width: 160px; }
-  #playBtn {
+  #teamControls .club-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  #teamControls .club-group.side-home { border-left: 3px solid var(--home); }
+  #teamControls .club-group.side-away { border-left: 3px solid var(--away); }
+  #teamControls #homeClub, #teamControls #awayClub { width: 160px; }
+  #teamControls select { width: 100px; }
+
+  button.action-btn {
     background: #16a34a;
     color: white;
     border: none;
@@ -88,8 +102,31 @@
     font-weight: 600;
     cursor: pointer;
   }
-  #playBtn:disabled { background: #334155; cursor: default; }
-  #status { color: var(--muted); font-size: 0.85rem; margin-left: 8px; }
+  button.action-btn:disabled { background: #334155; cursor: default; }
+  .status { color: var(--muted); font-size: 0.85rem; margin-left: 8px; }
+
+  #tabBar {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  #tabBar .tab-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid #334155;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: 6px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #tabBar .tab-btn.active { background: var(--bg); color: var(--text); }
+
+  .action-row { padding: 10px 0; }
+  .tab-panel { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .tab-panel.active { display: flex; }
 
   #matchArea {
     flex: 1;
@@ -214,20 +251,99 @@
     margin: 8px 0;
   }
   .event.ev-divider .minute { display: none; }
+
+  #calibrationPanel { overflow-y: auto; }
+  #calReport { max-width: 900px; margin: 0 auto; padding: 8px 20px 40px; }
+  #calReport .hint { text-align: center; color: var(--muted); margin-top: 40px; }
+  .cal-section {
+    background: var(--panel);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .cal-section h2 {
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px 20px;
+  }
+  .cal-stat { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; font-size: 0.88rem; }
+  .cal-stat .label { color: var(--muted); }
+  .cal-stat .value { font-variant-numeric: tabular-nums; font-weight: 600; }
+  table.cal-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  table.cal-table th, table.cal-table td { text-align: left; padding: 4px 8px; border-bottom: 1px solid #334155; }
+  table.cal-table th { color: var(--muted); font-weight: 600; }
+  table.cal-table td.num, table.cal-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
   <header>
-    <h1>Imortais da Bola — visualizador de partida</h1>
+    <h1>Imortais da Bola — visualizador de partida &amp; calibragem</h1>
     <div id="scoreboard">
       <span class="team-home" id="homeName">—</span>
       <span class="score"><span id="homeScore">0</span> x <span id="awayScore">0</span></span>
       <span class="team-away" id="awayName">—</span>
     </div>
-    <div id="controls">
+    <div id="teamControls">
+      <div class="club-group side-home">
+        <label>Casa <select id="homeClub"></select></label>
+        <label>Postura
+          <select id="homePosture">
+            <option value="attacking">ofensiva</option>
+            <option value="balanced" selected>equilibrada</option>
+            <option value="defensive">defensiva</option>
+          </select>
+        </label>
+        <label>Catimba
+          <select id="homeGamesmanship">
+            <option value="auto" selected>auto</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </label>
+      </div>
+      <div class="club-group side-away">
+        <label>Visitante <select id="awayClub"></select></label>
+        <label>Postura
+          <select id="awayPosture">
+            <option value="attacking">ofensiva</option>
+            <option value="balanced" selected>equilibrada</option>
+            <option value="defensive">defensiva</option>
+          </select>
+        </label>
+        <label>Catimba
+          <select id="awayGamesmanship">
+            <option value="auto" selected>auto</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </label>
+      </div>
+      <label>Formação
+        <select id="formation">
+          <option value="4-4-2" selected>4-4-2</option>
+          <option value="4-3-3">4-3-3</option>
+          <option value="4-2-4">4-2-4</option>
+        </select>
+      </label>
+    </div>
+    <div id="tabBar">
+      <button class="tab-btn active" data-tab="match">Partida</button>
+      <button class="tab-btn" data-tab="calibration">Calibragem</button>
+    </div>
+    <div class="action-row" id="matchActionRow">
       <span id="clock">0'</span>
-      <label>Casa <select id="homeClub"></select></label>
-      <label>Visitante <select id="awayClub"></select></label>
       <label>Seed <input id="seedInput" type="number" placeholder="aleatória" /></label>
       <label>Velocidade
         <select id="speed">
@@ -236,18 +352,39 @@
           <option value="120">rápida</option>
         </select>
       </label>
-      <button id="playBtn">Nova partida</button>
-      <span id="status"></span>
+      <button id="playBtn" class="action-btn">Nova partida</button>
+      <span id="status" class="status"></span>
+    </div>
+    <div class="action-row" id="calActionRow" style="display: none;">
+      <label>Seed base <input id="calSeedInput" type="number" placeholder="aleatória" /></label>
+      <label>Partidas <input id="calCountInput" type="number" min="1" max="5000" value="500" /></label>
+      <button id="calRunBtn" class="action-btn">Rodar calibragem</button>
+      <span id="calStatus" class="status"></span>
     </div>
   </header>
-  <div id="matchArea">
-    <aside id="homeLineup" class="lineup side-home"></aside>
-    <main id="log"><p class="hint">Clique em "Nova partida" para simular um confronto.</p></main>
-    <aside id="awayLineup" class="lineup side-away"></aside>
+
+  <div id="matchPanel" class="tab-panel active">
+    <div id="matchArea">
+      <aside id="homeLineup" class="lineup side-home"></aside>
+      <main id="log"><p class="hint">Clique em "Nova partida" para simular um confronto.</p></main>
+      <aside id="awayLineup" class="lineup side-away"></aside>
+    </div>
+  </div>
+
+  <div id="calibrationPanel" class="tab-panel">
+    <div id="calReport"><p class="hint">Escolha os times/configurações acima e clique em "Rodar calibragem".</p></div>
   </div>
 
   <script type="module">
-    import { createRng, FORMATIONS, draftEleven, simulateMatch, EVENT_TYPES, GOAL_EVENT_TYPES, defaultGamesmanship } from './src/engine/index.js';
+    import {
+      createRng,
+      FORMATIONS,
+      draftEleven,
+      simulateMatch,
+      EVENT_TYPES,
+      GOAL_EVENT_TYPES,
+      defaultGamesmanship,
+    } from './src/engine/index.js';
 
     // Each club's data lives in its own folder under src/data/clubs/ (see
     // src/data/clubs/index.js for the Node-side equivalent of this same
@@ -274,8 +411,6 @@
       })
     );
 
-    const FORMATION = FORMATIONS['4-4-2'];
-
     const els = {
       homeName: document.getElementById('homeName'),
       awayName: document.getElementById('awayName'),
@@ -285,18 +420,69 @@
       log: document.getElementById('log'),
       homeClubSelect: document.getElementById('homeClub'),
       awayClubSelect: document.getElementById('awayClub'),
+      homePostureSelect: document.getElementById('homePosture'),
+      awayPostureSelect: document.getElementById('awayPosture'),
+      homeGamesmanshipSelect: document.getElementById('homeGamesmanship'),
+      awayGamesmanshipSelect: document.getElementById('awayGamesmanship'),
+      formationSelect: document.getElementById('formation'),
       seedInput: document.getElementById('seedInput'),
       speedSelect: document.getElementById('speed'),
       playBtn: document.getElementById('playBtn'),
       status: document.getElementById('status'),
       homeLineup: document.getElementById('homeLineup'),
       awayLineup: document.getElementById('awayLineup'),
+      matchActionRow: document.getElementById('matchActionRow'),
+      calActionRow: document.getElementById('calActionRow'),
+      calSeedInput: document.getElementById('calSeedInput'),
+      calCountInput: document.getElementById('calCountInput'),
+      calRunBtn: document.getElementById('calRunBtn'),
+      calStatus: document.getElementById('calStatus'),
+      calReport: document.getElementById('calReport'),
+      matchPanel: document.getElementById('matchPanel'),
+      calibrationPanel: document.getElementById('calibrationPanel'),
     };
 
     for (const select of [els.homeClubSelect, els.awayClubSelect]) {
       select.innerHTML = SAMPLE_CLUBS.map((club, i) => `<option value="${i}">${club.name}</option>`).join('');
     }
     els.awayClubSelect.value = SAMPLE_CLUBS.findIndex((club) => club.slug === 'uniao-da-porrada');
+
+    // --- Tabs ---------------------------------------------------------------
+
+    for (const btn of document.querySelectorAll('#tabBar .tab-btn')) {
+      btn.addEventListener('click', () => {
+        for (const b of document.querySelectorAll('#tabBar .tab-btn')) b.classList.toggle('active', b === btn);
+        const tab = btn.dataset.tab;
+        els.matchPanel.classList.toggle('active', tab === 'match');
+        els.calibrationPanel.classList.toggle('active', tab === 'calibration');
+        els.matchActionRow.style.display = tab === 'match' ? '' : 'none';
+        els.calActionRow.style.display = tab === 'calibration' ? '' : 'none';
+      });
+    }
+
+    // --- Shared team building (used by both the single-match tab and the
+    // calibration tab, so "escolher os times e configurar os outros
+    // elementos" applies to both the same way) ------------------------------
+
+    // `gamesmanship` select value is either 'auto' (defaultGamesmanship,
+    // based on the drafted lineup's cynicalFouler traits) or a fixed 0-3
+    // override — same choice the actual game itself never exposes, but
+    // useful here to isolate catimba's effect while calibrating.
+    function buildTeam(side, rng) {
+      const clubSelect = side === 'home' ? els.homeClubSelect : els.awayClubSelect;
+      const postureSelect = side === 'home' ? els.homePostureSelect : els.awayPostureSelect;
+      const gamesmanshipSelect = side === 'home' ? els.homeGamesmanshipSelect : els.awayGamesmanshipSelect;
+
+      const club = SAMPLE_CLUBS[Number(clubSelect.value)];
+      const formation = FORMATIONS[els.formationSelect.value];
+      const lineup = draftEleven(club.pool, formation, rng);
+      const gamesmanshipValue = gamesmanshipSelect.value;
+      const gamesmanship = gamesmanshipValue === 'auto' ? defaultGamesmanship(lineup) : Number(gamesmanshipValue);
+
+      return { name: club.name, lineup, posture: postureSelect.value, gamesmanship };
+    }
+
+    // ===================== Aba "Partida" (evento a evento) =================
 
     const POSITION_LABELS = { GK: 'GOL', CB: 'ZAG', FB: 'LAT', MF: 'MEI', FW: 'ATA' };
 
@@ -486,31 +672,15 @@
       const seed = els.seedInput.value ? Number(els.seedInput.value) : Math.floor(Math.random() * 1e9);
       els.seedInput.value = seed;
 
-      const homeClub = SAMPLE_CLUBS[Number(els.homeClubSelect.value)];
-      const awayClub = SAMPLE_CLUBS[Number(els.awayClubSelect.value)];
-
       const rng = createRng(seed);
-      const homeLineup = draftEleven(homeClub.pool, FORMATION, rng);
-      const awayLineup = draftEleven(awayClub.pool, FORMATION, rng);
-
-      const home = {
-        name: homeClub.name,
-        lineup: homeLineup,
-        posture: 'balanced',
-        gamesmanship: defaultGamesmanship(homeLineup),
-      };
-      const away = {
-        name: awayClub.name,
-        lineup: awayLineup,
-        posture: 'balanced',
-        gamesmanship: defaultGamesmanship(awayLineup),
-      };
+      const home = buildTeam('home', rng);
+      const away = buildTeam('away', rng);
       els.homeName.textContent = home.name;
       els.awayName.textContent = away.name;
 
       playerRefs = new Map();
-      renderLineup(els.homeLineup, homeLineup);
-      renderLineup(els.awayLineup, awayLineup);
+      renderLineup(els.homeLineup, home.lineup);
+      renderLineup(els.awayLineup, away.lineup);
 
       const result = simulateMatch({ home, away, rng });
       const msPerMinute = Number(els.speedSelect.value);
@@ -553,6 +723,380 @@
     }
 
     els.playBtn.addEventListener('click', playMatch);
+
+    // ===================== Aba "Calibragem" (várias partidas, agregado) ====
+    // Browser port of scripts/calibration.js, but driven by whatever
+    // teams/formation/postura/catimba are picked in #teamControls instead of
+    // a fixed pair of clubs — so balance can be probed interactively instead
+    // of editing the script and re-running it in a terminal.
+
+    // Same approximation used by ResultScreen.jsx and scripts/calibration.js:
+    // the engine has no continuous possession state, only independent
+    // per-minute attack rolls per side, so "possession" is estimated as each
+    // side's share of attacking sequences (every SHOT_EVENT_TYPES event is
+    // the resolution of exactly one such sequence).
+    const SHOT_EVENT_TYPES = new Set([
+      ...GOAL_EVENT_TYPES,
+      EVENT_TYPES.WHIFF,
+      EVENT_TYPES.WHIFF_HOME_MISS,
+      EVENT_TYPES.CHANCE_MISSED,
+      EVENT_TYPES.WALL_SAVE,
+      EVENT_TYPES.GOAL_LINE_CLEARANCE,
+      EVENT_TYPES.HANDBALL_ON_THE_LINE,
+      EVENT_TYPES.PENALTY_MISSED,
+    ]);
+
+    function countShotsBySide(events) {
+      const counts = { home: 0, away: 0 };
+      for (const event of events) {
+        if (event.side && SHOT_EVENT_TYPES.has(event.type)) counts[event.side]++;
+      }
+      return counts;
+    }
+
+    // A goal event only carries `playerId`, not position, so cross-reference
+    // against that match's drafted goalkeepers to count how often one of
+    // them is the one credited with the goal (join-the-attack situations, a
+    // free-kick specialist trait on a keeper, etc.).
+    function countGoalkeeperGoals(result, goalkeeperIds) {
+      return result.events.filter((e) => GOAL_EVENT_TYPES.has(e.type) && goalkeeperIds.has(e.playerId)).length;
+    }
+
+    function averageOverall(pool) {
+      return (pool.reduce((sum, p) => sum + p.overall, 0) / pool.length).toFixed(1);
+    }
+
+    function fmtAvg(total, count) {
+      return (total / count).toFixed(2);
+    }
+
+    function fmtPct(part, total) {
+      return total > 0 ? ((part / total) * 100).toFixed(1) : '0.0';
+    }
+
+    const GOAL_STYLE_LABELS = {
+      plain: 'sem detalhe',
+      individual: 'jogada individual',
+      assisted: 'assistência',
+      corner: 'escanteio',
+      longShot: 'chute de longe',
+      defensiveBlunder: 'lambança da defesa',
+      goalkeeperBlunder: 'frango do goleiro',
+      penalty: 'pênalti',
+    };
+
+    function emptyTotals() {
+      return {
+        goals: 0,
+        homeGoals: 0,
+        awayGoals: 0,
+        fouls: 0,
+        yellowCards: 0,
+        redCards: 0,
+        nutmegTaunts: 0,
+        brawls: 0,
+        scandalousFouls: 0,
+        disallowedGoals: 0,
+        severeInjuries: 0,
+        noCardDespiteInjury: 0,
+        trashTalks: 0,
+        fightCallouts: 0,
+        whiffs: 0,
+        goalStyles: {
+          plain: 0,
+          individual: 0,
+          assisted: 0,
+          corner: 0,
+          longShot: 0,
+          defensiveBlunder: 0,
+          goalkeeperBlunder: 0,
+          penalty: 0,
+        },
+        penaltiesAwarded: 0,
+        penaltiesNotGiven: 0,
+        penaltiesPhantom: 0,
+        penaltiesWrongLocation: 0,
+        penaltyMindGames: 0,
+        penaltiesMissed: 0,
+        goalkeeperForward: 0,
+        crowdSilenced: 0,
+        showboating: 0,
+        refereeDeflectionGoals: 0,
+        specialAbilities: 0,
+        stoppageTimeBooed: 0,
+        throwInDelays: 0,
+        goalKickDelays: 0,
+        goalkeeperGoals: 0,
+        officialsAssaulted: 0,
+        handballsOnTheLine: 0,
+        matchAbandoned: 0,
+        standInGoalkeepers: 0,
+        shots: { home: 0, away: 0 },
+      };
+    }
+
+    function accumulate(totals, result, goalkeeperIds) {
+      totals.goalkeeperGoals += countGoalkeeperGoals(result, goalkeeperIds);
+      const shots = countShotsBySide(result.events);
+      totals.shots.home += shots.home;
+      totals.shots.away += shots.away;
+      totals.goals += result.homeGoals + result.awayGoals;
+      totals.homeGoals += result.homeGoals;
+      totals.awayGoals += result.awayGoals;
+      totals.fouls += result.stats.fouls;
+      totals.yellowCards += result.stats.yellowCards;
+      totals.redCards += result.stats.redCards;
+      totals.nutmegTaunts += result.stats.nutmegTaunts;
+      totals.brawls += result.stats.brawls;
+      totals.scandalousFouls += result.stats.scandalousFouls;
+      totals.disallowedGoals += result.stats.disallowedGoals;
+      totals.officialsAssaulted += result.stats.officialsAssaulted;
+      totals.handballsOnTheLine += result.stats.handballsOnTheLine;
+      totals.severeInjuries += result.stats.severeInjuries;
+      totals.noCardDespiteInjury += result.stats.noCardDespiteInjury;
+      totals.trashTalks += result.stats.trashTalks;
+      totals.fightCallouts += result.stats.fightCallouts;
+      totals.whiffs += result.stats.whiffs;
+      for (const style of Object.keys(totals.goalStyles)) {
+        totals.goalStyles[style] += result.stats.goalStyles[style];
+      }
+      totals.penaltiesAwarded += result.stats.penaltiesAwarded;
+      totals.penaltiesNotGiven += result.stats.penaltiesNotGiven;
+      totals.penaltiesPhantom += result.stats.penaltiesPhantom;
+      totals.penaltiesWrongLocation += result.stats.penaltiesWrongLocation;
+      totals.penaltyMindGames += result.stats.penaltyMindGames;
+      totals.penaltiesMissed += result.stats.penaltiesMissed;
+      totals.goalkeeperForward += result.stats.goalkeeperForward;
+      totals.crowdSilenced += result.stats.crowdSilenced;
+      totals.showboating += result.stats.showboating;
+      totals.refereeDeflectionGoals += result.stats.refereeDeflectionGoals;
+      totals.specialAbilities += result.stats.specialAbilities;
+      totals.stoppageTimeBooed += result.stats.stoppageTimeBooed;
+      totals.throwInDelays += result.stats.throwInDelays;
+      totals.goalKickDelays += result.stats.goalKickDelays;
+      totals.matchAbandoned += result.stats.matchAbandoned ? 1 : 0;
+      totals.standInGoalkeepers += result.stats.standInGoalkeepers;
+    }
+
+    function statRow(label, value) {
+      return `<div class="cal-stat"><span class="label">${label}</span><span class="value">${value}</span></div>`;
+    }
+
+    function renderCalibrationReport(ctx) {
+      const {
+        totals,
+        matchCount,
+        homeName,
+        awayName,
+        homePoolAvg,
+        awayPoolAvg,
+        homeWins,
+        awayWins,
+        draws,
+        matchesWithRedCard,
+        oneSidedRedCardMatches,
+        marginForSentOffSide,
+        matchesWithComedy,
+        formationName,
+      } = ctx;
+
+      const totalShots = totals.shots.home + totals.shots.away;
+      const homePossessionPct = totalShots > 0 ? fmtPct(totals.shots.home, totalShots) : '50.0';
+      const awayPossessionPct = totalShots > 0 ? fmtPct(totals.shots.away, totalShots) : '50.0';
+      const avgMarginSentOff =
+        oneSidedRedCardMatches > 0 ? (marginForSentOffSide / oneSidedRedCardMatches).toFixed(2) : 'n/a';
+      const totalOpenPlayGoals = Object.values(totals.goalStyles).reduce((sum, count) => sum + count, 0);
+      const totalPenaltiesTaken = totals.penaltiesMissed + totals.goalStyles.penalty;
+      const penaltyConversionPct =
+        totalPenaltiesTaken > 0 ? fmtPct(totals.goalStyles.penalty, totalPenaltiesTaken) : '0.0';
+
+      const goalStyleRows = Object.entries(GOAL_STYLE_LABELS)
+        .map(([style, label]) => {
+          const count = totals.goalStyles[style];
+          return `<tr><td>${label}</td><td class="num">${count}</td><td class="num">${fmtPct(count, totalOpenPlayGoals)}%</td></tr>`;
+        })
+        .join('');
+
+      els.calReport.innerHTML = `
+        <div class="cal-section">
+          <h2>Resumo — ${matchCount} partidas</h2>
+          <p class="cal-stat"><span class="label">${homeName} (casa, overall médio do elenco ${homePoolAvg}) × ${awayName} (fora, overall médio do elenco ${awayPoolAvg}), formação ${formationName}</span></p>
+          <div class="cal-grid">
+            ${statRow('Vitórias casa', `${homeWins} (${fmtPct(homeWins, matchCount)}%)`)}
+            ${statRow('Vitórias fora', `${awayWins} (${fmtPct(awayWins, matchCount)}%)`)}
+            ${statRow('Empates', `${draws} (${fmtPct(draws, matchCount)}%)`)}
+          </div>
+        </div>
+
+        <div class="cal-section">
+          <h2>Gols, finalizações e posse</h2>
+          <div class="cal-grid">
+            ${statRow('Gols por partida', fmtAvg(totals.goals, matchCount))}
+            ${statRow('— time da casa', fmtAvg(totals.homeGoals, matchCount))}
+            ${statRow('— time visitante', fmtAvg(totals.awayGoals, matchCount))}
+            ${statRow('Finalizações por partida', `${fmtAvg(totalShots, matchCount)} (casa ${fmtAvg(totals.shots.home, matchCount)} / fora ${fmtAvg(totals.shots.away, matchCount)})`)}
+            ${statRow('Posse de bola (aprox.)', `casa ${homePossessionPct}% / fora ${awayPossessionPct}%`)}
+            ${statRow('Gols marcados por goleiro', fmtAvg(totals.goalkeeperGoals, matchCount))}
+          </div>
+        </div>
+
+        <div class="cal-section">
+          <h2>Faltas e cartões</h2>
+          <div class="cal-grid">
+            ${statRow('Faltas por partida', fmtAvg(totals.fouls, matchCount))}
+            ${statRow('Cartões amarelos por partida', fmtAvg(totals.yellowCards, matchCount))}
+            ${statRow('Cartões vermelhos por partida', fmtAvg(totals.redCards, matchCount))}
+            ${statRow('Partidas com expulsão', `${matchesWithRedCard} (${fmtPct(matchesWithRedCard, matchCount)}%)`)}
+            ${statRow('Saldo médio de quem fica com 10', `${avgMarginSentOff} (${oneSidedRedCardMatches} partidas de 1 lado só)`)}
+            ${statRow('Partidas com WO (menos de 7 jogadores)', `${totals.matchAbandoned} (${fmtPct(totals.matchAbandoned, matchCount)}%)`)}
+            ${statRow('Goleiros de linha (titular expulso)', `${totals.standInGoalkeepers} (${fmtAvg(totals.standInGoalkeepers, matchCount)} por partida)`)}
+          </div>
+        </div>
+
+        <div class="cal-section">
+          <h2>Eventos cômicos (ver CLAUDE.md "Tom dos eventos")</h2>
+          <div class="cal-grid">
+            ${statRow('Chapéus com provocação', fmtAvg(totals.nutmegTaunts, matchCount))}
+            ${statRow('Confusões generalizadas', fmtAvg(totals.brawls, matchCount))}
+            ${statRow('Faltas escandalosas', fmtAvg(totals.scandalousFouls, matchCount))}
+            ${statRow('Gols anulados por erro', fmtAvg(totals.disallowedGoals, matchCount))}
+            ${statRow('Agressão a árbitro/bandeirinha', fmtAvg(totals.officialsAssaulted, matchCount))}
+            ${statRow('Mão na bola em cima da linha', fmtAvg(totals.handballsOnTheLine, matchCount))}
+            ${statRow('Lesões graves', fmtAvg(totals.severeInjuries, matchCount))}
+            ${statRow('Sem cartão apesar da lesão', fmtAvg(totals.noCardDespiteInjury, matchCount))}
+            ${statRow('Provocações (fala/gesto)', fmtAvg(totals.trashTalks, matchCount))}
+            ${statRow('Chamadas pra briga', fmtAvg(totals.fightCallouts, matchCount))}
+            ${statRow('Furadas com vaia', fmtAvg(totals.whiffs, matchCount))}
+            ${statRow('Partidas com algum cômico', `${matchesWithComedy} (${fmtPct(matchesWithComedy, matchCount)}%)`)}
+          </div>
+        </div>
+
+        <div class="cal-section">
+          <h2>Como os gols de bola rolando aconteceram</h2>
+          <table class="cal-table">
+            <thead><tr><th>Estilo</th><th class="num">Total</th><th class="num">%</th></tr></thead>
+            <tbody>${goalStyleRows}</tbody>
+          </table>
+        </div>
+
+        <div class="cal-section">
+          <h2>Pênaltis (situação, não só o gol)</h2>
+          <div class="cal-grid">
+            ${statRow('Dados de verdade', fmtAvg(totals.penaltiesAwarded, matchCount))}
+            ${statRow('Claros e não marcados', fmtAvg(totals.penaltiesNotGiven, matchCount))}
+            ${statRow('Fantasmas (não existiram)', fmtAvg(totals.penaltiesPhantom, matchCount))}
+            ${statRow('Falta fora da área, erro do juiz', fmtAvg(totals.penaltiesWrongLocation, matchCount))}
+            ${statRow('Com pressão do goleiro', fmtAvg(totals.penaltyMindGames, matchCount))}
+            ${statRow('Perdidos na cobrança', fmtAvg(totals.penaltiesMissed, matchCount))}
+            ${statRow('Conversão na cobrança', `${penaltyConversionPct}% (referência real: ~75-80%)`)}
+          </div>
+        </div>
+
+        <div class="cal-section">
+          <h2>Outros eventos</h2>
+          <div class="cal-grid">
+            ${statRow('Goleiro-linha (bola parada, desespero)', fmtAvg(totals.goalkeeperForward, matchCount))}
+            ${statRow('Torcida calada (visitante vira o jogo)', fmtAvg(totals.crowdSilenced, matchCount))}
+            ${statRow('Embaixadinhas (provocação)', fmtAvg(totals.showboating, matchCount))}
+            ${statRow('Gol com desvio no juiz', fmtAvg(totals.refereeDeflectionGoals, matchCount))}
+            ${statRow('Eventos especiais de jogador', fmtAvg(totals.specialAbilities, matchCount))}
+            ${statRow('Torcida vaia o acréscimo', fmtAvg(totals.stoppageTimeBooed, matchCount))}
+            ${statRow('Demora no lateral', fmtAvg(totals.throwInDelays, matchCount))}
+            ${statRow('Demora no tiro de meta', fmtAvg(totals.goalKickDelays, matchCount))}
+          </div>
+        </div>
+      `;
+    }
+
+    function runCalibration() {
+      const baseSeed = els.calSeedInput.value ? Number(els.calSeedInput.value) : Math.floor(Math.random() * 1e9);
+      els.calSeedInput.value = baseSeed;
+      const matchCount = Math.max(1, Math.min(5000, Math.round(Number(els.calCountInput.value) || 500)));
+      els.calCountInput.value = matchCount;
+
+      els.calRunBtn.disabled = true;
+      els.calStatus.textContent = `rodando ${matchCount} partidas...`;
+
+      // Deferred so the "rodando..." status actually paints before the
+      // (synchronous, potentially CPU-heavy for large match counts) loop
+      // below blocks the main thread.
+      setTimeout(() => {
+        const totals = emptyTotals();
+        let homeWins = 0;
+        let awayWins = 0;
+        let draws = 0;
+        let matchesWithRedCard = 0;
+        let matchesWithComedy = 0;
+        // Checks whether being down a player actually hurts more (see the
+        // SHORT_HANDED_DEFENSE_PENALTY asymmetry in teamPower/match.js) —
+        // only counts matches where exactly one side had a red card, since a
+        // match with cards on both sides doesn't isolate "who was down".
+        let oneSidedRedCardMatches = 0;
+        let marginForSentOffSide = 0;
+
+        let homeName = '';
+        let awayName = '';
+
+        for (let i = 0; i < matchCount; i++) {
+          const rng = createRng(baseSeed + i);
+          const home = buildTeam('home', rng);
+          const away = buildTeam('away', rng);
+          homeName = home.name;
+          awayName = away.name;
+
+          const goalkeeperIds = new Set(
+            [...home.lineup, ...away.lineup].filter((p) => p.position === 'GK').map((p) => p.id)
+          );
+          const result = simulateMatch({ home, away, rng });
+          accumulate(totals, result, goalkeeperIds);
+
+          if (result.homeGoals > result.awayGoals) homeWins++;
+          else if (result.awayGoals > result.homeGoals) awayWins++;
+          else draws++;
+
+          if (result.stats.redCards > 0) matchesWithRedCard++;
+          const redHome = result.stats.redCardsBySide.home > 0;
+          const redAway = result.stats.redCardsBySide.away > 0;
+          if (redHome !== redAway) {
+            oneSidedRedCardMatches++;
+            marginForSentOffSide += redHome ? result.homeGoals - result.awayGoals : result.awayGoals - result.homeGoals;
+          }
+          if (
+            result.stats.officialsAssaulted > 0 ||
+            result.stats.brawls > 0 ||
+            result.stats.scandalousFouls > 0 ||
+            result.stats.fightCallouts > 0
+          ) {
+            matchesWithComedy++;
+          }
+        }
+
+        const homeClub = SAMPLE_CLUBS[Number(els.homeClubSelect.value)];
+        const awayClub = SAMPLE_CLUBS[Number(els.awayClubSelect.value)];
+
+        renderCalibrationReport({
+          totals,
+          matchCount,
+          homeName,
+          awayName,
+          homePoolAvg: averageOverall(homeClub.pool),
+          awayPoolAvg: averageOverall(awayClub.pool),
+          homeWins,
+          awayWins,
+          draws,
+          matchesWithRedCard,
+          oneSidedRedCardMatches,
+          marginForSentOffSide,
+          matchesWithComedy,
+          formationName: els.formationSelect.value,
+        });
+
+        els.calRunBtn.disabled = false;
+        els.calStatus.textContent = 'concluído';
+      }, 20);
+    }
+
+    els.calRunBtn.addEventListener('click', runCalibration);
   </script>
 </body>
 </html>
