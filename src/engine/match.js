@@ -530,18 +530,30 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     }
   } else if (rng.chance(COMEDY.WHIFF_CHANCE)) {
     // The crowd reacting is always the home crowd — the dominant presence
-    // in the stadium in this abstraction. For a home player's own mistake
-    // that's their own fans groaning; for an away player it's the home
-    // (opposing) crowd jeering them, not their own small travelling support.
-    const crowd = attackingTeam.side === 'home' ? attackingTeam.config.name : defendingTeam.config.name;
-    pushEvent(
-      events,
-      minute,
-      EVENT_TYPES.WHIFF,
-      attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name, crowd },
-      rng
-    );
+    // in the stadium in this abstraction. Booing only makes sense directed
+    // at the rival: an away finisher gets jeered by the home crowd
+    // (WHIFF). A home finisher's own miss instead gets a pained,
+    // hands-on-head reaction from their own fans (WHIFF_HOME_MISS) — see
+    // narration.js for why that's a separate event type from WHIFF.
+    if (attackingTeam.side === 'home') {
+      pushEvent(
+        events,
+        minute,
+        EVENT_TYPES.WHIFF_HOME_MISS,
+        attackingTeam.side,
+        { player: finisher.name, team: attackingTeam.config.name },
+        rng
+      );
+    } else {
+      pushEvent(
+        events,
+        minute,
+        EVENT_TYPES.WHIFF,
+        attackingTeam.side,
+        { player: finisher.name, team: attackingTeam.config.name, crowd: defendingTeam.config.name },
+        rng
+      );
+    }
     stats.whiffs++;
   } else {
     pushEvent(

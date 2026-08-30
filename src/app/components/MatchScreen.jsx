@@ -107,6 +107,7 @@ const EVENT_CATEGORY_CLASS = {
   [EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT]: 'text-yellow-300 italic',
   [EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG]: 'text-yellow-300 italic',
   [EVENT_TYPES.WHIFF]: 'text-slate-400 italic',
+  [EVENT_TYPES.WHIFF_HOME_MISS]: 'text-slate-400 italic',
   [EVENT_TYPES.WALL_SAVE]: 'text-cyan-400',
   [EVENT_TYPES.GOAL_LINE_CLEARANCE]: 'text-cyan-400',
   [EVENT_TYPES.TIME_WASTING]: 'text-slate-500 text-sm',

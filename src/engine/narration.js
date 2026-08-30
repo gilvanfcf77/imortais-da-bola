@@ -12,6 +12,7 @@ export const EVENT_TYPES = {
   STOPPAGE_TIME_BOOED_LONG: 'stoppageTimeBooedLong',
   CHANCE_MISSED: 'chanceMissed',
   WHIFF: 'whiff',
+  WHIFF_HOME_MISS: 'whiffHomeMiss',
   WALL_SAVE: 'wallSave',
   GOAL_LINE_CLEARANCE: 'goalLineClearance',
   HANDBALL_ON_THE_LINE: 'handballOnTheLine',
@@ -91,9 +92,19 @@ const TEMPLATES = {
     'Que perna torta! {player} chuta torto e nem assusta o goleiro.',
   ],
   [EVENT_TYPES.WHIFF]: [
-    '{player} vai para o chute, erra a bola feio e cai sentado — a torcida vaia sem dó.',
-    'Vexame de {player}: erra o chute, escorrega e vai ao chão. Muita vaia nas arquibancadas.',
-    '{player} tenta a finalização, fura completamente e cai. A torcida de {crowd} não perdoa e vaia.',
+    '{player} vai para o chute, erra a bola feio e cai sentado — a torcida do {crowd} vaia sem dó.',
+    'Vexame de {player}: erra o chute, escorrega e vai ao chão. Muita vaia da torcida do {crowd} nas arquibancadas.',
+    '{player} tenta a finalização, fura completamente e cai. A torcida do {crowd} não perdoa e vaia.',
+  ],
+  // Distinct from WHIFF above: this fires when the player whiffing is the
+  // home team's own — see match.js resolveShot. The home crowd (the only
+  // one modeled, per CROWD_SILENCED/WHIFF's "dominant presence" convention)
+  // wouldn't jeer its own player for a miss the way it jeers a rival's; a
+  // pained groan or hands-on-head reaction reads truer than a boo.
+  [EVENT_TYPES.WHIFF_HOME_MISS]: [
+    '{player} vai para o chute, erra a bola feio e cai sentado — a torcida do {team} leva as mãos à cabeça.',
+    'Vexame de {player}: erra o chute, escorrega e vai ao chão. A torcida do {team} mal acredita no que viu.',
+    '{player} tenta a finalização, fura completamente e cai. Muita lamentação nas arquibancadas.',
   ],
   [EVENT_TYPES.WALL_SAVE]: [
     '{player} finaliza, mas {defender} faz a defesaça e segura tudo.',
