@@ -8,6 +8,7 @@
     "test": "node --test",
     "match": "node scripts/sample-match.js",
     "calibrate": "node scripts/calibration.js",
+    "test:defensive-catimba": "node scripts/test-defensive-catimba.js",
     "view": "node scripts/serve-viewer.js",
     "dev": "next dev --turbopack",
     "build": "next build",

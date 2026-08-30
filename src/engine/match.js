@@ -172,12 +172,14 @@ function refereeLeniencyWeight(team, player) {
 // Gamesmanship only makes sense as a way to run down the clock on a result
 // worth protecting, so its mechanical effects (extra fouls, card risk,
 // rhythm-breaking, time-wasting flavor events) only apply while the team is
-// actually ahead — a tied or losing team has nothing to stall for. This
-// only looks at the current match's score; once the cup's two-legged ties
-// exist (see CLAUDE.md "Passo 3"), it should also treat being ahead on
-// aggregate from the first leg as "winning" here.
+// winning OR drawing — a draw is very much a result worth stalling for
+// (holding a 0-0, running out the clock on level terms), not just an
+// outright lead. A losing team still has nothing to stall for. This only
+// looks at the current match's score; once the cup's two-legged ties exist
+// (see CLAUDE.md "Passo 3"), it should also treat being ahead on aggregate
+// from the first leg as "winning" here.
 function effectiveGamesmanship(team, score) {
-  if (scoreSituation(team.side, score) !== 'winning') return 0;
+  if (scoreSituation(team.side, score) === 'losing') return 0;
   return team.config.gamesmanship ?? 0;
 }
 
