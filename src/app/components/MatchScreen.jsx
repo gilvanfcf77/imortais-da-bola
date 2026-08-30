@@ -57,6 +57,54 @@ function isScoringEvent(event) {
   return GOAL_EVENT_TYPES.has(event.type) || event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED;
 }
 
+// Everything the scoreboard/lineup panels show is derived fresh from
+// whichever events are currently visible, rather than accumulated
+// imperatively as each event's setTimeout fires. That split is what makes
+// changing playback speed mid-match safe (see the scheduling effect in
+// MatchScreen below): the schedule's only job is deciding how many events
+// are visible, so it has no separate score/badge bookkeeping of its own
+// that could fall out of sync — or get thrown away and restarted from
+// kickoff — when the effect re-runs for a new msPerMinute.
+function deriveMatchState(events) {
+  const score = { home: 0, away: 0 };
+  const shootoutScore = { home: 0, away: 0 };
+  let shootoutActive = false;
+  let shootoutKickCount = 0;
+  const badgesByPlayer = {};
+  const sentOffIds = new Set();
+
+  function addBadge(playerId, type, text) {
+    if (!playerId) return;
+    badgesByPlayer[playerId] = [...(badgesByPlayer[playerId] ?? []), { type, text }];
+  }
+
+  for (const event of events) {
+    // A WO overwrites the score with the fixed scoreline (see
+    // checkMatchAbandoned in match.js) rather than adding to it.
+    if (event.type === EVENT_TYPES.MATCH_ABANDONED) {
+      score.home = event.homeGoals;
+      score.away = event.awayGoals;
+    } else if (GOAL_EVENT_TYPES.has(event.type) || event.type === EVENT_TYPES.DISALLOWED_GOAL) {
+      score[event.side] += event.type === EVENT_TYPES.DISALLOWED_GOAL ? -1 : 1;
+    }
+
+    if (event.type === EVENT_TYPES.SHOOTOUT_START) shootoutActive = true;
+    if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED || event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED) {
+      shootoutKickCount++;
+      if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED) shootoutScore[event.side]++;
+    }
+
+    if (event.victimId) addBadge(event.victimId, 'injury', '+');
+    if (event.cardType && event.playerId) {
+      addBadge(event.playerId, event.cardType === 'red' ? 'red' : 'yellow', '');
+      if (event.cardType === 'red') sentOffIds.add(event.playerId);
+    }
+    if (event.playerId && isScoringEvent(event)) addBadge(event.playerId, 'goal', '⚽');
+  }
+
+  return { score, shootoutScore, shootoutActive, shootoutKickCount, badgesByPlayer, sentOffIds };
+}
+
 function eventEmoji(event) {
   if (event.cardType === 'red') return '🟥 ';
   if (event.cardType === 'yellow') return '🟨 ';
@@ -207,31 +255,37 @@ export default function MatchScreen({ matchData, onFinished }) {
   const shootoutStartIndex = result.events.length;
   const [msPerMinute, setMsPerMinute] = useState(300);
   const [visibleCount, setVisibleCount] = useState(0);
-  const [score, setScore] = useState({ home: 0, away: 0 });
-  const [shootoutActive, setShootoutActive] = useState(false);
-  const [shootoutScore, setShootoutScore] = useState({ home: 0, away: 0 });
-  // Total kicks taken so far (scored or missed, either side) — the score
-  // alone doesn't tell you how far into the shootout you are, especially
-  // once it's 0-0 for a few rounds or deep into sudden death.
-  const [shootoutKickCount, setShootoutKickCount] = useState(0);
   // Bumped whenever that side's score changes — used as a `key` on the
   // score span so React remounts it, which restarts the CSS pulse animation
   // every time (the same trick as viewer.html's classList remove/re-add,
-  // just done the React way instead of touching the DOM directly).
+  // just done the React way instead of touching the DOM directly). This is
+  // the one piece of scoreboard state that genuinely can't be derived from
+  // `visibleEvents` alone (see the effect below) — it's about a transition
+  // happening, not a value.
   const [pulseKeys, setPulseKeys] = useState({ home: 0, away: 0 });
-  const [badgesByPlayer, setBadgesByPlayer] = useState({});
-  const [sentOffIds, setSentOffIds] = useState(new Set());
   const logEndRef = useRef(null);
+  // Mirrors `visibleCount` synchronously (state updates are async/batched)
+  // so the scheduling effect below can read "how far did we get" the
+  // instant it re-runs for a speed change, without waiting a render.
+  const visibleCountRef = useRef(0);
+  // Identity check for "is this actually a new match" vs. "just a speed
+  // change" — `allEvents` is stable (useMemo, keyed on matchData) for the
+  // whole life of one match, so a change here can only mean a new one.
+  const prevAllEventsRef = useRef(null);
 
+  // Schedules reveal timers for whichever events aren't visible yet. Only
+  // resets to kickoff when `allEvents` itself changed (a new match); a
+  // speed change alone resumes from `visibleCountRef.current` instead of
+  // restarting the whole replay — this is the fix for switching speed mid-
+  // match jumping back to minute 0.
   useEffect(() => {
-    setVisibleCount(0);
-    setScore({ home: 0, away: 0 });
-    setShootoutActive(false);
-    setShootoutScore({ home: 0, away: 0 });
-    setShootoutKickCount(0);
-    setPulseKeys({ home: 0, away: 0 });
-    setBadgesByPlayer({});
-    setSentOffIds(new Set());
+    const isNewMatch = prevAllEventsRef.current !== allEvents;
+    prevAllEventsRef.current = allEvents;
+    const startIndex = isNewMatch ? 0 : visibleCountRef.current;
+    if (isNewMatch) {
+      visibleCountRef.current = 0;
+      setVisibleCount(0);
+    }
 
     // Same pacing rule as viewer.html: events never appear less than
     // minEventGap apart in real time, even if they land in the same match
@@ -243,19 +297,11 @@ export default function MatchScreen({ matchData, onFinished }) {
     // at the same pace as regular-time events.
     const shootoutKickGap = minEventGap * 2.5;
     let delay = 300;
-    let lastMinute = 0;
-    const runningScore = { home: 0, away: 0 };
-    const runningShootoutScore = { home: 0, away: 0 };
-    const badgesAcc = {};
-    const sentOffAcc = new Set();
+    let lastMinute = allEvents[startIndex - 1]?.minute ?? 0;
     const timers = [];
 
-    function addBadge(playerId, type, text) {
-      if (!playerId) return;
-      badgesAcc[playerId] = [...(badgesAcc[playerId] ?? []), { type, text }];
-    }
-
-    allEvents.forEach((event, index) => {
+    allEvents.slice(startIndex).forEach((event, i) => {
+      const index = startIndex + i;
       const isShootoutKick = event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED || event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED;
       const gap = isShootoutKick ? shootoutKickGap : minEventGap;
       const minuteBasedDelay = delay + (event.minute - lastMinute) * msPerMinute;
@@ -264,35 +310,8 @@ export default function MatchScreen({ matchData, onFinished }) {
 
       timers.push(
         setTimeout(() => {
+          visibleCountRef.current = index + 1;
           setVisibleCount(index + 1);
-
-          if (GOAL_EVENT_TYPES.has(event.type) || event.type === EVENT_TYPES.DISALLOWED_GOAL) {
-            runningScore[event.side] += event.type === EVENT_TYPES.DISALLOWED_GOAL ? -1 : 1;
-            setScore({ ...runningScore });
-            setPulseKeys((prev) => ({ ...prev, [event.side]: prev[event.side] + 1 }));
-          }
-          if (event.type === EVENT_TYPES.SHOOTOUT_START) {
-            setShootoutActive(true);
-          }
-          if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED || event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED) {
-            setShootoutKickCount((count) => count + 1);
-            if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED) {
-              runningShootoutScore[event.side]++;
-              setShootoutScore({ ...runningShootoutScore });
-            }
-          }
-
-          if (event.victimId) addBadge(event.victimId, 'injury', '+');
-          if (event.cardType && event.playerId) {
-            addBadge(event.playerId, event.cardType === 'red' ? 'red' : 'yellow', '');
-            if (event.cardType === 'red') sentOffAcc.add(event.playerId);
-          }
-          if (event.playerId && isScoringEvent(event)) addBadge(event.playerId, 'goal', '⚽');
-
-          if (event.victimId || (event.cardType && event.playerId) || (event.playerId && isScoringEvent(event))) {
-            setBadgesByPlayer({ ...badgesAcc });
-            setSentOffIds(new Set(sentOffAcc));
-          }
         }, delay)
       );
     });
@@ -300,11 +319,25 @@ export default function MatchScreen({ matchData, onFinished }) {
     return () => timers.forEach(clearTimeout);
   }, [allEvents, msPerMinute]);
 
+  const visibleEvents = useMemo(() => allEvents.slice(0, visibleCount), [allEvents, visibleCount]);
+  const { score, shootoutScore, shootoutActive, shootoutKickCount, badgesByPlayer, sentOffIds } = useMemo(
+    () => deriveMatchState(visibleEvents),
+    [visibleEvents]
+  );
+
+  // Pulses whenever a side's derived score goes up — never on the drop back
+  // to 0-0 at the start of a new match, since that's a decrease, not a goal.
+  const prevScoreRef = useRef({ home: 0, away: 0 });
+  useEffect(() => {
+    if (score.home > prevScoreRef.current.home) setPulseKeys((prev) => ({ ...prev, home: prev.home + 1 }));
+    if (score.away > prevScoreRef.current.away) setPulseKeys((prev) => ({ ...prev, away: prev.away + 1 }));
+    prevScoreRef.current = score;
+  }, [score]);
+
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [visibleCount]);
 
-  const visibleEvents = allEvents.slice(0, visibleCount);
   const finished = visibleCount === allEvents.length;
 
   return (
