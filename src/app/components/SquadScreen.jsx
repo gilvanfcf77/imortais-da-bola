@@ -1,13 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { FORMATIONS, defaultGamesmanship } from '../../engine/index.js';
+import { FORMATIONS, ROLE_TO_POSITION, defaultGamesmanship } from '../../engine/index.js';
 import { drawEraSquad, completeSquadRandomly } from '../actions.js';
 
 const POSTURE_LABELS = { attacking: 'ofensiva', balanced: 'equilibrada', defensive: 'defensiva' };
 const FORMATION_NAMES = Object.keys(FORMATIONS);
-
-const POSITION_LABELS = { GK: 'GOL', CB: 'ZAG', FB: 'LAT', MF: 'MEI', FW: 'ATA' };
 
 // English slugs come straight from the engine (src/engine/traits.js) — this
 // is the display-only Portuguese translation, matching the names already
@@ -23,23 +21,20 @@ const TRAIT_LABELS = {
   leader: 'Líder',
 };
 
-// One row per slot in formation order (GK, CB, CB, FB, FB, ...), independent
-// of the order players were actually picked in — picks can happen in any
-// order now, so display order and pick order are decoupled on purpose.
+// One row per slot in formation order (GOL, ZAG, ZAG, LE, LD, ...) — picks
+// can happen in any order, so display order and pick order are decoupled on
+// purpose. `squad` entries are tagged with the specific `role` they were
+// picked to fill (see handlePick/completeSquadRandomly/draftEleven), which
+// is what lets two identically-labeled slots (e.g. two ZAG) each show their
+// own occupant instead of both showing whoever was picked first.
 function buildDisplaySlots(formation, squad) {
-  const byPosition = new Map();
-  for (const player of squad) {
-    if (!byPosition.has(player.position)) byPosition.set(player.position, []);
-    byPosition.get(player.position).push(player);
-  }
-  const rows = [];
-  for (const slot of formation.slots) {
-    const filled = byPosition.get(slot.position) ?? [];
-    for (let i = 0; i < slot.count; i++) {
-      rows.push({ position: slot.position, player: filled[i] ?? null });
-    }
-  }
-  return rows;
+  const remaining = [...squad];
+  return formation.slots.map((slot) => {
+    const index = remaining.findIndex((p) => p.role === slot.role);
+    if (index === -1) return { role: slot.role, player: null };
+    const [player] = remaining.splice(index, 1);
+    return { role: slot.role, player };
+  });
 }
 
 function LineupPanel({ clubName, formation, squad }) {
@@ -57,9 +52,7 @@ function LineupPanel({ clubName, formation, squad }) {
             row.player ? 'border-emerald-500' : 'border-slate-800 text-slate-600'
           }`}
         >
-          <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
-            {POSITION_LABELS[row.position]}
-          </span>
+          <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
           <span className="truncate">
             {row.player ? row.player.name : 'vaga aberta'}
             {row.player?.era ? ` '${String(row.player.era).slice(-2)}` : ''}
@@ -76,7 +69,7 @@ function LineupPanel({ clubName, formation, squad }) {
 export default function SquadScreen({ club, onComplete }) {
   const [formationName, setFormationName] = useState('4-4-2');
   const formation = FORMATIONS[formationName];
-  const totalSlots = useMemo(() => formation.slots.reduce((sum, s) => sum + s.count, 0), [formation]);
+  const totalSlots = formation.slots.length;
   const [squad, setSquad] = useState([]);
   const [drawnEra, setDrawnEra] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -86,6 +79,11 @@ export default function SquadScreen({ club, onComplete }) {
   // handed off, so a fixed number (not the sentinel) is what actually
   // reaches playMatch.
   const [gamesmanshipChoice, setGamesmanshipChoice] = useState('auto');
+  // Set only when a clicked player is eligible for more than one still-open
+  // role (e.g. a ZAG who's also a VOL, with both slots open) — the player
+  // picks which one to fill; see handlePick/confirmRole below. Never set for
+  // a player with exactly one eligible role, since there's nothing to choose.
+  const [pendingChoice, setPendingChoice] = useState(null);
 
   // Changing formation mid-pick would leave already-picked players sitting
   // in slots that may no longer exist (e.g. dropping from 4-3-3's 3 FWs to
@@ -95,22 +93,30 @@ export default function SquadScreen({ club, onComplete }) {
     setFormationName(name);
     setSquad([]);
     setDrawnEra(null);
+    setPendingChoice(null);
   }
 
   const pickedIds = new Set(squad.map((p) => p.id));
-  const totalByPosition = useMemo(() => {
+  const totalByRole = useMemo(() => {
     const counts = {};
-    for (const slot of formation.slots) counts[slot.position] = slot.count;
+    for (const slot of formation.slots) counts[slot.role] = (counts[slot.role] ?? 0) + 1;
     return counts;
   }, [formation]);
-  const filledByPosition = squad.reduce((acc, p) => {
-    acc[p.position] = (acc[p.position] ?? 0) + 1;
+  const filledByRole = squad.reduce((acc, p) => {
+    acc[p.role] = (acc[p.role] ?? 0) + 1;
     return acc;
   }, {});
   const complete = squad.length === totalSlots;
 
-  function hasOpenSlot(position) {
-    return (filledByPosition[position] ?? 0) < (totalByPosition[position] ?? 0);
+  function openSlotsFor(role) {
+    return (totalByRole[role] ?? 0) - (filledByRole[role] ?? 0);
+  }
+
+  // Every role this specific player could still fill right now — a player
+  // with roles ['ZAG', 'VOL'] only offers both if both kinds of slot are
+  // still open; once the ZAG slots fill up, they'd only offer VOL.
+  function eligibleRolesFor(player) {
+    return (player.roles ?? [player.position]).filter((role) => openSlotsFor(role) > 0);
   }
 
   async function handleDraw() {
@@ -128,10 +134,25 @@ export default function SquadScreen({ club, onComplete }) {
     setLoading(false);
   }
 
-  function handlePick(player) {
-    if (!hasOpenSlot(player.position) || pickedIds.has(player.id)) return;
-    setSquad([...squad, player]);
+  // `position` is overridden to match the slot actually filled (not
+  // whatever the player's data file lists as their default) — same rule
+  // draftEleven follows, so a ZAG picked into a VOL slot counts as MF for
+  // the rest of the game exactly like one drafted that way automatically.
+  function addToSquad(player, role) {
+    setSquad([...squad, { ...player, role, position: ROLE_TO_POSITION[role] }]);
     setDrawnEra(null);
+    setPendingChoice(null);
+  }
+
+  function handlePick(player) {
+    if (pickedIds.has(player.id)) return;
+    const eligible = eligibleRolesFor(player);
+    if (eligible.length === 0) return;
+    if (eligible.length === 1) {
+      addToSquad(player, eligible[0]);
+    } else {
+      setPendingChoice({ player, eligible });
+    }
   }
 
   function handleStartCup() {
@@ -220,6 +241,31 @@ export default function SquadScreen({ club, onComplete }) {
           </button>
         )}
 
+        {pendingChoice && (
+          <div className="rounded-lg border border-emerald-500 bg-slate-900 px-4 py-3">
+            <p className="mb-2 text-sm text-slate-300">
+              Escalar <span className="font-semibold">{pendingChoice.player.name}</span> como:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {pendingChoice.eligible.map((role) => (
+                <button
+                  key={role}
+                  onClick={() => addToSquad(pendingChoice.player, role)}
+                  className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
+                >
+                  {role}
+                </button>
+              ))}
+              <button
+                onClick={() => setPendingChoice(null)}
+                className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-500"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
+
         {drawnEra && (
           <div>
             <p className="mb-3 text-sm text-slate-400">
@@ -227,7 +273,8 @@ export default function SquadScreen({ club, onComplete }) {
             </p>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {drawnEra.pool.map((player) => {
-                const selectable = hasOpenSlot(player.position) && !pickedIds.has(player.id);
+                const eligible = eligibleRolesFor(player);
+                const selectable = eligible.length > 0 && !pickedIds.has(player.id);
                 const traits = player.traits ?? [];
                 return (
                   <button
@@ -241,7 +288,7 @@ export default function SquadScreen({ club, onComplete }) {
                     }`}
                   >
                     <p className="font-medium">
-                      [{POSITION_LABELS[player.position]}] {player.name}
+                      [{(player.roles ?? [player.position]).join('/')}] {player.name}
                     </p>
                     <p className="text-sm text-slate-400">Overall {player.overall}</p>
                     {traits.length > 0 && (

@@ -4,7 +4,7 @@
 // import only from here, not from the individual engine files.
 
 export { createRng } from './rng.js';
-export { FORMATIONS, totalPlayers } from './formations.js';
+export { FORMATIONS, totalPlayers, ROLE_TO_POSITION } from './formations.js';
 export { TRAITS, getTraitIntensity, sumTraitIntensity, combineMultipliers, defaultGamesmanship } from './traits.js';
 export { draftEleven } from './draft.js';
 export { simulateMatch, resolvePenaltyShootout } from './match.js';

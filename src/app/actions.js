@@ -9,6 +9,7 @@
 import {
   createRng,
   FORMATIONS,
+  ROLE_TO_POSITION,
   draftEleven,
   simulateMatch,
   resolvePenaltyShootout,
@@ -30,19 +31,28 @@ export async function drawEraSquad(clubSlug) {
 // picked and drafts random players for the remaining open slots only, from
 // the club's full multi-era pool (so the random fill can still mix eras
 // across positions, same as scripts/sample-match.js does). Builds a
-// synthetic formation with just the missing slot counts and reuses
-// draftEleven as-is — no engine change needed.
+// synthetic formation with just the still-open roles (by count, since a
+// formation can list the same role more than once — e.g. two ZAG slots)
+// and reuses draftEleven as-is — no engine change needed. `currentSquad`
+// entries are tagged with `.role` (see SquadScreen.jsx and draftEleven),
+// which is what lets this tell an open ZAG slot apart from an open VOL one.
 export async function completeSquadRandomly(clubSlug, currentSquad, formationName = '4-4-2') {
   const pickedIds = new Set(currentSquad.map((p) => p.id));
   const pool = getClubPool(clubSlug).filter((p) => !pickedIds.has(p.id));
 
-  const filledByPosition = currentSquad.reduce((acc, p) => {
-    acc[p.position] = (acc[p.position] ?? 0) + 1;
+  const filledByRole = currentSquad.reduce((acc, p) => {
+    acc[p.role] = (acc[p.role] ?? 0) + 1;
     return acc;
   }, {});
-  const remainingSlots = FORMATIONS[formationName].slots
-    .map((slot) => ({ position: slot.position, count: slot.count - (filledByPosition[slot.position] ?? 0) }))
-    .filter((slot) => slot.count > 0);
+  const totalByRole = FORMATIONS[formationName].slots.reduce((acc, slot) => {
+    acc[slot.role] = (acc[slot.role] ?? 0) + 1;
+    return acc;
+  }, {});
+  const remainingSlots = [];
+  for (const [role, total] of Object.entries(totalByRole)) {
+    const remaining = total - (filledByRole[role] ?? 0);
+    for (let i = 0; i < remaining; i++) remainingSlots.push({ role, position: ROLE_TO_POSITION[role] });
+  }
 
   const rng = createRng(Date.now());
   const additions = draftEleven(pool, { slots: remainingSlots }, rng);

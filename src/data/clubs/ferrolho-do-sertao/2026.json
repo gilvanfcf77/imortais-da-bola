@@ -6,7 +6,7 @@
     {
       "id": "fs-gk-1",
       "name": "Zé Ferrolho",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 68,
       "traits": [
         {
@@ -27,7 +27,7 @@
     {
       "id": "fs-gk-2",
       "name": "Bento Tranca",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 60,
       "traits": [
         {
@@ -48,7 +48,7 @@
     {
       "id": "fs-gk-3",
       "name": "Chico Grade",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 55,
       "traits": [
         {
@@ -69,7 +69,7 @@
     {
       "id": "fs-cb-1",
       "name": "Duda Cascavel",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 66,
       "traits": [
         {
@@ -90,7 +90,7 @@
     {
       "id": "fs-cb-2",
       "name": "Nem Pedra",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 63,
       "traits": [
         {
@@ -111,7 +111,7 @@
     {
       "id": "fs-cb-3",
       "name": "Toco Bezerra",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 60,
       "traits": [
         {
@@ -132,7 +132,7 @@
     {
       "id": "fs-cb-4",
       "name": "Grosso Aderaldo",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 58,
       "traits": [
         {
@@ -153,7 +153,7 @@
     {
       "id": "fs-cb-5",
       "name": "Cabra Seco",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 54,
       "traits": [
         {
@@ -174,7 +174,7 @@
     {
       "id": "fs-fb-1",
       "name": "Zezinho Espinho",
-      "position": "FB",
+      "position": "FB", "roles": ["LE", "LD"],
       "overall": 64,
       "traits": [
         {
@@ -195,7 +195,7 @@
     {
       "id": "fs-fb-2",
       "name": "Bode Solto",
-      "position": "FB",
+      "position": "FB", "roles": ["LD"],
       "overall": 61,
       "traits": [
         {
@@ -216,7 +216,7 @@
     {
       "id": "fs-fb-3",
       "name": "Rasteira Chagas",
-      "position": "FB",
+      "position": "FB", "roles": ["LE"],
       "overall": 57,
       "traits": [
         {
@@ -237,7 +237,7 @@
     {
       "id": "fs-fb-4",
       "name": "Cangaço Vieira",
-      "position": "FB",
+      "position": "FB", "roles": ["LD", "LE"],
       "overall": 53,
       "traits": [
         {
@@ -258,7 +258,7 @@
     {
       "id": "fs-mf-1",
       "name": "Capiau Duro",
-      "position": "MF",
+      "position": "MF", "roles": ["ME", "MAT"],
       "overall": 70,
       "traits": [
         {
@@ -279,7 +279,7 @@
     {
       "id": "fs-mf-2",
       "name": "Sertanejo Bruto",
-      "position": "MF",
+      "position": "MF", "roles": ["MD"],
       "overall": 67,
       "traits": [
         {
@@ -300,7 +300,7 @@
     {
       "id": "fs-mf-3",
       "name": "Coice Amaral",
-      "position": "MF",
+      "position": "MF", "roles": ["MAT"],
       "overall": 65,
       "traits": [
         {
@@ -321,7 +321,7 @@
     {
       "id": "fs-mf-4",
       "name": "Espora Ferreira",
-      "position": "MF",
+      "position": "MF", "roles": ["VOL", "MAT"],
       "overall": 63,
       "traits": [
         {
@@ -342,7 +342,7 @@
     {
       "id": "fs-mf-5",
       "name": "Jagunço Vale",
-      "position": "MF",
+      "position": "MF", "roles": ["MC"],
       "overall": 61,
       "traits": [
         {
@@ -359,7 +359,7 @@
     {
       "id": "fs-mf-6",
       "name": "Cabresto Melo",
-      "position": "MF",
+      "position": "MF", "roles": ["ME"],
       "overall": 59,
       "traits": [
         {
@@ -376,7 +376,7 @@
     {
       "id": "fs-mf-7",
       "name": "Facão Torto",
-      "position": "MF",
+      "position": "MF", "roles": ["MD"],
       "overall": 57,
       "traits": [
         {
@@ -397,7 +397,7 @@
     {
       "id": "fs-mf-8",
       "name": "Xingó Bravo",
-      "position": "MF",
+      "position": "MF", "roles": ["MAT"],
       "overall": 54,
       "traits": [
         {
@@ -414,7 +414,7 @@
     {
       "id": "fs-fw-1",
       "name": "Gavião Cego",
-      "position": "FW",
+      "position": "FW", "roles": ["CA", "PE"],
       "overall": 72,
       "traits": [
         {
@@ -435,7 +435,7 @@
     {
       "id": "fs-fw-2",
       "name": "Urubu Manso",
-      "position": "FW",
+      "position": "FW", "roles": ["PE"],
       "overall": 65,
       "traits": [
         {
@@ -456,7 +456,7 @@
     {
       "id": "fs-fw-3",
       "name": "Bacurau Fera",
-      "position": "FW",
+      "position": "FW", "roles": ["PD"],
       "overall": 60,
       "traits": [
         {
@@ -473,7 +473,7 @@
     {
       "id": "fs-fw-4",
       "name": "Tição Aceso",
-      "position": "FW",
+      "position": "FW", "roles": ["CA"],
       "overall": 57,
       "traits": [
         {
@@ -490,7 +490,7 @@
     {
       "id": "fs-fw-5",
       "name": "Beiço Rachado",
-      "position": "FW",
+      "position": "FW", "roles": ["PE", "PD"],
       "overall": 54,
       "traits": [
         {
@@ -507,7 +507,7 @@
     {
       "id": "fs-fw-6",
       "name": "Sol a Pino",
-      "position": "FW",
+      "position": "FW", "roles": ["PD"],
       "overall": 50,
       "traits": [
         {

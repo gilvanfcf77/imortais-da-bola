@@ -6,7 +6,7 @@
     {
       "id": "hp-gk-1",
       "name": "Max Kanté",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 74,
       "traits": [
         {
@@ -19,7 +19,7 @@
     {
       "id": "hp-gk-2",
       "name": "Nathaniel Kurtzberg",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 68,
       "traits": [
         {
@@ -32,7 +32,7 @@
     {
       "id": "hp-gk-3",
       "name": "Wayhem",
-      "position": "GK",
+      "position": "GK", "roles": ["GOL"],
       "overall": 58,
       "traits": [],
       "specialAbility": null
@@ -40,7 +40,7 @@
     {
       "id": "hp-cb-1",
       "name": "Ivan Bruel",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 76,
       "traits": [
         {
@@ -53,7 +53,7 @@
     {
       "id": "hp-cb-2",
       "name": "Carapace",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 78,
       "traits": [
         {
@@ -70,7 +70,7 @@
     {
       "id": "hp-cb-3",
       "name": "Théo Barbot",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 68,
       "traits": [
         {
@@ -83,7 +83,7 @@
     {
       "id": "hp-cb-4",
       "name": "Mylène Haprèle",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 65,
       "traits": [],
       "specialAbility": null
@@ -91,7 +91,7 @@
     {
       "id": "hp-cb-5",
       "name": "Juleka Couffaine",
-      "position": "CB",
+      "position": "CB", "roles": ["ZAG"],
       "overall": 66,
       "traits": [],
       "specialAbility": null
@@ -99,7 +99,7 @@
     {
       "id": "hp-fb-1",
       "name": "Bunnyx",
-      "position": "FB",
+      "position": "FB", "roles": ["LE"],
       "overall": 79,
       "traits": [
         {
@@ -112,7 +112,7 @@
     {
       "id": "hp-fb-2",
       "name": "Queen Bee",
-      "position": "FB",
+      "position": "FB", "roles": ["LD"],
       "overall": 77,
       "traits": [
         {
@@ -129,7 +129,7 @@
     {
       "id": "hp-fb-3",
       "name": "Chris Lahiffe",
-      "position": "FB",
+      "position": "FB", "roles": ["LE"],
       "overall": 60,
       "traits": [
         {
@@ -142,7 +142,7 @@
     {
       "id": "hp-fb-4",
       "name": "Sabrina Raincomprix",
-      "position": "FB",
+      "position": "FB", "roles": ["LD"],
       "overall": 63,
       "traits": [],
       "specialAbility": null
@@ -150,7 +150,7 @@
     {
       "id": "hp-mf-1",
       "name": "Rena Rouge",
-      "position": "MF",
+      "position": "MF", "roles": ["ME"],
       "overall": 80,
       "traits": [
         {
@@ -163,7 +163,7 @@
     {
       "id": "hp-mf-2",
       "name": "Ryuko",
-      "position": "MF",
+      "position": "MF", "roles": ["MD"],
       "overall": 82,
       "traits": [
         {
@@ -180,7 +180,7 @@
     {
       "id": "hp-mf-3",
       "name": "Viperion",
-      "position": "MF",
+      "position": "MF", "roles": ["MAT"],
       "overall": 75,
       "traits": [
         {
@@ -193,7 +193,7 @@
     {
       "id": "hp-mf-4",
       "name": "Lila Rossi",
-      "position": "MF",
+      "position": "MF", "roles": ["VOL"],
       "overall": 74,
       "traits": [
         {
@@ -206,7 +206,7 @@
     {
       "id": "hp-mf-5",
       "name": "Félix Graham de Vanily",
-      "position": "MF",
+      "position": "MF", "roles": ["MC", "MAT"],
       "overall": 76,
       "traits": [
         {
@@ -219,7 +219,7 @@
     {
       "id": "hp-mf-6",
       "name": "Zoé Lee",
-      "position": "MF",
+      "position": "MF", "roles": ["ME", "VOL"],
       "overall": 68,
       "traits": [],
       "specialAbility": null
@@ -227,7 +227,7 @@
     {
       "id": "hp-mf-7",
       "name": "Ondine",
-      "position": "MF",
+      "position": "MF", "roles": ["MD"],
       "overall": 66,
       "traits": [
         {
@@ -240,7 +240,7 @@
     {
       "id": "hp-mf-8",
       "name": "Aurore Beauréal",
-      "position": "MF",
+      "position": "MF", "roles": ["MAT", "MC"],
       "overall": 64,
       "traits": [
         {
@@ -253,7 +253,7 @@
     {
       "id": "hp-fw-1",
       "name": "Ladybug",
-      "position": "FW",
+      "position": "FW", "roles": ["CA", "PD"],
       "overall": 90,
       "traits": [
         {
@@ -278,7 +278,7 @@
     {
       "id": "hp-fw-2",
       "name": "Cat Noir",
-      "position": "FW",
+      "position": "FW", "roles": ["PE"],
       "overall": 90,
       "traits": [
         {
@@ -302,7 +302,7 @@
     {
       "id": "hp-fw-3",
       "name": "Kim Le Chien",
-      "position": "FW",
+      "position": "FW", "roles": ["PD"],
       "overall": 78,
       "traits": [
         {
@@ -315,7 +315,7 @@
     {
       "id": "hp-fw-4",
       "name": "Rose Lavillant",
-      "position": "FW",
+      "position": "FW", "roles": ["CA", "PE"],
       "overall": 65,
       "traits": [],
       "specialAbility": null
@@ -323,7 +323,7 @@
     {
       "id": "hp-fw-5",
       "name": "Marc Anciel",
-      "position": "FW",
+      "position": "FW", "roles": ["PE", "PD"],
       "overall": 62,
       "traits": [],
       "specialAbility": null
@@ -331,7 +331,7 @@
     {
       "id": "hp-fw-6",
       "name": "Manon Chamack",
-      "position": "FW",
+      "position": "FW", "roles": ["PD"],
       "overall": 55,
       "traits": [
         {
