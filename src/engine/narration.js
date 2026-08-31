@@ -243,15 +243,15 @@ const TEMPLATES = {
     'O árbitro marca falta de {player}.',
   ],
   [EVENT_TYPES.SCANDALOUS_FOUL]: [
-    '{player} perde a cabeça e rasga a camisa de {victim} no meio do carrinho. O juiz apita na hora, sem acreditar no que viu.',
-    '{player} agarra {victim} pela orelha e dá um puxão antes de soltar — cena inacreditável, e o árbitro já vem correndo para cima dele.',
-    '{player} derruba {victim} e ainda arranca a caneleira dele no chão. O juiz chega revoltado com a cena.',
-    'Depois da falta, {player} pisa de propósito na chuteira de {victim}. O árbitro não acredita no que viu.',
-    '{player} puxa {victim} pelo pescoço da camisa e quase rasga o tecido. O juiz vem sério, decidido a não deixar barato.',
+    '{player} puxa a camisa de {victim} até rasgar. O juiz marcou falta na hora.',
+    '{player} puxa {victim} pela orelha — cena inacreditável, e o árbitro já está vindo resolver.',
+    '{player} chega com as travas da chuteira nas costas de {victim}. O juiz viu tudo de perto.',
+    'Depois da falta, {player} pisa de propósito na canela de {victim}. O árbitro não acredita no que viu.',
+    '{player} puxa {victim} pela gola da camisa. O juiz vem sério, decidido a não deixar barato.',
   ],
   [EVENT_TYPES.SCANDALOUS_FOUL_IGNORED]: [
     'No fim das contas, o juiz finge que não viu nada e manda o jogo seguir.',
-    'Depois de dar uma bronca, o árbitro relaxa e não dá nem cartão amarelo para {player}.',
+    'Depois de dar uma bronca, o árbitro não dá nem cartão amarelo para {player}.',
     'Para a surpresa geral, o juiz não pune {player} — só advertência verbal.',
   ],
   [EVENT_TYPES.SEVERE_INJURY]: [
