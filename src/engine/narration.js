@@ -248,6 +248,7 @@ const TEMPLATES = {
     '{player} chega com as travas da chuteira nas costas de {victim}. O juiz viu tudo de perto.',
     'Depois da falta, {player} pisa de propósito na canela de {victim}. O árbitro não acredita no que viu.',
     '{player} puxa {victim} pela gola da camisa. O juiz vem sério, decidido a não deixar barato.',
+    '{player} aplica um mata-leão em {victim}. Jogadores de ambos os times correm para separar a confusão.',
   ],
   [EVENT_TYPES.SCANDALOUS_FOUL_IGNORED]: [
     'No fim das contas, o juiz finge que não viu nada e manda o jogo seguir.',
