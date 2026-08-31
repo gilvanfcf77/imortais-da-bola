@@ -194,6 +194,18 @@ export const GOAL_STYLE = {
   LONG_SHOT_REFEREE_DEFLECTION_CHANCE: 0.04,
 };
 
+// Real refereeing research consistently finds officials skew borderline
+// calls toward the home side under crowd pressure — this models that,
+// applied only to the referee's own genuinely discretionary calls that the
+// engine already has (a penalty given/not given, a card shown/withheld, a
+// goal disallowed). It deliberately does NOT touch anything player-driven
+// (who commits a foul, who's picked to finish, trait effects) — the bias
+// belongs to the referee's judgment, not to how the players themselves
+// behave. See refereeBiasMultiplier in match.js. Not yet calibrated.
+export const REFEREE = {
+  HOME_BIAS: 1.3,
+};
+
 export const PENALTY = {
   // Chance any attack sequence turns into a clear penalty situation, rolled
   // before the normal shot-conversion math in resolveAttack — see

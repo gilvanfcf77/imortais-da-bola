@@ -22,6 +22,7 @@ import {
   WALL_SAVE,
   SHOOTOUT,
   GOALKEEPER,
+  REFEREE,
 } from './constants.js';
 import { getTraitIntensity, sumTraitIntensity, combineMultipliers } from './traits.js';
 import { EVENT_TYPES, narrate, narrateCustom } from './narration.js';
@@ -165,6 +166,16 @@ function issueYellowCard(team, player, minute, rng, stats) {
 // NOT the player playing more carefully; it's refereeing leniency.
 function refereeLeniencyWeight(team, player) {
   return team.yellowCards.has(player.id) ? CARDS.LENIENCY_ON_BOOKED_PLAYER : 1;
+}
+
+// `benefitedSide` is whichever team comes out ahead if this particular
+// discretionary call goes through (awarded a penalty, shown a card to the
+// other side, had a goal disallowed against them) — see REFEREE.HOME_BIAS
+// in constants.js. Multiplies that call's chance up when the benefited
+// side is home, down when it's away, so a single constant swings both
+// directions symmetrically.
+function refereeBiasMultiplier(benefitedSide) {
+  return benefitedSide === 'home' ? REFEREE.HOME_BIAS : 1 / REFEREE.HOME_BIAS;
 }
 
 // --- Trait-driven multipliers -----------------------------------------
@@ -389,7 +400,8 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       rng
     );
     stats.penaltiesWrongLocation++;
-  } else if (rng.chance(PENALTY.NOT_GIVEN_CHANCE)) {
+    // Not giving a deserved penalty benefits whoever was defending it.
+  } else if (rng.chance(PENALTY.NOT_GIVEN_CHANCE * refereeBiasMultiplier(defendingTeam.side))) {
     pushEvent(
       events,
       minute,
@@ -481,7 +493,8 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
   if (active.length === 0) return events;
 
   const finisher = pickFinisher(attackingTeam, rng);
-  if (rng.chance(PENALTY.PHANTOM_CHANCE)) {
+  // A phantom penalty benefits whoever gets awarded it — the attacking side.
+  if (rng.chance(PENALTY.PHANTOM_CHANCE * refereeBiasMultiplier(attackingTeam.side))) {
     return resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, 'phantom');
   }
   if (rng.chance(PENALTY.SITUATION_CHANCE)) {
@@ -604,8 +617,9 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
 
     // The reversal: for maximum drama this is checked only now, after the
     // goal has already been fully announced and celebrated — not as an
-    // alternative to scoring in the first place.
-    if (rng.chance(COMEDY.DISALLOWED_GOAL_CHANCE)) {
+    // alternative to scoring in the first place. Disallowing it benefits
+    // whoever was defending, i.e. the side that just conceded.
+    if (rng.chance(COMEDY.DISALLOWED_GOAL_CHANCE * refereeBiasMultiplier(defendingTeam.side))) {
       if (attackingTeam.side === 'home') score.home--;
       else score.away--;
       pushEvent(
@@ -718,7 +732,11 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
   // happened at all). Excludes goalkeepers — their fouls are already handled
   // above and are basically always near their own goal, so "wrong location"
   // doesn't read right for them.
-  if (offender.position !== 'GK' && rng.chance(PENALTY.WRONG_LOCATION_CHANCE)) {
+  // A wrongly-awarded penalty benefits whoever gets to take it — the fouled side.
+  if (
+    offender.position !== 'GK' &&
+    rng.chance(PENALTY.WRONG_LOCATION_CHANCE * refereeBiasMultiplier(fouledTeam.side))
+  ) {
     const finisher = pickFinisher(fouledTeam, rng);
     return resolvePenalty(fouledTeam, offendingTeam, finisher, minute, score, rng, stats, 'wrongLocation');
   }
@@ -786,8 +804,12 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
   }
 
   const gamesmanshipLevel = effectiveGamesmanship(offendingTeam, score);
+  // Showing a card benefits the fouled side, not the offender — the home
+  // crowd's pressure makes the referee more willing to card an away
+  // offender, more reluctant to card a home one.
+  const cardBias = refereeBiasMultiplier(fouledTeam.side);
   const straightRedChance =
-    CARDS.BASE_STRAIGHT_RED_CHANCE * (1 + gamesmanshipLevel * GAMESMANSHIP.CARD_RISK_PER_LEVEL);
+    CARDS.BASE_STRAIGHT_RED_CHANCE * (1 + gamesmanshipLevel * GAMESMANSHIP.CARD_RISK_PER_LEVEL) * cardBias;
   if (rng.chance(straightRedChance)) {
     pushEvent(events, minute, EVENT_TYPES.STRAIGHT_RED, offendingTeam.side, { player: offender.name }, rng, {
       playerId: offender.id,
@@ -802,7 +824,8 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
     (1 + shortFuseIntensity * CARDS.SHORT_FUSE_CARD_WEIGHT) *
     (1 + gamesmanshipLevel * GAMESMANSHIP.CARD_RISK_PER_LEVEL) *
     (isScandalous ? COMEDY.SCANDALOUS_FOUL_CARD_WEIGHT : 1) *
-    refereeLeniencyWeight(offendingTeam, offender);
+    refereeLeniencyWeight(offendingTeam, offender) *
+    cardBias;
 
   let cardGiven = false;
   if (rng.chance(yellowChance)) {
