@@ -180,6 +180,17 @@ function refereeBiasMultiplier(benefitedSide) {
 
 // --- Trait-driven multipliers -----------------------------------------
 
+function averageOverall(players) {
+  if (players.length === 0) return 60; // neutral fallback, mirrors sectorStrength's
+  return players.reduce((sum, p) => sum + p.overall, 0) / players.length;
+}
+
+// A big-underdog-nursing-a-shock-lead situation — see
+// GAMESMANSHIP.UNDERDOG_* in constants.js.
+function isUnderdog(team, opponent) {
+  return averageOverall(activePlayers(opponent)) - averageOverall(activePlayers(team)) >= GAMESMANSHIP.UNDERDOG_OVERALL_GAP;
+}
+
 // Gamesmanship only makes sense as a way to run down the clock on a result
 // worth protecting, so its mechanical effects (extra fouls, card risk,
 // rhythm-breaking, time-wasting flavor events) only apply while the team is
@@ -189,13 +200,26 @@ function refereeBiasMultiplier(benefitedSide) {
 // looks at the current match's score; once the cup's two-legged ties exist
 // (see CLAUDE.md "Passo 3"), it should also treat being ahead on aggregate
 // from the first leg as "winning" here.
-function effectiveGamesmanship(team, score) {
-  if (scoreSituation(team.side, score) === 'losing') return 0;
-  return team.config.gamesmanship ?? 0;
+//
+// On top of that deliberately-configured level: a big underdog holding an
+// actual lead late in the match gets a floor bumped up to
+// UNDERDOG_INSTINCTIVE_LEVEL regardless of what catimba was set before
+// kickoff — see isUnderdog above. This is the PLAYERS' own instinct under
+// pressure, not a manager's tactical dial, which is why it's additive
+// (never lowers a deliberately higher setting) rather than something the
+// user configures.
+function effectiveGamesmanship(team, opponent, minute, score) {
+  const situation = scoreSituation(team.side, score);
+  if (situation === 'losing') return 0;
+  const configured = team.config.gamesmanship ?? 0;
+  if (situation === 'winning' && minute >= GAMESMANSHIP.UNDERDOG_LATE_GAME_MINUTE && isUnderdog(team, opponent)) {
+    return Math.max(configured, GAMESMANSHIP.UNDERDOG_INSTINCTIVE_LEVEL);
+  }
+  return configured;
 }
 
-function rhythmBreakReduction(team, score) {
-  const level = effectiveGamesmanship(team, score);
+function rhythmBreakReduction(team, opponent, minute, score) {
+  const level = effectiveGamesmanship(team, opponent, minute, score);
   if (level === 0) return 0;
   const cynicalIntensity = sumTraitIntensity(activePlayers(team), 'cynicalFouler');
   if (cynicalIntensity === 0) return 0; // gamesmanship without a cynicalFouler buys nothing
@@ -803,7 +827,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
     return events;
   }
 
-  const gamesmanshipLevel = effectiveGamesmanship(offendingTeam, score);
+  const gamesmanshipLevel = effectiveGamesmanship(offendingTeam, fouledTeam, minute, score);
   // Showing a card benefits the fouled side, not the offender — the home
   // crowd's pressure makes the referee more willing to card an away
   // offender, more reluctant to card a home one.
@@ -1168,7 +1192,7 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
     const attackPower = teamPower(attacker).attack;
     const defensePower = teamPower(defender).defense;
     let attackChance = ATTACK.BASE_CHANCE_PER_MINUTE * (attackPower / defensePower);
-    attackChance *= 1 - rhythmBreakReduction(defender, score);
+    attackChance *= 1 - rhythmBreakReduction(defender, attacker, minute, score);
     attackChance = clamp(attackChance, ATTACK.CHANCE_RANGE[0], ATTACK.CHANCE_RANGE[1]);
 
     if (rng.chance(attackChance)) {
@@ -1180,7 +1204,7 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
     [home, away],
     [away, home],
   ]) {
-    const gamesmanshipLevel = effectiveGamesmanship(offender, score);
+    const gamesmanshipLevel = effectiveGamesmanship(offender, fouled, minute, score);
     const dribblerIntensity = sumTraitIntensity(activePlayers(fouled), 'dribbler');
     const foulChance =
       FOUL.BASE_CHANCE_PER_MINUTE *
@@ -1217,10 +1241,17 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
     }
   }
 
-  for (const team of [home, away]) {
-    const level = effectiveGamesmanship(team, score);
+  for (const [team, opponent] of [
+    [home, away],
+    [away, home],
+  ]) {
+    const level = effectiveGamesmanship(team, opponent, minute, score);
     if (level === 0) continue;
-    if (rng.chance(level * GAMESMANSHIP.TIME_WASTING_EVENT_CHANCE_PER_LEVEL)) {
+    // Blatant flavor (gandulas hiding every ball, a fake medical timeout)
+    // only reads as believable once the match is genuinely running out —
+    // see GAMESMANSHIP.TIME_WASTING_MIN_MINUTE. The milder delays below
+    // stay ungated: a slow throw-in makes sense from kickoff on.
+    if (minute >= GAMESMANSHIP.TIME_WASTING_MIN_MINUTE && rng.chance(level * GAMESMANSHIP.TIME_WASTING_EVENT_CHANCE_PER_LEVEL)) {
       events.push(...resolveTimeWasting(team, minute, rng));
     }
     if (rng.chance(level * GAMESMANSHIP.THROW_IN_DELAY_CHANCE_PER_LEVEL)) {

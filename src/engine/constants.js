@@ -135,6 +135,22 @@ export const GAMESMANSHIP = {
   // as-is for the delay-of-game card chance. Not yet calibrated.
   THROW_IN_DELAY_CHANCE_PER_LEVEL: 0.015,
   GOAL_KICK_DELAY_CHANCE_PER_LEVEL: 0.015,
+  // TIME_WASTING's flavor (gandulas hiding every ball, a fake medical
+  // timeout) only reads as believable once the match is genuinely running
+  // out — a team doing that in the 20th minute would look bizarre, not
+  // cynical. THROW_IN_DELAY/GOAL_KICK_DELAY are milder and stay ungated —
+  // a slow throw-in makes sense from kickoff on if the level was set high.
+  TIME_WASTING_MIN_MINUTE: 80,
+  // A big underdog nursing a shock lead late doesn't need a manager's
+  // pre-match instruction to start playing for time — the players
+  // themselves sense they're punching above their weight and instinctively
+  // shut the game down. This boosts the EFFECTIVE gamesmanship level (never
+  // lowers whatever was actually configured) once a team is winning, this
+  // late, against a clearly stronger opponent. Same "holding a result"
+  // window as LEADER.LATE_GAME_MINUTE.
+  UNDERDOG_LATE_GAME_MINUTE: 70,
+  UNDERDOG_OVERALL_GAP: 10, // opponent's average overall must be at least this much higher
+  UNDERDOG_INSTINCTIVE_LEVEL: 2,
 };
 
 export const TRAIT_WEIGHTS = {
