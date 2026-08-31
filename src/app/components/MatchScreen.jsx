@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { EVENT_TYPES, GOAL_EVENT_TYPES } from '../../engine/index.js';
+import { EVENT_TYPES, GOAL_EVENT_TYPES, ROLE_TO_POSITION } from '../../engine/index.js';
 
 const SPEEDS = [
   { label: 'lenta', msPerMinute: 600 },
@@ -9,7 +9,15 @@ const SPEEDS = [
   { label: 'rápida', msPerMinute: 120 },
 ];
 
-const POSITION_LABELS = { GK: 'GOL', CB: 'ZAG', FB: 'LAT', MF: 'MEI', FW: 'ATA' };
+// Goalkeeper first, then defenders, then midfielders, then forwards —
+// ROLE_TO_POSITION's own key order already lists roles in exactly this
+// sequence (see formations.js), so it doubles as the canonical lineup
+// order instead of duplicating it here.
+const ROLE_ORDER = Object.keys(ROLE_TO_POSITION);
+
+function sortByRole(lineup) {
+  return [...lineup].sort((a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role));
+}
 
 const BADGE_STYLE = {
   goal: 'bg-transparent',
@@ -189,6 +197,7 @@ function eventRowClass(event) {
 
 function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
   const averageOverall = (lineup.reduce((sum, p) => sum + p.overall, 0) / lineup.length).toFixed(1);
+  const ordered = sortByRole(lineup);
   return (
     <aside
       className={`w-48 shrink-0 overflow-y-auto py-2 ${side === 'home' ? 'border-r' : 'border-l'} border-slate-800`}
@@ -196,7 +205,7 @@ function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
       <p className="px-3 pb-2 text-[11px] text-slate-500">
         Overall médio: <span className="font-semibold text-slate-300">{averageOverall}</span>
       </p>
-      {lineup.map((player) => {
+      {ordered.map((player) => {
         const badges = badgesByPlayer[player.id] ?? [];
         const sentOff = sentOffIds.has(player.id);
         return (
@@ -207,7 +216,7 @@ function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
             } ${sentOff ? 'opacity-45' : ''} ${side === 'home' ? 'border-sky-500' : 'border-orange-500'}`}
           >
             <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
-              {POSITION_LABELS[player.position] ?? player.position}
+              {player.role ?? player.position}
             </span>
             <span className="flex-1 truncate" title={player.era ? `${player.name} (${player.era})` : player.name}>
               {player.name}
