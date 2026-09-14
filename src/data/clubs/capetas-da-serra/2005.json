@@ -2,6 +2,7 @@
   "slug": "capetas-da-serra",
   "name": "Capetas da Serra",
   "era": 2005,
+  "cupEligible": true,
   "pool": [
     { "id": "us05-gk-1", "name": "Bartô Escudo", "position": "GK", "roles": ["GOL"], "overall": 71, "traits": [], "specialAbility": null },
     { "id": "us05-gk-2", "name": "Chicão Pulo", "position": "GK", "roles": ["GOL"], "overall": 64, "traits": [{ "slug": "wall", "intensity": 1 }], "specialAbility": null },

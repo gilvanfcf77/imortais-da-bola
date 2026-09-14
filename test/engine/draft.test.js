@@ -74,3 +74,19 @@ test('draftEleven lets a player with cross-position roles fill either kind of sl
     `expected the versatile player's effective position to be CB or MF, got ${picked.position}`
   );
 });
+
+// A real player can have one entry per club era (different `id`s), but the
+// draft must still treat them as one person — see PROGRESSO.md on real
+// clubs mixing eras in a single pool.
+test('draftEleven never drafts the same person twice across era entries', () => {
+  const pool = makePool();
+  const eraEntryA = makePlayer('CB', 80, [], ['ZAG'], 'rivellino');
+  const eraEntryB = makePlayer('MF', 80, [], ['VOL'], 'rivellino');
+  const poolWithRepeatedPerson = [...pool, eraEntryA, eraEntryB];
+
+  for (let seed = 0; seed < 30; seed++) {
+    const lineup = draftEleven(poolWithRepeatedPerson, FORMATIONS['4-4-2'], createRng(seed));
+    const rivellinoCount = lineup.filter((p) => p.personId === 'rivellino').length;
+    assert.ok(rivellinoCount <= 1, `seed ${seed}: expected at most 1 'rivellino' entry, got ${rivellinoCount}`);
+  }
+});

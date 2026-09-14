@@ -18,9 +18,17 @@ const DEFAULT_ROLES = {
   FW: ['PE', 'PD', 'CA'],
 };
 
-export function makePlayer(position, overall = 70, traits = [], roles) {
+export function makePlayer(position, overall = 70, traits = [], roles, personId) {
   nextId += 1;
-  return { id: `test-${nextId}`, name: `Player ${nextId}`, position, overall, traits, roles: roles ?? DEFAULT_ROLES[position] };
+  return {
+    id: `test-${nextId}`,
+    name: `Player ${nextId}`,
+    position,
+    overall,
+    traits,
+    roles: roles ?? DEFAULT_ROLES[position],
+    ...(personId ? { personId } : {}),
+  };
 }
 
 // Generous enough per position that draftEleven can fill any FORMATIONS

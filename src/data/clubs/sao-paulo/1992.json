@@ -1,0 +1,43 @@
+{
+  "slug": "sao-paulo",
+  "name": "São Paulo",
+  "era": 1992,
+  "cupEligible": true,
+  "pool": [
+    { "id": "spa92-gk-1", "personId": "zetti-q3jl", "name": "Zetti", "position": "GK", "roles": ["GOL"], "overall": 83, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa92-gk-2", "personId": "alexandre-g8qt", "name": "Alexandre", "position": "GK", "roles": ["GOL"], "overall": 63, "traits": [], "specialAbility": null },
+
+    { "id": "spa92-cb-1", "personId": "cafu-pcde", "name": "Cafu", "position": "FB", "roles": ["LD"], "overall": 84, "traits": [{ "slug": "dribbler", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa92-cb-2", "personId": "ronaldao-sjzt", "name": "Ronaldão", "position": "CB", "roles": ["ZAG"], "overall": 83, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-3", "personId": "antonio-carlos-xtzt", "name": "Antônio Carlos", "position": "CB", "roles": ["ZAG"], "overall": 78, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-4", "personId": "adilson-a2fa", "name": "Adílson", "position": "CB", "roles": ["ZAG"], "overall": 79, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-5", "personId": "gilmar-cevw", "name": "Gilmar", "position": "CB", "roles": ["ZAG"], "overall": 75, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-6", "personId": "nelsinho-zp1p", "name": "Nelsinho", "position": "FB", "roles": ["LE"], "overall": 69, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-7", "personId": "vitor-1wx7", "name": "Vítor", "position": "FB", "roles": ["LD"], "overall": 73, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-8", "personId": "ronaldo-luiz-kpe1", "name": "Ronaldo Luiz", "position": "CB", "roles": ["ZAG"], "overall": 74, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-9", "personId": "valber-d6yg", "name": "Válber", "position": "FB", "roles": ["LE", "VOL"], "overall": 71, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-10", "personId": "ivan-rocha-g8an", "name": "Ivan Rocha", "position": "CB", "roles": ["ZAG", "LE"], "overall": 75, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-11", "personId": "marcos-adriano-xo31", "name": "Marcos Adriano", "position": "FB", "roles": ["LE"], "overall": 65, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-12", "personId": "lula-d7i1", "name": "Lula", "position": "CB", "roles": ["ZAG"], "overall": 67, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-13", "personId": "menta-0cxe", "name": "Menta", "position": "CB", "roles": ["ZAG"], "overall": 58, "traits": [], "specialAbility": null },
+    { "id": "spa92-cb-14", "personId": "sergio-baresi-dgps", "name": "Sérgio Baresi", "position": "CB", "roles": ["ZAG"], "overall": 58, "traits": [], "specialAbility": null },
+
+    { "id": "spa92-mf-1", "personId": "rai-ln31", "name": "Raí", "position": "MF", "roles": ["MC", "MAT"], "overall": 92, "traits": [{ "slug": "playmaker", "intensity": 3 }, { "slug": "leader", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa92-mf-2", "personId": "toninho-cerezo-30qp", "name": "Toninho Cerezo", "position": "MF", "roles": ["VOL", "MC"], "overall": 82, "traits": [{ "slug": "leader", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa92-mf-3", "personId": "pintado-xuwb", "name": "Pintado", "position": "MF", "roles": ["VOL"], "overall": 80, "traits": [], "specialAbility": null },
+    { "id": "spa92-mf-4", "personId": "dinho-smi9", "name": "Dinho", "position": "MF", "roles": ["MC", "MD"], "overall": 74, "traits": [], "specialAbility": null },
+    { "id": "spa92-mf-5", "personId": "suelio-lacerda-wee5", "name": "Suélio Lacerda", "position": "MF", "roles": ["VOL"], "overall": 68, "traits": [], "specialAbility": null },
+    { "id": "spa92-mf-6", "personId": "sidnei-x5hf", "name": "Sídnei", "position": "MF", "roles": ["VOL"], "overall": 67, "traits": [], "specialAbility": null },
+    { "id": "spa92-mf-7", "personId": "mona-k0r7", "name": "Mona", "position": "MF", "roles": ["VOL"], "overall": 58, "traits": [], "specialAbility": null },
+    { "id": "spa92-mf-8", "personId": "eraldo-bjl6", "name": "Eraldo", "position": "MF", "roles": ["VOL", "MD"], "overall": 55, "traits": [], "specialAbility": null },
+
+    { "id": "spa92-fw-1", "personId": "muller-kjkt", "name": "Müller", "position": "FW", "roles": ["CA"], "overall": 88, "traits": [{ "slug": "sharpshooter", "intensity": 3 }], "specialAbility": null },
+    { "id": "spa92-fw-2", "personId": "palhinha-qv0h", "name": "Palhinha", "position": "FW", "roles": ["CA", "MAT"], "overall": 88, "traits": [{ "slug": "sharpshooter", "intensity": 3 }], "specialAbility": null },
+    { "id": "spa92-fw-3", "personId": "cate-sku7", "name": "Catê", "position": "FW", "roles": ["CA", "PD"], "overall": 76, "traits": [], "specialAbility": null },
+    { "id": "spa92-fw-4", "personId": "elivelton-gypy", "name": "Elivélton", "position": "FW", "roles": ["PE"], "overall": 75, "traits": [], "specialAbility": null },
+    { "id": "spa92-fw-5", "personId": "macedo-36pd", "name": "Macedo", "position": "FW", "roles": ["CA", "PD"], "overall": 72, "traits": [], "specialAbility": null },
+    { "id": "spa92-fw-6", "personId": "rinaldo-0k3m", "name": "Rinaldo", "position": "FW", "roles": ["CA", "PE"], "overall": 64, "traits": [], "specialAbility": null },
+    { "id": "spa92-fw-7", "personId": "cuca-a5pr", "name": "Cuca", "position": "FW", "roles": ["CA", "PE"], "overall": 58, "traits": [], "specialAbility": null },
+    { "id": "spa92-fw-8", "personId": "claudio-moura-z4ti", "name": "Cláudio Moura", "position": "FW", "roles": ["CA", "PD"], "overall": 54, "traits": [], "specialAbility": null }
+  ]
+}

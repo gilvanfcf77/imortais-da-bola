@@ -2,6 +2,7 @@
   "slug": "samangos-do-vale",
   "name": "Samangos do Vale",
   "era": 2012,
+  "cupEligible": true,
   "pool": [
     { "id": "ev12-gk-1", "name": "Bino Muralha", "position": "GK", "roles": ["GOL"], "overall": 74, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },
     { "id": "ev12-gk-2", "name": "Rui Segura", "position": "GK", "roles": ["GOL"], "overall": 66, "traits": [], "specialAbility": null },

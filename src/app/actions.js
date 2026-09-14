@@ -37,8 +37,11 @@ export async function drawEraSquad(clubSlug) {
 // entries are tagged with `.role` (see SquadScreen.jsx and draftEleven),
 // which is what lets this tell an open ZAG slot apart from an open VOL one.
 export async function completeSquadRandomly(clubSlug, currentSquad, formationName = '4-4-2') {
-  const pickedIds = new Set(currentSquad.map((p) => p.id));
-  const pool = getClubPool(clubSlug).filter((p) => !pickedIds.has(p.id));
+  // Compares by personId (falling back to id), not just id, so a real
+  // person already on the squad from one era can't also be drafted from a
+  // different era's entry — see the personId note in draft.js.
+  const pickedPersonIds = new Set(currentSquad.map((p) => p.personId ?? p.id));
+  const pool = getClubPool(clubSlug).filter((p) => !pickedPersonIds.has(p.personId ?? p.id));
 
   const filledByRole = currentSquad.reduce((acc, p) => {
     acc[p.role] = (acc[p.role] ?? 0) + 1;
@@ -263,7 +266,7 @@ function buildBracket(opponents, rng) {
 // resolves every match that doesn't involve the player.
 export async function startCup(clubSlug, squad) {
   const manifest = getClubManifest();
-  const others = manifest.filter((c) => c.slug !== clubSlug);
+  const others = manifest.filter((c) => c.slug !== clubSlug && c.cupEligible);
   const rng = createRng(Date.now());
 
   const opponentClubs = rng.shuffle(others).slice(0, TOURNAMENT_SIZE - 1);

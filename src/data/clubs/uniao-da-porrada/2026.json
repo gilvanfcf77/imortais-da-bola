@@ -2,6 +2,7 @@
   "slug": "uniao-da-porrada",
   "name": "União da Porrada",
   "era": 2026,
+  "cupEligible": true,
   "pool": [
     {
       "id": "up-gk-1",

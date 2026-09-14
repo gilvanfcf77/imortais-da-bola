@@ -32,7 +32,13 @@ export function draftEleven(pool, formation, rng) {
     }
     const chosen = rng.pick(candidates);
     lineup.push({ ...chosen, role: formationSlot.role, position: formationSlot.position });
-    available = available.filter((p) => p.id !== chosen.id);
+    // Compares by personId, not id, so the same real person can't be drafted
+    // twice from two different era entries (id is per-passage; personId is
+    // per-person — see CLAUDE.md/PROGRESSO.md on multi-era pools). Falls
+    // back to id for data that has no personId (every fictional club's
+    // pool), where each entry is already a distinct person.
+    const chosenPersonId = chosen.personId ?? chosen.id;
+    available = available.filter((p) => (p.personId ?? p.id) !== chosenPersonId);
   }
 
   return lineup;

@@ -2,6 +2,7 @@
   "slug": "samangos-do-vale",
   "name": "Samangos do Vale",
   "era": 2026,
+  "cupEligible": true,
   "pool": [
     {
       "id": "ev-gk-1",

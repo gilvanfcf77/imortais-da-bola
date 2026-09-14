@@ -30,6 +30,8 @@ import { dirname, join } from 'node:path';
 const CLUBS_DIR = dirname(fileURLToPath(import.meta.url));
 
 const CLUBS = [
+  { slug: 'corinthians', files: ['1977.json'] },
+  { slug: 'sao-paulo', files: ['1992.json'] },
   { slug: 'samangos-do-vale', files: ['2005.json', '2012.json', '2026.json'] },
   { slug: 'capetas-da-serra', files: ['2005.json', '2012.json', '2026.json'] },
   { slug: 'uniao-da-porrada', files: ['2026.json'] },
@@ -51,6 +53,7 @@ function loadClub({ slug, files }) {
 
 const bySlug = Object.fromEntries(CLUBS.map((club) => [club.slug, loadClub(club)]));
 
+export const CORINTHIANS = bySlug['corinthians'];
 export const SAMANGOS_DO_VALE = bySlug['samangos-do-vale'];
 export const CAPETAS_DA_SERRA = bySlug['capetas-da-serra'];
 export const UNIAO_DA_PORRADA = bySlug['uniao-da-porrada'];
@@ -61,8 +64,16 @@ export const HEROIS_DE_PARIS = bySlug['herois-de-paris'];
 export const SAMPLE_CLUBS = CLUBS.map((club) => bySlug[club.slug]);
 
 // Club list for UI pickers, without the (possibly large) merged pool.
+// `cupEligible` here means "has at least one era eligible as a cup
+// opponent" — the flag itself lives per era (see getClubEras below), not on
+// the club as a whole, since one era of a club can be curated enough to
+// face players while another isn't.
 export function getClubManifest() {
-  return CLUBS.map(({ slug }) => ({ slug, name: bySlug[slug].name }));
+  return CLUBS.map(({ slug }) => ({
+    slug,
+    name: bySlug[slug].name,
+    cupEligible: getClubEras(slug).some((e) => e.cupEligible),
+  }));
 }
 
 // The full, already-merged multi-era pool for one club — every player from

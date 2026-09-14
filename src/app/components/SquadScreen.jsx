@@ -96,7 +96,10 @@ export default function SquadScreen({ club, onComplete }) {
     setPendingChoice(null);
   }
 
-  const pickedIds = new Set(squad.map((p) => p.id));
+  // Compares by personId (falling back to id) so a real person already
+  // picked from one era's draw shows disabled if the same person turns up
+  // in a different era — see the personId note in src/engine/draft.js.
+  const pickedPersonIds = new Set(squad.map((p) => p.personId ?? p.id));
   const totalByRole = useMemo(() => {
     const counts = {};
     for (const slot of formation.slots) counts[slot.role] = (counts[slot.role] ?? 0) + 1;
@@ -145,7 +148,7 @@ export default function SquadScreen({ club, onComplete }) {
   }
 
   function handlePick(player) {
-    if (pickedIds.has(player.id)) return;
+    if (pickedPersonIds.has(player.personId ?? player.id)) return;
     const eligible = eligibleRolesFor(player);
     if (eligible.length === 0) return;
     if (eligible.length === 1) {
@@ -274,7 +277,7 @@ export default function SquadScreen({ club, onComplete }) {
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {drawnEra.pool.map((player) => {
                 const eligible = eligibleRolesFor(player);
-                const selectable = eligible.length > 0 && !pickedIds.has(player.id);
+                const selectable = eligible.length > 0 && !pickedPersonIds.has(player.personId ?? player.id);
                 const traits = player.traits ?? [];
                 return (
                   <button
