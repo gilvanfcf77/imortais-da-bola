@@ -145,10 +145,18 @@ export async function playMatch({ homeName, squad, awayName, awayEra, awayLineup
   return { result, homeName, awayName, awayEra, homeLineup: squad, awayLineup, shootout };
 }
 
-// How many clubs total are in the cup, the player included. Bump this once
-// enough other clubs exist — it needs TOURNAMENT_SIZE - 1 distinct others,
-// and must stay a power of 2 (buildBracket below assumes it).
-const TOURNAMENT_SIZE = 4;
+// buildBracket needs the player's opponent count to be one less than a power
+// of 2 (1, 3, 7, 15, ...) — see its own doc comment for why. Rather than a
+// fixed TOURNAMENT_SIZE, this picks the largest such count that still fits
+// within however many distinct cupEligible clubs are actually available, so
+// the cup grows on its own as more real clubs get curated (see DECISOES.md
+// #15) instead of needing a manual bump — and shrinks to a single Final when
+// only one other club is eligible, instead of crashing.
+function largestValidOpponentCount(availableOthers) {
+  let count = 1;
+  while (count <= availableOthers) count = count * 2 + 1;
+  return (count - 1) / 2;
+}
 
 const ROUND_NAME_SEQUENCE = ['Final', 'Semifinal', 'Quartas de final', 'Oitavas de final'];
 
@@ -261,15 +269,17 @@ function buildBracket(opponents, rng) {
   return rounds;
 }
 
-// Draws the whole bracket at once: TOURNAMENT_SIZE - 1 distinct clubs (never
-// repeats one on both sides of the draw), each with its own single era, then
-// resolves every match that doesn't involve the player.
+// Draws the whole bracket at once: as many distinct clubs as
+// largestValidOpponentCount allows (never repeats one on both sides of the
+// draw), each with its own single era, then resolves every match that
+// doesn't involve the player.
 export async function startCup(clubSlug, squad) {
   const manifest = getClubManifest();
   const others = manifest.filter((c) => c.slug !== clubSlug && c.cupEligible);
   const rng = createRng(Date.now());
 
-  const opponentClubs = rng.shuffle(others).slice(0, TOURNAMENT_SIZE - 1);
+  const opponentCount = largestValidOpponentCount(others.length);
+  const opponentClubs = rng.shuffle(others).slice(0, opponentCount);
   const opponents = opponentClubs.map((clubEntry) => drawSingleEraOpponent(clubEntry, rng));
 
   return { rounds: buildBracket(opponents, rng) };
