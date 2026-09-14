@@ -2,7 +2,7 @@
   "slug": "ousadia-e-alegria",
   "name": "Ousadia e Alegria",
   "era": 2026,
-  "cupEligible": true,
+  "cupEligible": false,
   "pool": [
     {
       "id": "oa-gk-1",

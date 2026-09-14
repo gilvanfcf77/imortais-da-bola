@@ -30,8 +30,8 @@ import { dirname, join } from 'node:path';
 const CLUBS_DIR = dirname(fileURLToPath(import.meta.url));
 
 const CLUBS = [
-  { slug: 'corinthians', files: ['1977.json'] },
-  { slug: 'sao-paulo', files: ['1992.json'] },
+  { slug: 'corinthians', files: ['1977.json', '2000.json'] },
+  { slug: 'sao-paulo', files: ['1992.json', '2008.json'] },
   { slug: 'samangos-do-vale', files: ['2005.json', '2012.json', '2026.json'] },
   { slug: 'capetas-da-serra', files: ['2005.json', '2012.json', '2026.json'] },
   { slug: 'uniao-da-porrada', files: ['2026.json'] },
@@ -91,6 +91,6 @@ export function getClubEras(slug) {
   const club = CLUBS.find((c) => c.slug === slug);
   return club.files.map((file) => {
     const part = loadClubFile(slug, file);
-    return { era: part.era ?? null, pool: part.pool };
+    return { era: part.era ?? null, pool: part.pool, cupEligible: part.cupEligible ?? false };
   });
 }

@@ -1,0 +1,34 @@
+{
+  "slug": "sao-paulo",
+  "name": "São Paulo",
+  "era": 2008,
+  "cupEligible": true,
+  "pool": [
+    { "id": "spa08-gk-1", "personId": "rogerio-ceni-w4nb", "name": "Rogério Ceni", "position": "GK", "roles": ["GOL"], "overall": 90, "traits": [{ "slug": "leader", "intensity": 3 }, { "slug": "freeKickSpecialist", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa08-gk-2", "personId": "bosco-t8lq", "name": "Bosco", "position": "GK", "roles": ["GOL"], "overall": 65, "traits": [], "specialAbility": null },
+
+    { "id": "spa08-cb-1", "personId": "miranda-sp-k2vy", "name": "Miranda", "position": "CB", "roles": ["ZAG"], "overall": 79, "traits": [{ "slug": "wall", "intensity": 1 }], "specialAbility": null },
+    { "id": "spa08-cb-2", "personId": "andre-dias-r6mh", "name": "André Dias", "position": "CB", "roles": ["ZAG"], "overall": 76, "traits": [], "specialAbility": null },
+    { "id": "spa08-cb-3", "personId": "alex-silva-sp-d0zu", "name": "Alex Silva", "position": "CB", "roles": ["ZAG"], "overall": 70, "traits": [], "specialAbility": null },
+    { "id": "spa08-cb-4", "personId": "rodrigo-sp-f9cj", "name": "Rodrigo", "position": "CB", "roles": ["ZAG"], "overall": 68, "traits": [], "specialAbility": null },
+    { "id": "spa08-cb-5", "personId": "edcarlos-sp-b3xp", "name": "Edcarlos", "position": "CB", "roles": ["ZAG"], "overall": 62, "traits": [], "specialAbility": null },
+
+    { "id": "spa08-fb-1", "personId": "jorge-wagner-l7iu", "name": "Jorge Wagner", "position": "FB", "roles": ["LE"], "overall": 74, "traits": [], "specialAbility": null },
+    { "id": "spa08-fb-2", "personId": "joilson-sp-a5ny", "name": "Joílson", "position": "FB", "roles": ["LD"], "overall": 72, "traits": [], "specialAbility": null },
+    { "id": "spa08-fb-3", "personId": "rafinha-sp-q1he", "name": "Rafinha", "position": "FB", "roles": ["LD"], "overall": 63, "traits": [], "specialAbility": null },
+
+    { "id": "spa08-mf-1", "personId": "josue-sp-m9wt", "name": "Josué", "position": "MF", "roles": ["VOL"], "overall": 77, "traits": [], "specialAbility": null },
+    { "id": "spa08-mf-2", "personId": "ze-luis-sp-g4bo", "name": "Zé Luís", "position": "MF", "roles": ["VOL"], "overall": 71, "traits": [], "specialAbility": null },
+    { "id": "spa08-mf-3", "personId": "hernanes-x8dk", "name": "Hernanes", "position": "MF", "roles": ["MC", "MAT"], "overall": 82, "traits": [{ "slug": "playmaker", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa08-mf-4", "personId": "richarlyson-e2vf", "name": "Richarlyson", "position": "MF", "roles": ["MD", "ME"], "overall": 75, "traits": [{ "slug": "dribbler", "intensity": 1 }], "specialAbility": null },
+    { "id": "spa08-mf-5", "personId": "hugo-sp-p6jz", "name": "Hugo", "position": "MF", "roles": ["MC"], "overall": 68, "traits": [], "specialAbility": null },
+    { "id": "spa08-mf-6", "personId": "souza-sp-c0lr", "name": "Souza", "position": "MF", "roles": ["VOL"], "overall": 60, "traits": [], "specialAbility": null },
+    { "id": "spa08-mf-7", "personId": "jean-sp-y3qs", "name": "Jean", "position": "MF", "roles": ["VOL"], "overall": 58, "traits": [], "specialAbility": null },
+
+    { "id": "spa08-fw-1", "personId": "aloisio-sp-n7ud", "name": "Aloísio", "position": "FW", "roles": ["CA"], "overall": 83, "traits": [{ "slug": "sharpshooter", "intensity": 2 }], "specialAbility": null },
+    { "id": "spa08-fw-2", "personId": "borges-sp-h1ki", "name": "Borges", "position": "FW", "roles": ["CA", "PD"], "overall": 68, "traits": [], "specialAbility": null },
+    { "id": "spa08-fw-3", "personId": "dagoberto-sp-z5wa", "name": "Dagoberto", "position": "FW", "roles": ["CA", "PE"], "overall": 72, "traits": [], "specialAbility": null },
+    { "id": "spa08-fw-4", "personId": "andre-lima-sp-o9tb", "name": "André Lima", "position": "FW", "roles": ["CA"], "overall": 65, "traits": [], "specialAbility": null },
+    { "id": "spa08-fw-5", "personId": "leandro-sp-v4mc", "name": "Leandro", "position": "FW", "roles": ["PE", "PD"], "overall": 60, "traits": [], "specialAbility": null }
+  ]
+}

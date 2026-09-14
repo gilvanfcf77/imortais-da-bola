@@ -2,7 +2,7 @@
   "slug": "capetas-da-serra",
   "name": "Capetas da Serra",
   "era": 2026,
-  "cupEligible": true,
+  "cupEligible": false,
   "pool": [
     {
       "id": "us-gk-1",

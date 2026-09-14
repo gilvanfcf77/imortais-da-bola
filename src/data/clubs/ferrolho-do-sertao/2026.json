@@ -2,7 +2,7 @@
   "slug": "ferrolho-do-sertao",
   "name": "Ferrolho do Sertão",
   "era": 2026,
-  "cupEligible": true,
+  "cupEligible": false,
   "pool": [
     {
       "id": "fs-gk-1",
