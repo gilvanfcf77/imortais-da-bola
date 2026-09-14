@@ -160,6 +160,7 @@ export const TRAIT_WEIGHTS = {
   WALL_REDUCTION_CAP: 0.55,
   FREE_KICK_GOAL_CHANCE: 0.04, // base chance a foul in range becomes a scored free kick
   FREE_KICK_SPECIALIST_WEIGHT: 0.1, // per point of intensity
+  SET_PIECE_SPECIALIST_WEIGHT: 1, // extra selection weight per point for corners and penalties
   PLAYMAKER_ASSIST_WEIGHT: 0.5, // extra weight per point of intensity, when picking who gets credited with the assist
   DRIBBLER_INDIVIDUAL_GOAL_WEIGHT: 0.5, // multiplies GOAL_STYLE.WEIGHTS.individual, per point of the scorer's dribbler intensity
 };

@@ -16,7 +16,7 @@
 export const TRAITS = {
   freeKickSpecialist: {
     name: 'Free-kick specialist',
-    description: 'Higher chance of scoring directly from a foul.',
+    description: 'Preferred taker for free kicks, corners, and penalties, with a higher chance of scoring directly from a foul.',
   },
   shortFuse: {
     name: 'Short fuse',

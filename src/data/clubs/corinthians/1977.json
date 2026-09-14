@@ -2,6 +2,7 @@
   "slug": "corinthians",
   "name": "Corinthians",
   "era": 1977,
+  "legendary": false,
   "cupEligible": true,
   "pool": [
     { "id": "cor77-gk-1", "personId": "tobias-v49o", "name": "Tobias", "position": "GK", "roles": ["GOL"], "overall": 84, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },

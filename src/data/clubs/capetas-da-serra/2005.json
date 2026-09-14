@@ -2,6 +2,7 @@
   "slug": "capetas-da-serra",
   "name": "Capetas da Serra",
   "era": 2005,
+  "legendary": false,
   "cupEligible": false,
   "pool": [
     { "id": "us05-gk-1", "name": "Bartô Escudo", "position": "GK", "roles": ["GOL"], "overall": 71, "traits": [], "specialAbility": null },

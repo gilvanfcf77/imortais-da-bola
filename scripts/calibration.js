@@ -13,6 +13,7 @@ import {
   CAPETAS_DA_SERRA,
   FERROLHO_DO_SERTAO,
   OUSADIA_E_ALEGRIA,
+  getClubEras,
 } from '../src/data/clubs/index.js';
 
 const lines = [];
@@ -24,6 +25,8 @@ function log(line = '') {
 const MATCH_COUNT = 500;
 const BASE_SEED = 20260829;
 const FORMATION = FORMATIONS['4-4-2'];
+const CORINTHIANS_1977 = getClubEras('corinthians').find((era) => era.era === 1977);
+const SAO_PAULO_2008 = getClubEras('sao-paulo').find((era) => era.era === 2008);
 
 // Same approximation used by the frontend's ResultScreen (src/app/components/
 // ResultScreen.jsx): the engine has no continuous possession state, only
@@ -53,11 +56,11 @@ function countShotsBySide(events) {
 
 function playOneMatch(seed) {
   const rng = createRng(seed);
-  const homeLineup = draftEleven(SAMANGOS_DO_VALE.pool, FORMATION, rng);
-  const awayLineup = draftEleven(CAPETAS_DA_SERRA.pool, FORMATION, rng);
+  const homeLineup = draftEleven(CORINTHIANS_1977.pool, FORMATION, rng);
+  const awayLineup = draftEleven(SAO_PAULO_2008.pool, FORMATION, rng);
 
-  const home = { name: SAMANGOS_DO_VALE.name, lineup: homeLineup, posture: 'balanced', gamesmanship: 1 };
-  const away = { name: CAPETAS_DA_SERRA.name, lineup: awayLineup, posture: 'balanced', gamesmanship: 1 };
+  const home = { name: 'Corinthians (1977)', lineup: homeLineup, posture: 'balanced', gamesmanship: 3 };
+  const away = { name: 'São Paulo (2008)', lineup: awayLineup, posture: 'attacking', gamesmanship: 0 };
 
   const goalkeeperIds = new Set(
     [...homeLineup, ...awayLineup].filter((p) => p.position === 'GK').map((p) => p.id)
@@ -204,9 +207,9 @@ for (let i = 0; i < MATCH_COUNT; i++) {
 }
 
 log(`Calibragem — ${MATCH_COUNT} partidas simuladas (seed base ${BASE_SEED})`);
-log(`Samangos do Vale (casa) x Capetas da Serra (fora), formação ${FORMATION.name}, postura equilibrada, catimba 1`);
+log(`Corinthians (1977, casa, equilibrado, catimba 3) x São Paulo (2008, fora, ofensivo, catimba 0), formação ${FORMATION.name}`);
 log(
-  `Overall médio do elenco: casa ${averageOverall(SAMANGOS_DO_VALE.pool)} / fora ${averageOverall(CAPETAS_DA_SERRA.pool)}`
+  `Overall médio do elenco: casa ${averageOverall(CORINTHIANS_1977.pool)} / fora ${averageOverall(SAO_PAULO_2008.pool)}`
 );
 log('');
 log(

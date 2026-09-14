@@ -47,13 +47,16 @@ function loadClubFile(slug, file) {
 
 function loadClub({ slug, files }) {
   const parts = files.map((file) => loadClubFile(slug, file));
-  const pool = parts.flatMap((part) => part.pool.map((player) => ({ ...player, era: part.era ?? null })));
+  const pool = parts.flatMap((part) =>
+    part.pool.map((player) => ({ ...player, era: part.era ?? null, legendary: part.legendary ?? false }))
+  );
   return { slug: parts[0].slug, name: parts[0].name, pool };
 }
 
 const bySlug = Object.fromEntries(CLUBS.map((club) => [club.slug, loadClub(club)]));
 
 export const CORINTHIANS = bySlug['corinthians'];
+export const SAO_PAULO = bySlug['sao-paulo'];
 export const SAMANGOS_DO_VALE = bySlug['samangos-do-vale'];
 export const CAPETAS_DA_SERRA = bySlug['capetas-da-serra'];
 export const UNIAO_DA_PORRADA = bySlug['uniao-da-porrada'];
@@ -91,6 +94,11 @@ export function getClubEras(slug) {
   const club = CLUBS.find((c) => c.slug === slug);
   return club.files.map((file) => {
     const part = loadClubFile(slug, file);
-    return { era: part.era ?? null, pool: part.pool, cupEligible: part.cupEligible ?? false };
+    return {
+      era: part.era ?? null,
+      legendary: part.legendary ?? false,
+      pool: part.pool,
+      cupEligible: part.cupEligible ?? false,
+    };
   });
 }

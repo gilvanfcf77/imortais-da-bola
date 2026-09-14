@@ -2,6 +2,7 @@
   "slug": "sao-paulo",
   "name": "São Paulo",
   "era": 1992,
+  "legendary": false,
   "cupEligible": true,
   "pool": [
     { "id": "spa92-gk-1", "personId": "zetti-q3jl", "name": "Zetti", "position": "GK", "roles": ["GOL"], "overall": 83, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },

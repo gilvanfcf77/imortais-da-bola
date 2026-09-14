@@ -2,6 +2,7 @@
   "slug": "herois-de-paris",
   "name": "Heróis de Paris",
   "era": 2026,
+  "legendary": false,
   "cupEligible": false,
   "pool": [
     {

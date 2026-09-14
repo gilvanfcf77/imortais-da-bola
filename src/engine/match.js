@@ -271,6 +271,20 @@ function pickFinisher(team, rng, exclude) {
   return rng.pickWeighted(candidates, weights);
 }
 
+function pickSetPieceTaker(team, rng, exclude) {
+  const active = activePlayers(team).filter((p) => !exclude?.has(p.id));
+  const pool = active.length > 0 ? active : activePlayers(team);
+  return rng.pickWeighted(
+    pool,
+    pool.map(
+      (p) =>
+        1 +
+        getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT +
+        getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT
+    )
+  );
+}
+
 function pickOffender(team, rng) {
   const candidates = activePlayers(team);
   const weights = candidates.map((p) => {
@@ -403,6 +417,7 @@ function maybeSilenceCrowd(scoringTeam, tookTheLead, scorer, minute, rng, stats)
 // for whether they also wave it off.
 function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, situation) {
   const events = [];
+  finisher = pickSetPieceTaker(attackingTeam, rng);
 
   if (situation === 'phantom') {
     pushEvent(
@@ -590,7 +605,12 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       } else {
         const kicker = rng.pickWeighted(
           teammates,
-          teammates.map((p) => 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT)
+          teammates.map(
+            (p) =>
+              1 +
+              getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT +
+              getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT
+          )
         );
         context.assist = kicker.name;
         assistPlayerId = kicker.id;
@@ -1514,7 +1534,7 @@ export function resolvePenaltyShootout({
   function takeKick(side) {
     const kickingTeam = side === 'home' ? homeTeam : awayTeam;
     const defendingTeam = side === 'home' ? awayTeam : homeTeam;
-    const kicker = pickFinisher(kickingTeam, rng, taken[side]);
+    const kicker = pickSetPieceTaker(kickingTeam, rng, taken[side]);
     taken[side].add(kicker.id);
     const keeper = pickGoalkeeper(defendingTeam, rng);
     minute += 1;

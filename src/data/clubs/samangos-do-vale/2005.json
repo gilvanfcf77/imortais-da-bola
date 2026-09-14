@@ -2,6 +2,7 @@
   "slug": "samangos-do-vale",
   "name": "Samangos do Vale",
   "era": 2005,
+  "legendary": false,
   "cupEligible": false,
   "pool": [
     { "id": "ev05-gk-1", "name": "Vaguinho Escudo", "position": "GK", "roles": ["GOL"], "overall": 70, "traits": [{ "slug": "wall", "intensity": 1 }], "specialAbility": null },
