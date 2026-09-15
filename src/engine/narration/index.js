@@ -50,6 +50,53 @@ export const GOAL_EVENT_TYPES = new Set([
   EVENT_TYPES.FREE_KICK_GOAL,
 ]);
 
+// Portuguese contracts a preposition with the definite article that follows
+// it (de+o="do", para+o="pro" informally, em+o="no"), and which contraction
+// is correct depends on the specific club's grammatical gender — "do
+// Corinthians" but "da Ponte Preta". A shared template pool that narrates
+// every club can't hardcode that contraction, so a template that needs one
+// uses a derived placeholder instead of writing the preposition itself: for
+// any of {team}/{opponent}/{crowd}, {xOf} gives "do"/"da" + name, {xFor}
+// gives "pro"/"pra" + name (the spoken contraction of "para o"/"para a",
+// matching this project's spoken-not-written narration convention), {xIn}
+// gives "no"/"na" + name, {xArticle} gives the bare article + name for
+// subject/object position with no preposition at all (e.g. "o Corinthians
+// venceu"), and {xArticleCap} is the same but capitalized, for the rare
+// template where that subject/object position is also the start of a
+// sentence (after a ". " or "! ") — {xArticle} itself always stays
+// lowercase, so a genuinely sentence-initial case needs this instead of
+// silently reading "o corinthians não acredita.". See CLAUDE.md club data:
+// a club that needs the feminine article
+// (Ponte Preta, Portuguesa) marks it with `feminineArticle: true`, read off
+// here from whichever team config supplied {team}/{opponent}/{crowd} — the
+// context value for those three keys is either a plain name string
+// (masculine assumed) or a `{ name, feminineArticle }` object.
+const CLUB_NOUN_KEYS = ['team', 'opponent', 'crowd'];
+const CLUB_NOUN_SUFFIXES = {
+  Of: ['do', 'da'],
+  For: ['pro', 'pra'],
+  In: ['no', 'na'],
+  Article: ['o', 'a'],
+};
+
+function withClubPlaceholders(context) {
+  const expanded = { ...context };
+  for (const noun of CLUB_NOUN_KEYS) {
+    const value = context[noun];
+    if (value == null) continue;
+    const isObject = typeof value === 'object';
+    const name = isObject ? value.name : value;
+    const feminine = isObject && Boolean(value.feminineArticle);
+    expanded[noun] = name;
+    for (const [suffix, [masculine, femForm]] of Object.entries(CLUB_NOUN_SUFFIXES)) {
+      expanded[`${noun}${suffix}`] = `${feminine ? femForm : masculine} ${name}`;
+    }
+    const article = feminine ? 'a' : 'o';
+    expanded[`${noun}ArticleCap`] = `${article.toUpperCase()} ${name}`;
+  }
+  return expanded;
+}
+
 function fillTemplate(template, context) {
   return template.replace(/\{(\w+)\}/g, (_, key) => context[key] ?? '');
 }
@@ -57,7 +104,7 @@ function fillTemplate(template, context) {
 export function narrate(type, context, rng) {
   const options = TEMPLATES[type];
   if (!options) throw new Error(`Unknown event type: ${type}`);
-  return fillTemplate(rng.pick(options), context);
+  return fillTemplate(rng.pick(options), withClubPlaceholders(context));
 }
 
 // Read-only view of one event type's current template pool — for tooling
@@ -72,5 +119,5 @@ export function templatesFor(type) {
 // Same template-filling as narrate(), but for text that isn't in the shared
 // TEMPLATES pool — e.g. a player's own bespoke special-event lines.
 export function narrateCustom(templates, context, rng) {
-  return fillTemplate(rng.pick(templates), context);
+  return fillTemplate(rng.pick(templates), withClubPlaceholders(context));
 }

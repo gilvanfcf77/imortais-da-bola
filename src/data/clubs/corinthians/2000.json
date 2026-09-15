@@ -204,11 +204,11 @@
         "minLead": 3,
         "chancePerMinute": 0.05,
         "templates": [
-          "Já com {team} com muita vantagem, {player} resolve fazer embaixadinhas.",
-          "Enquanto {team} administra a vantagem, {player} resolve se divertir: embaixadinha vai, embaixadinha vem...",
-          "Com o {team} na folga do placar, {player} ergue a bola e engrena uma sequência de embaixadinhas!",
-          "É puro deboche! {player} para a jogada, e começa a fazer embaixadinhas, garantindo a festa do {team}!",
-          "Vantagem tranquila do {team}, e o {player} resolve descontrair: embaixadinhas usando os pés, os joelhos e o peito!"
+          "Já com {teamArticle} com muita vantagem, {player} resolve fazer embaixadinhas.",
+          "Enquanto {teamArticle} administra a vantagem, {player} resolve se divertir: embaixadinha vai, embaixadinha vem...",
+          "Com {teamArticle} na folga do placar, {player} ergue a bola e engrena uma sequência de embaixadinhas!",
+          "É puro deboche! {player} para a jogada, e começa a fazer embaixadinhas, garantindo a festa {teamOf}!",
+          "Vantagem tranquila {teamOf}, e o {player} resolve descontrair: embaixadinhas usando os pés, os joelhos e o peito!"
         ]
       }
     },

@@ -48,7 +48,18 @@ function loadClub({ slug, files }) {
       legendary: part.legendary ?? false,
     })),
   );
-  return { slug: parts[0].slug, name: parts[0].name, pool };
+  return {
+    slug: parts[0].slug,
+    name: parts[0].name,
+    // Optional per-club flag — "o" (masculine) is the default and covers
+    // every real club curated so far; only a handful of Brazilian clubs
+    // (Ponte Preta, Portuguesa) take "a" instead. See
+    // src/engine/narration/index.js's withClubPlaceholders for where this
+    // actually picks the right preposition contraction ("do"/"da",
+    // "pro"/"pra", ...) in narration text.
+    feminineArticle: parts[0].feminineArticle ?? false,
+    pool,
+  };
 }
 
 const bySlug = Object.fromEntries(CLUBS.map((club) => [club.slug, loadClub(club)]));
@@ -74,6 +85,7 @@ export function getClubManifest() {
   return CLUBS.map(({ slug }) => ({
     slug,
     name: bySlug[slug].name,
+    feminineArticle: bySlug[slug].feminineArticle,
     cupEligible: getClubEras(slug).some((e) => e.cupEligible),
   }));
 }

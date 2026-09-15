@@ -119,6 +119,7 @@ function matchScoreLabel(result, shootout) {
 function toTeamConfig(participant) {
   return {
     name: participant.name,
+    feminineArticle: participant.feminineArticle,
     lineup: participant.lineup,
     posture: 'balanced',
     gamesmanship: defaultGamesmanship(participant.lineup),
@@ -156,7 +157,13 @@ function drawSingleEraOpponent(clubEntry, rng) {
   const legendaryEras = eras.filter((e) => e.legendary);
   const era = rng.pick(legendaryEras.length > 0 ? legendaryEras : eras);
   const { formation, lineup } = draftBestFormationEleven(era.pool, FORMATIONS, rng);
-  return { name: clubEntry.name, era: era.era, formation: formation.name, lineup };
+  return {
+    name: clubEntry.name,
+    feminineArticle: clubEntry.feminineArticle,
+    era: era.era,
+    formation: formation.name,
+    lineup,
+  };
 }
 
 // Plays a single already-determined match — the semifinal or the final,
@@ -164,8 +171,10 @@ function drawSingleEraOpponent(clubEntry, rng) {
 // (see startCup for that) so it can be reused for either stage.
 export async function playMatch({
   homeName,
+  homeFeminineArticle,
   squad,
   awayName,
+  awayFeminineArticle,
   awayEra,
   awayLineup,
   posture = 'balanced',
@@ -174,12 +183,14 @@ export async function playMatch({
   const rng = createRng(Date.now());
   const home = {
     name: homeName,
+    feminineArticle: homeFeminineArticle,
     lineup: squad,
     posture,
     gamesmanship: gamesmanship ?? defaultGamesmanship(squad),
   };
   const away = {
     name: awayName,
+    feminineArticle: awayFeminineArticle,
     lineup: awayLineup,
     posture: 'balanced',
     gamesmanship: defaultGamesmanship(awayLineup),

@@ -133,7 +133,7 @@ function maybeAssignStandInGoalkeeper(team, minute, rng, stats) {
     minute,
     EVENT_TYPES.OUTFIELD_PLAYER_IN_GOAL,
     team.side,
-    { player: chosen.name, team: team.config.name },
+    { player: chosen.name, team: team.config },
     rng,
     { playerId: chosen.id },
   );
@@ -404,7 +404,7 @@ function checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats) {
     minute,
     EVENT_TYPES.MATCH_ABANDONED,
     offendingSide,
-    { team: offendingTeam.config.name, opponent: winningTeam.config.name },
+    { team: offendingTeam.config, opponent: winningTeam.config },
     rng,
     { homeGoals: score.home, awayGoals: score.away },
   );
@@ -425,7 +425,7 @@ function maybeSilenceCrowd(scoringTeam, tookTheLead, scorer, minute, rng, stats)
     minute,
     EVENT_TYPES.CROWD_SILENCED,
     scoringTeam.side,
-    { player: scorer.name, team: scoringTeam.config.name },
+    { player: scorer.name, team: scoringTeam.config },
     rng,
     { playerId: scorer.id },
   );
@@ -461,7 +461,7 @@ function resolvePenalty(
       minute,
       EVENT_TYPES.PENALTY_PHANTOM,
       attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name },
+      { player: finisher.name, team: attackingTeam.config },
       rng,
     );
     stats.penaltiesPhantom++;
@@ -471,7 +471,7 @@ function resolvePenalty(
       minute,
       EVENT_TYPES.PENALTY_WRONG_LOCATION,
       attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name },
+      { player: finisher.name, team: attackingTeam.config },
       rng,
     );
     stats.penaltiesWrongLocation++;
@@ -482,7 +482,7 @@ function resolvePenalty(
       minute,
       EVENT_TYPES.PENALTY_NOT_GIVEN,
       attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name },
+      { player: finisher.name, team: attackingTeam.config },
       rng,
     );
     stats.penaltiesNotGiven++;
@@ -493,7 +493,7 @@ function resolvePenalty(
       minute,
       EVENT_TYPES.PENALTY_AWARDED,
       attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name },
+      { player: finisher.name, team: attackingTeam.config },
       rng,
     );
     stats.penaltiesAwarded++;
@@ -538,7 +538,7 @@ function resolvePenalty(
       minute,
       EVENT_TYPES.PENALTY_MISSED,
       attackingTeam.side,
-      { player: finisher.name, keeper: keeper.name, team: attackingTeam.config.name },
+      { player: finisher.name, keeper: keeper.name, team: attackingTeam.config },
       rng,
     );
     stats.penaltiesMissed++;
@@ -555,7 +555,7 @@ function resolvePenalty(
     minute,
     EVENT_TYPES.GOAL_PENALTY,
     attackingTeam.side,
-    { player: finisher.name, team: attackingTeam.config.name },
+    { player: finisher.name, team: attackingTeam.config },
     rng,
     { playerId: finisher.id },
   );
@@ -644,7 +644,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       !wasWinningBefore && scoreSituation(attackingTeam.side, score) === 'winning';
 
     const style = pickGoalStyle(rng, finisher, Boolean(defendingTeam.standInGoalkeeperId));
-    const context = { player: finisher.name, team: attackingTeam.config.name };
+    const context = { player: finisher.name, team: attackingTeam.config };
     let goalEventType = GOAL_STYLE_EVENT_TYPE[style];
     let assistPlayerId = null;
 
@@ -733,7 +733,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         minute,
         EVENT_TYPES.GOALKEEPER_FORWARD,
         attackingTeam.side,
-        { keeper: keeper.name, team: attackingTeam.config.name },
+        { keeper: keeper.name, team: attackingTeam.config },
         rng,
       );
       stats.goalkeeperForward++;
@@ -777,7 +777,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         minute,
         EVENT_TYPES.DISALLOWED_GOAL,
         attackingTeam.side,
-        { player: finisher.name, team: attackingTeam.config.name },
+        { player: finisher.name, team: attackingTeam.config },
         rng,
       );
       stats.disallowedGoals++;
@@ -789,7 +789,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
           minute,
           EVENT_TYPES.OFFICIAL_ASSAULTED,
           attackingTeam.side,
-          { player: instigator.name, team: attackingTeam.config.name },
+          { player: instigator.name, team: attackingTeam.config },
           rng,
           { playerId: instigator.id, cardType: 'red' },
         );
@@ -809,7 +809,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     const saveContext = {
       player: finisher.name,
       defender: defenderPlayer.name,
-      team: attackingTeam.config.name,
+      team: attackingTeam.config,
     };
 
     if (defenderPlayer.position === 'GK') {
@@ -869,7 +869,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         minute,
         EVENT_TYPES.WHIFF_HOME_MISS,
         attackingTeam.side,
-        { player: finisher.name, team: attackingTeam.config.name },
+        { player: finisher.name, team: attackingTeam.config },
         rng,
       );
     } else {
@@ -880,8 +880,8 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         attackingTeam.side,
         {
           player: finisher.name,
-          team: attackingTeam.config.name,
-          crowd: defendingTeam.config.name,
+          team: attackingTeam.config,
+          crowd: defendingTeam.config,
         },
         rng,
       );
@@ -893,7 +893,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       minute,
       EVENT_TYPES.CHANCE_MISSED,
       attackingTeam.side,
-      { player: finisher.name, team: attackingTeam.config.name },
+      { player: finisher.name, team: attackingTeam.config },
       rng,
     );
   }
@@ -1079,7 +1079,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       minute,
       EVENT_TYPES.GOALKEEPER_FORWARD,
       fouledTeam.side,
-      { keeper: keeper.name, team: fouledTeam.config.name },
+      { keeper: keeper.name, team: fouledTeam.config },
       rng,
     );
     stats.goalkeeperForward++;
@@ -1201,7 +1201,7 @@ function resolveShowboating(team, minute, rng, stats) {
     minute,
     EVENT_TYPES.SHOWBOATING,
     team.side,
-    { player: player.name, team: team.config.name },
+    { player: player.name, team: team.config },
     rng,
     { playerId: player.id },
   );
@@ -1230,7 +1230,7 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
     EVENT_TYPES.PLAYER_SPECIAL,
     team.side,
     ability.templates,
-    { player: player.name, team: team.config.name },
+    { player: player.name, team: team.config },
     rng,
     { playerId: player.id },
   );
@@ -1251,7 +1251,7 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
       minute,
       EVENT_TYPES.GOAL,
       team.side,
-      { player: player.name, team: team.config.name },
+      { player: player.name, team: team.config },
       rng,
       { playerId: player.id },
     );
@@ -1261,7 +1261,7 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
       minute,
       EVENT_TYPES.CHANCE_MISSED,
       team.side,
-      { player: player.name, team: team.config.name },
+      { player: player.name, team: team.config },
       rng,
     );
   }
@@ -1322,7 +1322,7 @@ function resolveFightCallout(team, opponent, minute, rng, stats) {
 
 function resolveTimeWasting(team, minute, rng) {
   const events = [];
-  pushEvent(events, minute, EVENT_TYPES.TIME_WASTING, team.side, { team: team.config.name }, rng);
+  pushEvent(events, minute, EVENT_TYPES.TIME_WASTING, team.side, { team: team.config }, rng);
   return events;
 }
 
@@ -1349,7 +1349,7 @@ function resolveThrowInDelay(team, minute, gamesmanshipLevel, rng, stats) {
     minute,
     EVENT_TYPES.THROW_IN_DELAY,
     team.side,
-    { player: player.name, team: team.config.name },
+    { player: player.name, team: team.config },
     rng,
     {
       playerId: player.id,
@@ -1372,7 +1372,7 @@ function resolveGoalKickDelay(team, minute, gamesmanshipLevel, rng, stats) {
     minute,
     EVENT_TYPES.GOAL_KICK_DELAY,
     team.side,
-    { player: keeper.name, team: team.config.name },
+    { player: keeper.name, team: team.config },
     rng,
     {
       playerId: keeper.id,
@@ -1411,7 +1411,7 @@ function resolveStoppageAnnouncement(
     minute,
     EVENT_TYPES.STOPPAGE_TIME_ANNOUNCED,
     null,
-    { minutes: stoppage, team: homeTeam.config.name, opponent: awayTeam.config.name },
+    { minutes: stoppage, team: homeTeam.config, opponent: awayTeam.config },
     rng,
   );
 
@@ -1428,7 +1428,7 @@ function resolveStoppageAnnouncement(
         ? EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT
         : EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG,
       homeTeam.side,
-      { crowd: homeTeam.config.name },
+      { crowd: homeTeam.config },
       rng,
     );
     stats.stoppageTimeBooed++;
@@ -1614,7 +1614,7 @@ export function simulateMatch({ home, away, rng }) {
   };
   const events = [];
 
-  pushEvent(events, 0, EVENT_TYPES.KICKOFF, null, { team: home.name, opponent: away.name }, rng);
+  pushEvent(events, 0, EVENT_TYPES.KICKOFF, null, { team: home, opponent: away }, rng);
 
   const firstHalfStoppage = rng.int(MATCH.STOPPAGE_FIRST_HALF[0], MATCH.STOPPAGE_FIRST_HALF[1]);
   const secondHalfStoppage = rng.int(MATCH.STOPPAGE_SECOND_HALF[0], MATCH.STOPPAGE_SECOND_HALF[1]);
@@ -1673,7 +1673,7 @@ export function simulateMatch({ home, away, rng }) {
         minute,
         EVENT_TYPES.HALFTIME,
         null,
-        { team: home.name, opponent: away.name, homeGoals: score.home, awayGoals: score.away },
+        { team: home, opponent: away, homeGoals: score.home, awayGoals: score.away },
         rng,
       );
     }
@@ -1684,7 +1684,7 @@ export function simulateMatch({ home, away, rng }) {
     finalMinute,
     EVENT_TYPES.FULLTIME,
     null,
-    { team: home.name, opponent: away.name, homeGoals: score.home, awayGoals: score.away },
+    { team: home, opponent: away, homeGoals: score.home, awayGoals: score.away },
     rng,
   );
 
@@ -1823,7 +1823,7 @@ export function resolvePenaltyShootout({
       PENALTY.MISS_CHANCE_CEIL,
     );
 
-    const context = { player: kicker.name, keeper: keeper.name, team: kickingTeam.config.name };
+    const context = { player: kicker.name, keeper: keeper.name, team: kickingTeam.config };
     if (rng.chance(missChance)) {
       pushEvent(events, minute, EVENT_TYPES.SHOOTOUT_KICK_MISSED, kickingTeam.side, context, rng);
     } else {
@@ -1856,7 +1856,7 @@ export function resolvePenaltyShootout({
     minute,
     EVENT_TYPES.SHOOTOUT_WINNER,
     winnerSide,
-    { team: winnerTeam.config.name },
+    { team: winnerTeam.config },
     rng,
   );
 

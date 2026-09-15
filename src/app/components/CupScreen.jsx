@@ -33,10 +33,12 @@ export default function CupScreen({
     setLoading(true);
     const matchData = await playMatch({
       homeName: club.name,
+      homeFeminineArticle: club.feminineArticle,
       squad,
       posture,
       gamesmanship,
       awayName: opponent.name,
+      awayFeminineArticle: opponent.feminineArticle,
       awayEra: opponent.era,
       awayLineup: opponent.lineup,
     });

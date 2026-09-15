@@ -292,8 +292,8 @@
         "chancePerMinute": 0.01,
         "conversionMultiplier": 1.6,
         "templates": [
-          "{player} usa o Talismã e um objeto misterioso cai em campo — algo vai ajudar {team} nessa jogada!",
-          "Um brilho vermelho com pintas pretas aparece do nada perto de {player}. É a sorte do Talismã entrando em campo para {team}!",
+          "{player} usa o Talismã e um objeto misterioso cai em campo — algo vai ajudar {teamArticle} nessa jogada!",
+          "Um brilho vermelho com pintas pretas aparece do nada perto de {player}. É a sorte do Talismã entrando em campo {teamFor}!",
           "{player} invoca o Talismã e já sabe exatamente o que fazer com o que apareceu."
         ]
       }
@@ -318,7 +318,7 @@
         "chancePerMinute": 0.004,
         "conversionMultiplier": 2.8,
         "templates": [
-          "{player} grita \"Cataclismo!\" e nada nessa jogada resiste — {team} parte pro ataque!",
+          "{player} grita \"Cataclismo!\" e nada nessa jogada resiste — {teamArticle} parte pro ataque!",
           "Uma energia negra toma conta da mão de {player}. O que ele tocar agora, desmorona — inclusive a defesa adversária."
         ]
       }
