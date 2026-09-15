@@ -949,12 +949,19 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       minute,
       EVENT_TYPES.SCANDALOUS_FOUL,
       offendingTeam.side,
-      { player: offender.name, victim: victim.name },
+      { player: offender.name, victim: victim.name, opponent: fouledTeam.config },
       rng,
     );
     stats.scandalousFouls++;
   } else {
-    pushEvent(events, minute, EVENT_TYPES.FOUL, offendingTeam.side, { player: offender.name }, rng);
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.FOUL,
+      offendingTeam.side,
+      { player: offender.name, opponent: fouledTeam.config },
+      rng,
+    );
   }
 
   const injuryChance =
