@@ -5,25 +5,33 @@ import BracketTable from './BracketTable.jsx';
 
 function Leaderboard({ title, entries }) {
   if (entries.length === 0) return null;
+  // `entries` is already sorted descending (see tallyLeaderboard in
+  // matchStats.js), so entries[0].count is the top tally — every entry that
+  // matches it is a co-leader and gets the same 🥇 treatment, not just
+  // whichever one happened to sort first among ties.
+  const topCount = entries[0].count;
   return (
     <div className="w-full rounded-lg border border-slate-800 bg-slate-900 px-6 py-4">
       <p className="mb-2 text-center text-xs uppercase tracking-wide text-slate-500">{title}</p>
       <ol className="space-y-1">
-        {entries.map((entry, i) => (
-          <li
-            key={entry.id}
-            className={
-              i === 0
-                ? 'flex items-center justify-between rounded bg-emerald-500/10 px-2 py-1 text-base font-bold text-emerald-400'
-                : 'flex items-center justify-between px-2 py-1 text-sm text-slate-300'
-            }
-          >
-            <span className="truncate">
-              {i === 0 ? '🥇' : `${i + 1}.`} {entry.name}
-            </span>
-            <span className="tabular-nums">{entry.count}</span>
-          </li>
-        ))}
+        {entries.map((entry, i) => {
+          const isTopTied = entry.count === topCount;
+          return (
+            <li
+              key={entry.id}
+              className={
+                isTopTied
+                  ? 'flex items-center justify-between rounded bg-emerald-500/10 px-2 py-1 text-base font-bold text-emerald-400'
+                  : 'flex items-center justify-between px-2 py-1 text-sm text-slate-300'
+              }
+            >
+              <span className="truncate">
+                {isTopTied ? '🥇' : `${i + 1}.`} {entry.name}
+              </span>
+              <span className="tabular-nums">{entry.count}</span>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

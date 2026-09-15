@@ -92,7 +92,14 @@ export function getClubEras(slug) {
     return {
       era: part.era ?? null,
       legendary: part.legendary ?? false,
-      pool: part.pool,
+      // Stamped onto each player, same as loadClub's merged pool above —
+      // without this, a player picked straight from here (SquadScreen's
+      // manual pick / "Sortear" flow) never carries `.era`, unlike one
+      // added via completeSquadRandomly (which goes through getClubPool /
+      // loadClub instead). That gap was the actual bug: manually-picked
+      // players silently missing the era badge next to their name in
+      // LineupPanel, while randomly-completed ones had it.
+      pool: part.pool.map((player) => ({ ...player, era: part.era ?? null })),
       cupEligible: part.cupEligible ?? false,
     };
   });

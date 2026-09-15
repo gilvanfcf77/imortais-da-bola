@@ -54,10 +54,12 @@ function LineupPanel({ clubName, formation, squad }) {
             }`}
           >
             <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
-            <span className="truncate">
-              {row.player ? row.player.name : 'vaga aberta'}
-              {row.player?.era ? ` '${String(row.player.era).slice(-2)}` : ''}
-            </span>
+            <span className="flex-1 truncate">{row.player ? row.player.name : 'vaga aberta'}</span>
+            {row.player && (
+              <span className="shrink-0 rounded bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-emerald-400">
+                {row.player.overall}
+              </span>
+            )}
           </div>
         ))}
       </div>
