@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { FORMATIONS, ROLE_TO_POSITION, defaultGamesmanship } from '../../engine/index.js';
 import { drawEraSquad, completeSquadRandomly } from '../actions.js';
 import { overallColorClass } from './overallColor.js';
+import PitchLineup from './PitchLineup.jsx';
 
 const POSTURE_LABELS = { attacking: 'ofensiva', balanced: 'equilibrada', defensive: 'defensiva' };
 const FORMATION_NAMES = Object.keys(FORMATIONS);
@@ -308,6 +309,15 @@ export default function SquadScreen({ club, onComplete }) {
             <span className="text-xs text-slate-500">(trava depois do 1º jogador escolhido)</span>
           )}
         </label>
+
+        <PitchLineup
+          formation={formation}
+          formationName={formationName}
+          squad={squad}
+          selection={selection}
+          onSlotClick={handleSlotClick}
+          onPlacedPlayerClick={handlePlacedPlayerClick}
+        />
 
         <div className="flex flex-wrap items-center gap-3">
           <button
