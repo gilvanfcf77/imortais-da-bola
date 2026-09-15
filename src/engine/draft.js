@@ -80,14 +80,28 @@ export function draftBestEleven(pool, formation, rng) {
 // formation and keeps the one whose best XI has the highest summed overall.
 // Used for the cup opponent's lineup, alongside draftBestEleven itself —
 // "força máxima" means both the players AND the shape that best fits them.
+//
+// Not every formation needs the same number of players per broad position
+// (e.g. a back-three formation needs 3 ZAG-eligible players, one more than
+// a back-four one) — a pool too thin for a given formation is skipped
+// rather than crashing the whole search, since draftWithPicker throws when
+// a slot has no eligible candidate at all.
 export function draftBestFormationEleven(pool, formations, rng) {
   let best = null;
   for (const formation of Object.values(formations)) {
-    const lineup = draftBestEleven(pool, formation, rng);
+    let lineup;
+    try {
+      lineup = draftBestEleven(pool, formation, rng);
+    } catch {
+      continue;
+    }
     const total = lineup.reduce((sum, p) => sum + p.overall, 0);
     if (!best || total > best.total) {
       best = { formation, lineup, total };
     }
+  }
+  if (!best) {
+    throw new Error('No formation fits this pool: every formation left at least one slot empty');
   }
   return { formation: best.formation, lineup: best.lineup };
 }
