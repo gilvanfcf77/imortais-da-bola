@@ -38,7 +38,14 @@ function buildDisplaySlots(formation, squad) {
   });
 }
 
-function LineupPanel({ clubName, formation, squad }) {
+// `selection` (see SquadScreen's own `selection` state) drives which rows
+// react to a click: a still-open slot lights up as a valid target when its
+// role is in `selection.eligible` (whether that's a fresh pick from the
+// pool or an already-placed player being repositioned — `onSlotClick`
+// handles both the same way, see SquadScreen's handleSlotClick), and an
+// already-filled row stays clickable on its own to let the player start
+// (or cancel) a reposition, regardless of whether a selection is active.
+function LineupPanel({ clubName, formation, squad, selection, onSlotClick, onPlacedPlayerClick }) {
   const rows = buildDisplaySlots(formation, squad);
   const averageOverall = squad.length
     ? (squad.reduce((sum, p) => sum + p.overall, 0) / squad.length).toFixed(1)
@@ -47,24 +54,68 @@ function LineupPanel({ clubName, formation, squad }) {
     <aside className="w-full shrink-0 border-b border-slate-800 py-2 md:w-56 md:border-r md:border-b-0">
       <h3 className="px-3 pb-2 text-sm font-semibold text-slate-300">{clubName}</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-1">
-        {rows.map((row, index) => (
-          <div
-            key={index}
-            className={`flex items-center gap-2 border-l-2 px-3 py-1.5 text-sm ${
-              row.player ? 'border-emerald-500' : 'border-slate-800 text-slate-600'
-            }`}
-          >
-            <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
-            <span className="flex-1 truncate">{row.player ? row.player.name : 'vaga aberta'}</span>
-            {row.player && (
-              <span
-                className={`shrink-0 rounded bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums ${overallColorClass(row.player.overall)}`}
-              >
-                {row.player.overall}
+        {rows.map((row, index) => {
+          const isTarget = !row.player && Boolean(selection?.eligible.includes(row.role));
+          const isSelected = Boolean(row.player) && row.player === selection?.player;
+          const dimmed = Boolean(selection) && !row.player && !isTarget;
+          const label = row.player
+            ? row.player.name
+            : isTarget
+              ? 'clique para escalar aqui'
+              : 'vaga aberta';
+          const rowContent = (
+            <>
+              <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
+                {row.role}
               </span>
-            )}
-          </div>
-        ))}
+              <span className="flex-1 truncate">{label}</span>
+              {row.player && (
+                <span
+                  className={`shrink-0 rounded bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums ${overallColorClass(row.player.overall)}`}
+                >
+                  {row.player.overall}
+                </span>
+              )}
+            </>
+          );
+          const baseClass =
+            'flex w-full items-center gap-2 border-l-2 px-3 py-1.5 text-left text-sm transition';
+
+          if (isTarget) {
+            return (
+              <button
+                key={index}
+                onClick={() => onSlotClick(row.role)}
+                className={`${baseClass} animate-pulse border-emerald-400 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
+              >
+                {rowContent}
+              </button>
+            );
+          }
+          if (row.player) {
+            return (
+              <button
+                key={index}
+                onClick={() => onPlacedPlayerClick(row.player)}
+                className={`${baseClass} ${
+                  isSelected
+                    ? 'border-sky-400 bg-sky-500/10 text-sky-200'
+                    : 'border-emerald-500 hover:bg-slate-800/60'
+                }`}
+              >
+                {rowContent}
+              </button>
+            );
+          }
+          return (
+            <div
+              key={index}
+              className={`${baseClass} border-slate-800 text-slate-600 ${dimmed ? 'opacity-40' : ''}`}
+            >
+              {rowContent}
+            </div>
+          );
+        })}
       </div>
       <p className="mt-3 border-t border-slate-800 px-3 pt-3 text-sm text-slate-400">
         Overall médio: <span className="font-semibold text-slate-200">{averageOverall ?? '—'}</span>
@@ -86,11 +137,15 @@ export default function SquadScreen({ club, onComplete }) {
   // handed off, so a fixed number (not the sentinel) is what actually
   // reaches playMatch.
   const [gamesmanshipChoice, setGamesmanshipChoice] = useState('auto');
-  // Set only when a clicked player is eligible for more than one still-open
-  // role (e.g. a ZAG who's also a VOL, with both slots open) — the player
-  // picks which one to fill; see handlePick/confirmRole below. Never set for
-  // a player with exactly one eligible role, since there's nothing to choose.
-  const [pendingChoice, setPendingChoice] = useState(null);
+  // null, or { player, eligible, fromRole } — set once a clicked player has
+  // more than one still-open role to choose from (e.g. a ZAG who's also a
+  // VOL, with both slots open). `fromRole` is null for a fresh pick from the
+  // drawn pool, or the role they currently occupy when repositioning an
+  // already-placed player (see handlePick/handlePlacedPlayerClick below).
+  // Drives which LineupPanel slots light up as valid click targets. Never
+  // set when there's only one eligible role — nothing to choose, so that
+  // case places the player immediately instead.
+  const [selection, setSelection] = useState(null);
 
   // Changing formation mid-pick would leave already-picked players sitting
   // in slots that may no longer exist (e.g. dropping from 4-3-3's 3 FWs to
@@ -100,7 +155,7 @@ export default function SquadScreen({ club, onComplete }) {
     setFormationName(name);
     setSquad([]);
     setDrawnEra(null);
-    setPendingChoice(null);
+    setSelection(null);
   }
 
   // Compares by personId (falling back to id) so a real person already
@@ -122,11 +177,16 @@ export default function SquadScreen({ club, onComplete }) {
     return (totalByRole[role] ?? 0) - (filledByRole[role] ?? 0);
   }
 
-  // Every role this specific player could still fill right now — a player
-  // with roles ['ZAG', 'VOL'] only offers both if both kinds of slot are
-  // still open; once the ZAG slots fill up, they'd only offer VOL.
-  function eligibleRolesFor(player) {
-    return (player.roles ?? [player.position]).filter((role) => openSlotsFor(role) > 0);
+  // Every role this specific player could still move into right now — a
+  // player with roles ['ZAG', 'VOL'] only offers both if both kinds of slot
+  // are still open; once the ZAG slots fill up, they'd only offer VOL.
+  // `excludeRole` drops the player's own current role from the list when
+  // repositioning an already-placed player (moving them "to" where they
+  // already are isn't a real choice — see handlePlacedPlayerClick).
+  function eligibleRolesFor(player, excludeRole = null) {
+    return (player.roles ?? [player.position]).filter(
+      (role) => role !== excludeRole && openSlotsFor(role) > 0,
+    );
   }
 
   async function handleDraw() {
@@ -151,17 +211,64 @@ export default function SquadScreen({ club, onComplete }) {
   function addToSquad(player, role) {
     setSquad([...squad, { ...player, role, position: ROLE_TO_POSITION[role] }]);
     setDrawnEra(null);
-    setPendingChoice(null);
+    setSelection(null);
+  }
+
+  // Moves an already-placed player to a different slot they're also
+  // eligible for, in place — same position-override rule as addToSquad,
+  // just updating the existing squad entry instead of appending a new one.
+  // Matches by reference, not personId: `player` here is always the exact
+  // object handed back from LineupPanel's own squad array (see
+  // handlePlacedPlayerClick), so this can't accidentally touch a different
+  // era-entry for the same real person.
+  function repositionInSquad(player, role) {
+    setSquad(
+      squad.map((p) => (p === player ? { ...p, role, position: ROLE_TO_POSITION[role] } : p)),
+    );
+    setSelection(null);
   }
 
   function handlePick(player) {
+    if (selection?.player === player) {
+      setSelection(null);
+      return;
+    }
     if (pickedPersonIds.has(player.personId ?? player.id)) return;
     const eligible = eligibleRolesFor(player);
     if (eligible.length === 0) return;
     if (eligible.length === 1) {
       addToSquad(player, eligible[0]);
     } else {
-      setPendingChoice({ player, eligible });
+      setSelection({ player, eligible, fromRole: null });
+    }
+  }
+
+  // Clicking an already-placed player starts (or, clicked a second time,
+  // cancels) a reposition: every other role they're also eligible for and
+  // still open lights up in the LineupPanel for the next click to land on.
+  // A player with nowhere else to go (their only eligible role, or every
+  // other eligible slot already full) just does nothing — same "no real
+  // choice" shortcut a single-role fresh pick already gets in handlePick.
+  function handlePlacedPlayerClick(player) {
+    if (selection?.player === player) {
+      setSelection(null);
+      return;
+    }
+    const eligible = eligibleRolesFor(player, player.role);
+    if (eligible.length === 0) return;
+    setSelection({ player, eligible, fromRole: player.role });
+  }
+
+  // Only ever called for a role in the active selection's own `eligible`
+  // list (see LineupPanel's isTarget check), so no further validation
+  // needed here — just route to whichever placement means for this
+  // selection's origin.
+  function handleSlotClick(role) {
+    if (!selection) return;
+    if (selection.fromRole) {
+      repositionInSquad(selection.player, role);
+    } else {
+      addToSquad(selection.player, role);
     }
   }
 
@@ -173,7 +280,14 @@ export default function SquadScreen({ club, onComplete }) {
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <LineupPanel clubName={club.name} formation={formation} squad={squad} />
+      <LineupPanel
+        clubName={club.name}
+        formation={formation}
+        squad={squad}
+        selection={selection}
+        onSlotClick={handleSlotClick}
+        onPlacedPlayerClick={handlePlacedPlayerClick}
+      />
 
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6 md:py-8">
         <label className="flex w-fit items-center gap-2 text-sm text-slate-400">
@@ -254,28 +368,19 @@ export default function SquadScreen({ club, onComplete }) {
           </button>
         )}
 
-        {pendingChoice && (
-          <div className="rounded-lg border border-emerald-500 bg-slate-900 px-4 py-3">
-            <p className="mb-2 text-sm text-slate-300">
-              Escalar <span className="font-semibold">{pendingChoice.player.name}</span> como:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {pendingChoice.eligible.map((role) => (
-                <button
-                  key={role}
-                  onClick={() => addToSquad(pendingChoice.player, role)}
-                  className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
-                >
-                  {role}
-                </button>
-              ))}
-              <button
-                onClick={() => setPendingChoice(null)}
-                className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-500"
-              >
-                Cancelar
-              </button>
-            </div>
+        {selection && (
+          <div className="rounded-lg border border-emerald-500 bg-slate-900 px-4 py-3 text-sm text-slate-300">
+            {selection.fromRole ? (
+              <>
+                Movendo <span className="font-semibold">{selection.player.name}</span> — clique numa
+                vaga destacada ao lado, ou clique nele de novo para cancelar.
+              </>
+            ) : (
+              <>
+                Escalando <span className="font-semibold">{selection.player.name}</span> — clique
+                numa vaga destacada ao lado.
+              </>
+            )}
           </div>
         )}
 
@@ -286,9 +391,11 @@ export default function SquadScreen({ club, onComplete }) {
             </p>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {drawnEra.pool.map((player) => {
+                const isSelected = selection?.player === player;
                 const eligible = eligibleRolesFor(player);
                 const selectable =
-                  eligible.length > 0 && !pickedPersonIds.has(player.personId ?? player.id);
+                  isSelected ||
+                  (eligible.length > 0 && !pickedPersonIds.has(player.personId ?? player.id));
                 const traits = player.traits ?? [];
                 return (
                   <button
@@ -296,9 +403,11 @@ export default function SquadScreen({ club, onComplete }) {
                     onClick={() => handlePick(player)}
                     disabled={!selectable}
                     className={`rounded-lg border px-4 py-3 text-left transition ${
-                      selectable
-                        ? 'border-emerald-500 bg-slate-900 hover:bg-slate-800'
-                        : 'border-slate-800 bg-slate-950 text-slate-600'
+                      isSelected
+                        ? 'border-sky-400 bg-sky-500/10'
+                        : selectable
+                          ? 'border-emerald-500 bg-slate-900 hover:bg-slate-800'
+                          : 'border-slate-800 bg-slate-950 text-slate-600'
                     }`}
                   >
                     <p className="font-medium">
