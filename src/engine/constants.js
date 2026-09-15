@@ -156,6 +156,13 @@ export const GAMESMANSHIP = {
   // as-is for the delay-of-game card chance. Not yet calibrated.
   THROW_IN_DELAY_CHANCE_PER_LEVEL: 0.015,
   GOAL_KICK_DELAY_CHANCE_PER_LEVEL: 0.015,
+  // A throw-in is normally taken by whoever's already near the touchline,
+  // which in practice is the fullback on that side far more often than
+  // anyone else — this weights FB well above the flat weight of 1 every
+  // other outfield position gets when resolveThrowInDelay picks who's
+  // slow to take it, without making it impossible for a midfielder or
+  // forward chasing the ball out of play to be the one who ends up with it.
+  THROW_IN_TAKER_FB_WEIGHT: 4,
   // TIME_WASTING's flavor (gandulas hiding every ball, a fake medical
   // timeout) only reads as believable once the match is genuinely running
   // out — a team doing that in the 20th minute would look bizarre, not

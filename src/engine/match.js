@@ -1350,7 +1350,19 @@ function resolveThrowInDelay(team, minute, gamesmanshipLevel, rng, stats) {
   const active = activePlayers(team);
   if (active.length === 0) return events;
 
-  const player = rng.pick(active);
+  // A throw-in is taken from the touchline, never by the goalkeeper — same
+  // reasoning as resolveGoalKickDelay going the other way (always the
+  // keeper, since that's their restart). Falls back to whoever's on the
+  // pitch in the freak case a team is down to just its goalkeeper (e.g.
+  // every outfield player sent off), rather than crashing on an empty pick.
+  const outfield = active.filter((p) => p.position !== 'GK');
+  const pool = outfield.length > 0 ? outfield : active;
+  // Among outfield players, the fullback nearest the touchline takes it
+  // far more often in practice than anyone else — see THROW_IN_TAKER_FB_WEIGHT.
+  const weights = pool.map((p) =>
+    p.position === 'FB' ? GAMESMANSHIP.THROW_IN_TAKER_FB_WEIGHT : 1,
+  );
+  const player = rng.pickWeighted(pool, weights);
   pushEvent(
     events,
     minute,
