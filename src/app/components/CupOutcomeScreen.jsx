@@ -3,7 +3,17 @@
 import { cupScorerLeaderboard, cupAssisterLeaderboard } from './matchStats.js';
 import BracketTable from './BracketTable.jsx';
 
-function Leaderboard({ title, entries }) {
+// First three letters of the club name, uppercased (e.g. "Corinthians" ->
+// "COR") — short enough to sit next to a name in a leaderboard row without
+// needing a second line. Not unique in a mathematical sense (any two clubs
+// that happen to share a first syllable would collide), but with this
+// project's current small set of clubs it reads fine, and a leaderboard row
+// still has the full name as a tooltip via `title` if it's ever ambiguous.
+function clubTag(name) {
+  return name.slice(0, 3).toUpperCase();
+}
+
+function Leaderboard({ title, entries, playerClubName }) {
   if (entries.length === 0) return null;
   // `entries` is already sorted descending (see tallyLeaderboard in
   // matchStats.js), so entries[0].count is the top tally — every entry that
@@ -16,6 +26,7 @@ function Leaderboard({ title, entries }) {
       <ol className="space-y-1">
         {entries.map((entry, i) => {
           const isTopTied = entry.count === topCount;
+          const isPlayerClub = entry.club === playerClubName;
           return (
             <li
               key={entry.id}
@@ -26,7 +37,15 @@ function Leaderboard({ title, entries }) {
               }
             >
               <span className="truncate">
-                {isTopTied ? '🥇' : `${i + 1}.`} {entry.name}
+                {isTopTied ? '🥇' : `${i + 1}.`}{' '}
+                {entry.club && (
+                  <span className="text-xs text-slate-500" title={entry.club}>
+                    {clubTag(entry.club)}
+                  </span>
+                )}{' '}
+                <span className={isPlayerClub ? 'font-semibold text-sky-400' : undefined}>
+                  {entry.name}
+                </span>
               </span>
               <span className="tabular-nums">{entry.count}</span>
             </li>
@@ -73,10 +92,18 @@ export default function CupOutcomeScreen({
   const allMatches = [
     ...matchHistory.map((m) => ({
       events: m.result.events,
+      homeName: m.homeName,
+      awayName: m.awayName,
       homeLineup: m.homeLineup,
       awayLineup: m.awayLineup,
     })),
-    ...bracket.rounds.flatMap((r) => r.otherMatches),
+    // otherMatches (see resolveGroup in actions.js) already carries
+    // home/away as `{ name, era }`, not a plain string — normalized to the
+    // same `homeName`/`awayName` shape as matchHistory above so
+    // buildPlayerInfoMap (matchStats.js) can read either kind uniformly.
+    ...bracket.rounds.flatMap((r) =>
+      r.otherMatches.map((m) => ({ ...m, homeName: m.home.name, awayName: m.away.name })),
+    ),
   ];
   const scorers = cupScorerLeaderboard(allMatches);
   const assisters = cupAssisterLeaderboard(allMatches);
@@ -124,8 +151,12 @@ export default function CupOutcomeScreen({
       />
 
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-        <Leaderboard title="⚽ Artilheiros da copa" entries={scorers} />
-        <Leaderboard title="🎯 Assistências da copa" entries={assisters} />
+        <Leaderboard title="⚽ Artilheiros da copa" entries={scorers} playerClubName={homeName} />
+        <Leaderboard
+          title="🎯 Assistências da copa"
+          entries={assisters}
+          playerClubName={homeName}
+        />
       </div>
 
       <button

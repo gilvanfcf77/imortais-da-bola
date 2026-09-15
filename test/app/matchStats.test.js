@@ -90,5 +90,27 @@ test('cupAssisterLeaderboard only counts events with an assistPlayerId', () => {
     ),
   ];
   const entries = cupAssisterLeaderboard(matches);
-  assert.deepEqual(entries, [{ id: 'p2', name: 'Assister', count: 1 }]);
+  assert.deepEqual(entries, [{ id: 'p2', name: 'Assister', club: null, count: 1 }]);
+});
+
+test('cupScorerLeaderboard tags each entry with the scorer club name', () => {
+  const homeLineup = [{ id: 'p1', name: 'Home Player' }];
+  const awayLineup = [{ id: 'p2', name: 'Away Player' }];
+  const matches = [
+    {
+      homeName: 'Corinthians',
+      awayName: 'Flamengo',
+      homeLineup,
+      awayLineup,
+      events: [
+        { type: EVENT_TYPES.GOAL, playerId: 'p1' },
+        { type: EVENT_TYPES.GOAL, playerId: 'p2' },
+      ],
+    },
+  ];
+  const entries = cupScorerLeaderboard(matches);
+  assert.deepEqual(entries.map((e) => [e.name, e.club]).sort(), [
+    ['Away Player', 'Flamengo'],
+    ['Home Player', 'Corinthians'],
+  ]);
 });

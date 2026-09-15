@@ -49,15 +49,20 @@ export function possessionPctBySide(shots) {
 // every match actually played in the tournament, including the parts of the
 // bracket the player never sees (see `otherMatches` on each round, built by
 // resolveGroup in actions.js). Each entry here is one match, normalized to
-// `{ events, homeLineup, awayLineup }` regardless of whether it came from
-// the player's own matchHistory (page.js) or a round's `otherMatches`.
-function buildPlayerNameMap(matches) {
-  const names = {};
+// `{ events, homeName, awayName, homeLineup, awayLineup }` regardless of
+// whether it came from the player's own matchHistory (page.js) or a round's
+// `otherMatches` — see CupOutcomeScreen's `allMatches` for where both shapes
+// get normalized to this one before reaching here. The club name (not just
+// the player name) is tracked per id so the leaderboard can show which team
+// each entry belongs to — a real "artilheiro da copa" table spans several
+// clubs' squads at once, not just one.
+function buildPlayerInfoMap(matches) {
+  const info = {};
   for (const m of matches) {
-    for (const p of m.homeLineup) names[p.id] = p.name;
-    for (const p of m.awayLineup) names[p.id] = p.name;
+    for (const p of m.homeLineup) info[p.id] = { name: p.name, club: m.homeName };
+    for (const p of m.awayLineup) info[p.id] = { name: p.name, club: m.awayName };
   }
-  return names;
+  return info;
 }
 
 function tallyLeaderboard(matches, extractId, limit) {
@@ -68,9 +73,14 @@ function tallyLeaderboard(matches, extractId, limit) {
       if (id) tally[id] = (tally[id] ?? 0) + 1;
     }
   }
-  const names = buildPlayerNameMap(matches);
+  const info = buildPlayerInfoMap(matches);
   return Object.entries(tally)
-    .map(([id, count]) => ({ id, name: names[id] ?? '???', count }))
+    .map(([id, count]) => ({
+      id,
+      name: info[id]?.name ?? '???',
+      club: info[id]?.club ?? null,
+      count,
+    }))
     .sort((a, b) => b.count - a.count)
     .slice(0, limit);
 }
