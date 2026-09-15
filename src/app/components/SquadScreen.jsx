@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { FORMATIONS, ROLE_TO_POSITION, defaultGamesmanship } from '../../engine/index.js';
 import { drawEraSquad, completeSquadRandomly } from '../actions.js';
+import { overallColorClass } from './overallColor.js';
 
 const POSTURE_LABELS = { attacking: 'ofensiva', balanced: 'equilibrada', defensive: 'defensiva' };
 const FORMATION_NAMES = Object.keys(FORMATIONS);
@@ -56,7 +57,9 @@ function LineupPanel({ clubName, formation, squad }) {
             <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
             <span className="flex-1 truncate">{row.player ? row.player.name : 'vaga aberta'}</span>
             {row.player && (
-              <span className="shrink-0 rounded bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-emerald-400">
+              <span
+                className={`shrink-0 rounded bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums ${overallColorClass(row.player.overall)}`}
+              >
                 {row.player.overall}
               </span>
             )}
@@ -301,7 +304,12 @@ export default function SquadScreen({ club, onComplete }) {
                     <p className="font-medium">
                       [{(player.roles ?? [player.position]).join('/')}] {player.name}
                     </p>
-                    <p className="text-sm text-slate-400">Overall {player.overall}</p>
+                    <p className="text-sm text-slate-400">
+                      Overall{' '}
+                      <span className={`font-semibold ${overallColorClass(player.overall)}`}>
+                        {player.overall}
+                      </span>
+                    </p>
                     {traits.length > 0 && (
                       <p className="mt-1 flex flex-wrap gap-1">
                         {traits.map((t) => (
