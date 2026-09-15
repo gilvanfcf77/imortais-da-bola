@@ -157,6 +157,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 96,
+      "number": 11,
       "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
       "specialAbility": null
     },
@@ -167,6 +168,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 87,
+      "number": 7,
       "traits": [{ "slug": "dribbler", "intensity": 2 }],
       "specialAbility": null
     },

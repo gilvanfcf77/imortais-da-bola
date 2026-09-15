@@ -23,11 +23,23 @@ function buildPitchSlots(formation, squad, formationName) {
 
 // First name's initial + surname's initial (e.g. "Marcelinho Carioca" ->
 // "MC") — short enough to fit inside a dot at pitch scale. Falls back to
-// just the first two letters for a one-word name.
+// just the first two letters for a one-word name. Used only when the player
+// has no curated `number` (see dotLabelFor below) — most fictional/test
+// clubs don't have real shirt numbers to curate, so they keep initials.
 function initialsFor(name) {
   const parts = name.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+// The shirt number a real player actually wore that season, when curated
+// into the club's data (`number` on the pool entry — optional, since
+// Brazilian squad numbers before the mid-1990s followed a fixed
+// per-position convention re-assigned match to match, not a number owned by
+// a player all season, and fictional/stress-test clubs have no real-world
+// number to curate at all). Falls back to initials when absent.
+function dotLabelFor(player) {
+  return player.number != null ? String(player.number) : initialsFor(player.name);
 }
 
 // Purely a second visualization of the exact same squad/selection state
@@ -154,7 +166,7 @@ export default function PitchLineup({
                       : 'border-dashed border-white/40 bg-white/5 text-white/50'
                 }`}
               >
-                {slot.player ? initialsFor(slot.player.name) : slot.role}
+                {slot.player ? dotLabelFor(slot.player) : slot.role}
               </span>
               {slot.player && (
                 <span className="max-w-[4.5rem] truncate rounded bg-slate-950/70 px-1 text-[9px] leading-tight text-slate-100 sm:max-w-[5.5rem]">

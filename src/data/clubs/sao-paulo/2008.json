@@ -13,6 +13,7 @@
       "position": "GK",
       "roles": ["GOL"],
       "overall": 90,
+      "number": 1,
       "traits": [
         { "slug": "leader", "intensity": 3 },
         { "slug": "freeKickSpecialist", "intensity": 2 }
@@ -26,6 +27,7 @@
       "position": "GK",
       "roles": ["GOL"],
       "overall": 65,
+      "number": 22,
       "traits": [],
       "specialAbility": null
     },
@@ -37,6 +39,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 79,
+      "number": 5,
       "traits": [{ "slug": "wall", "intensity": 1 }],
       "specialAbility": null
     },
@@ -47,6 +50,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 76,
+      "number": 3,
       "traits": [],
       "specialAbility": null
     },
@@ -57,6 +61,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 70,
+      "number": 4,
       "traits": [],
       "specialAbility": null
     },
@@ -72,11 +77,11 @@
     },
     {
       "id": "spa08-cb-5",
-      "personId": "edcarlos-sp-b3xp",
-      "name": "Edcarlos",
+      "personId": "anderson-beraldo-sp-h5nc",
+      "name": "Anderson",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 62,
+      "overall": 60,
       "traits": [],
       "specialAbility": null
     },
@@ -88,6 +93,7 @@
       "position": "FB",
       "roles": ["LE"],
       "overall": 74,
+      "number": 7,
       "traits": [],
       "specialAbility": null
     },
@@ -98,27 +104,29 @@
       "position": "FB",
       "roles": ["LD"],
       "overall": 72,
+      "number": 12,
       "traits": [],
       "specialAbility": null
     },
     {
       "id": "spa08-fb-3",
-      "personId": "rafinha-sp-q1he",
-      "name": "Rafinha",
+      "personId": "jancarlos-sp-q1he",
+      "name": "Jancarlos",
       "position": "FB",
       "roles": ["LD"],
-      "overall": 63,
+      "overall": 62,
+      "number": 16,
       "traits": [],
       "specialAbility": null
     },
 
     {
       "id": "spa08-mf-1",
-      "personId": "josue-sp-m9wt",
-      "name": "Josué",
+      "personId": "wellington-martins-sp-m9wt",
+      "name": "Wellington Martins",
       "position": "MF",
       "roles": ["VOL"],
-      "overall": 77,
+      "overall": 55,
       "traits": [],
       "specialAbility": null
     },
@@ -129,6 +137,7 @@
       "position": "MF",
       "roles": ["VOL"],
       "overall": 71,
+      "number": 23,
       "traits": [],
       "specialAbility": null
     },
@@ -139,6 +148,7 @@
       "position": "MF",
       "roles": ["MC", "MAT"],
       "overall": 82,
+      "number": 15,
       "traits": [{ "slug": "playmaker", "intensity": 2 }],
       "specialAbility": null
     },
@@ -149,6 +159,7 @@
       "position": "MF",
       "roles": ["MD", "ME"],
       "overall": 75,
+      "number": 20,
       "traits": [{ "slug": "dribbler", "intensity": 1 }],
       "specialAbility": null
     },
@@ -159,6 +170,7 @@
       "position": "MF",
       "roles": ["MC"],
       "overall": 68,
+      "number": 18,
       "traits": [],
       "specialAbility": null
     },
@@ -169,6 +181,7 @@
       "position": "MF",
       "roles": ["VOL"],
       "overall": 60,
+      "number": 21,
       "traits": [],
       "specialAbility": null
     },
@@ -190,6 +203,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 83,
+      "number": 14,
       "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
       "specialAbility": null
     },
@@ -200,6 +214,7 @@
       "position": "FW",
       "roles": ["CA", "PD"],
       "overall": 68,
+      "number": 17,
       "traits": [],
       "specialAbility": null
     },
@@ -210,6 +225,7 @@
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 72,
+      "number": 11,
       "traits": [],
       "specialAbility": null
     },
@@ -220,6 +236,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 65,
+      "number": 19,
       "traits": [],
       "specialAbility": null
     },

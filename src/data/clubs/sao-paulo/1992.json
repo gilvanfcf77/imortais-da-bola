@@ -13,6 +13,7 @@
       "position": "GK",
       "roles": ["GOL"],
       "overall": 83,
+      "number": 1,
       "traits": [{ "slug": "wall", "intensity": 2 }],
       "specialAbility": null
     },
@@ -44,6 +45,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 83,
+      "number": 4,
       "traits": [],
       "specialAbility": null
     },
@@ -54,6 +56,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 78,
+      "number": 3,
       "traits": [],
       "specialAbility": null
     },
@@ -94,6 +97,7 @@
       "position": "FB",
       "roles": ["LD"],
       "overall": 73,
+      "number": 2,
       "traits": [],
       "specialAbility": null
     },
@@ -104,6 +108,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 74,
+      "number": 6,
       "traits": [],
       "specialAbility": null
     },
@@ -114,6 +119,7 @@
       "position": "FB",
       "roles": ["LE", "VOL"],
       "overall": 71,
+      "number": 13,
       "traits": [],
       "specialAbility": null
     },
@@ -124,6 +130,7 @@
       "position": "CB",
       "roles": ["ZAG", "LE"],
       "overall": 75,
+      "number": 15,
       "traits": [],
       "specialAbility": null
     },
@@ -175,6 +182,7 @@
       "position": "MF",
       "roles": ["MC", "MAT"],
       "overall": 92,
+      "number": 10,
       "traits": [
         { "slug": "playmaker", "intensity": 3 },
         { "slug": "leader", "intensity": 2 }
@@ -188,6 +196,7 @@
       "position": "MF",
       "roles": ["VOL", "MC"],
       "overall": 82,
+      "number": 8,
       "traits": [{ "slug": "leader", "intensity": 2 }],
       "specialAbility": null
     },
@@ -208,6 +217,7 @@
       "position": "MF",
       "roles": ["MC", "MD"],
       "overall": 74,
+      "number": 14,
       "traits": [],
       "specialAbility": null
     },
@@ -259,6 +269,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 88,
+      "number": 7,
       "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
       "specialAbility": null
     },
@@ -309,6 +320,7 @@
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 64,
+      "number": 23,
       "traits": [],
       "specialAbility": null
     },

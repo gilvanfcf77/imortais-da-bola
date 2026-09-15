@@ -43,6 +43,20 @@ overall = teto_lenda - penalidade_fase_carreira - penalidade_relevancia_no_clube
 A maioria dos jogadores decentes deve cair entre 65 e 78. Só lendas em fase
 excepcional passam de 90 — escala tipo FIFA, não linear.
 
+### Curadoria de elenco real: pesquisar antes de montar
+
+Ao montar a passagem de um clube real numa época específica, pesquisar com
+notícias/fontes (Wikipédia, arquivos de jornal, transfermarkt etc.) se cada
+jogador realmente fazia parte daquele elenco naquele ano — não presumir só
+porque o nome é famoso ou "parece certo". Já aconteceu de um elenco
+(São Paulo 2008) incluir um jogador que estava emprestado a outro clube
+naquele ano, outro que já tinha sido vendido pra Europa meses antes da
+temporada, e um terceiro que na verdade é um jogador famoso confundido com
+uma época bem diferente da carreira dele (o Rafinha do Bayern de Munique,
+que só foi pro São Paulo de verdade em 2021, não em 2008). Ver decisão 51
+em `info/DECISOES.md` para o caso completo, incluindo como os 3 nomes foram
+substituídos por jogadores reais daquele elenco.
+
 ## Traços (características)
 
 Traços dão personalidade ao time sorteado — dois times de overall parecido
