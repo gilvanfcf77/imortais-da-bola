@@ -256,17 +256,9 @@ function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
             <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
               {player.role ?? player.position}
             </span>
-            <span
-              className="flex-1 truncate"
-              title={player.era ? `${player.name} (${player.era})` : player.name}
-            >
+            <span className="flex-1 truncate" title={player.name}>
               {player.name}
             </span>
-            {player.era && (
-              <span className="shrink-0 text-[10px] tabular-nums text-slate-500">
-                '{String(player.era).slice(-2)}
-              </span>
-            )}
             <span className="flex shrink-0 items-center gap-0.5">
               {badges.map((badge, index) =>
                 badge.type === 'goal' ? (
