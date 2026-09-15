@@ -70,6 +70,22 @@ export const TEMPLATES = {
     'Assistência de quem? A bola bate na perna do árbitro depois da batida de {player} e desvia direto pro gol! Gol do {team}!',
     'Olha o gol mais esquisito do campeonato! {player} finalizou, a bola resvalou no homem do apito e morreu lá dentro. Gol do {team}!',
   ],
+  // Very rare — see GOAL_STYLE.PLAIN_HANDBALL_GOAL_CHANCE in constants.js
+  // and pickGoalStyle's 'plain' branch in match.js. The whole flavor of
+  // this event is that the referee missed it in the moment: it still
+  // counts as a goal right away, same as any other, but a handball this
+  // obvious is exactly the kind of thing that later gets him to change his
+  // mind (a linesman's flag, the losing side's fury) — see
+  // COMEDY.HANDBALL_GOAL_DISALLOWED_CHANCE, a much higher reversal chance
+  // than a normal goal gets. Most GOAL_HANDBALL goals end up called back;
+  // the rare one that survives is the real "Mão de Deus".
+  [EVENT_TYPES.GOAL_HANDBALL]: [
+    'Escandaloso! {player} empurra a bola pra dentro com a mão e o juiz não vê nada — vale o gol do {team}!',
+    'Que absurdo! A bola bate visivelmente no braço de {player} antes de entrar, mas a arbitragem não notou. Gol do {team}!',
+    'Ninguém vai acreditar nisso: {player} completa pro gol com o punho fechado, e o árbitro manda seguir o jogo. Gol do {team}!',
+    'Mão na bola, sem sombra de dúvida! {player} empurra pra rede e o juiz confirma o gol do {team} mesmo assim.',
+    'Vergonhoso! {player} desvia a bola pra dentro com a mão erguida bem na frente de todo mundo, e o juiz não marca nada. Gol do {team}!',
+  ],
   [EVENT_TYPES.GOAL_DEFENSIVE_BLUNDER]: [
     'Gol de {team}! {victim} erra feio o passe e entrega de bandeja para {player}, que não perdoa.',
     'GOOOOL! Zagueiro {victim} escorrega na hora errada e {player} aproveita a lambança para marcar para {team}.',

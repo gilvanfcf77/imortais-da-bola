@@ -1,7 +1,8 @@
 // The penalty-kick lifecycle (awarded, missed, converted — GOAL_PENALTY
 // itself lives in goals.js alongside the other goal styles), the
 // officiating drama around whether one should have been given at all, and
-// the disallowed-goal case that shares that same VAR-adjacent flavor.
+// the disallowed-goal case that shares that same blown-call flavor — no
+// video review in this world, just the referee abruptly changing his mind.
 
 import { EVENT_TYPES } from '../event-types.js';
 

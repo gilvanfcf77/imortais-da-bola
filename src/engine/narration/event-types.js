@@ -21,6 +21,7 @@ export const EVENT_TYPES = {
   GOAL_CORNER: 'goalCorner',
   GOAL_LONG_SHOT: 'goalLongShot',
   GOAL_REFEREE_DEFLECTION: 'goalRefereeDeflection',
+  GOAL_HANDBALL: 'goalHandball',
   GOAL_DEFENSIVE_BLUNDER: 'goalDefensiveBlunder',
   GOAL_GOALKEEPER_BLUNDER: 'goalGoalkeeperBlunder',
   GOAL_PENALTY: 'goalPenalty',

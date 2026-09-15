@@ -38,7 +38,7 @@ export const TEMPLATES = {
     'No fim das contas, o juiz finge que não viu nada e manda o jogo seguir.',
     'Depois de dar uma bronca, o árbitro não dá nem cartão amarelo para {player}.',
     'Para a surpresa geral, o juiz não pune {player} — só advertência verbal.',
-    'O VAR tá dormindo no ponto, o juiz esquece o cartão no bolso e {player} respira aliviado!',
+    'O bandeirinha nem se mexe, o juiz esquece o cartão no bolso e {player} respira aliviado!',
     'Era para vermelho direto, mas o árbitro avisa que foi só falta e perdoa {player}!',
     'A entrada foi criminosa, só que o juiz achou bonito e manda o jogo seguir com {player}!',
     'Ninguém acredita! O árbitro viu a pancada e escolheu ignorar a falta de {player}!',

@@ -220,6 +220,12 @@ export const GOAL_STYLE = {
   // off-a-defender) long-range strike — rare but possible. Not yet
   // calibrated — run `npm run calibrate` and check the "desvio no juiz" line.
   LONG_SHOT_REFEREE_DEFLECTION_CHANCE: 0.04,
+  // Out of plain goals specifically, chance the finisher actually used a
+  // hand/arm and the referee missed it — a "Mão de Deus" moment. Slightly
+  // rarer than the referee-deflection fluke above: that one is an honest
+  // accident, this one is a stolen goal, so it should feel like the rarer
+  // of the two. Not yet calibrated.
+  PLAIN_HANDBALL_GOAL_CHANCE: 0.03,
 };
 
 // Real refereeing research consistently finds officials skew borderline
@@ -368,6 +374,14 @@ export const COMEDY = {
   // 20260829, 500 matches) at ~0.14/match under the old before-the-fact
   // trigger point — not re-verified since moving it after the goal.
   DISALLOWED_GOAL_CHANCE: 0.04,
+  // Same reversal mechanic as DISALLOWED_GOAL_CHANCE, but for a GOAL_HANDBALL
+  // specifically (see GOAL_STYLE.PLAIN_HANDBALL_GOAL_CHANCE) — there's no
+  // video review in this world, but a clear handball is still the kind of
+  // thing that usually gets the referee to change his mind (a linesman's
+  // flag, the losing side's fury), so most of these should get called back;
+  // only the rare survivor becomes a real "Mão de Deus" that stands forever.
+  // Not yet calibrated.
+  HANDBALL_GOAL_DISALLOWED_CHANCE: 0.65,
   // Out of disallowed goals, chance a short-fused player on the wronged
   // team snaps and goes after the referee or a linesman — straight red, no
   // question. Requires at least one shortFuse player on the pitch for that

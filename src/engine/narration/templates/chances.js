@@ -24,6 +24,7 @@ export const TEMPLATES = {
     '{player} tenta pegar de primeira, mas passa batido pela bola e vira chacota nas arquibancadas do {crowd}.',
     'Furou! {player} isola o vento e ouve o coro de vaias da torcida do {crowd}.',
     'Olha o que ele tentou! {player} chuta o vazio e a torcida do {crowd} não perdoa o lance ridículo.',
+    'Que risada na arquibancada! {player} tenta o voleio, pega no vento e cai de bunda no chão.',
   ],
   // Distinct from WHIFF above: this fires when the player whiffing is the
   // home team's own — see match.js resolveShot. The home crowd (the only
@@ -36,7 +37,6 @@ export const TEMPLATES = {
     '{player} tenta a finalização, fura completamente e cai. Muita lamentação nas arquibancadas.',
     'Olha isso! {player} isola tanto que a bola vai parar lá no estacionamento, que vexame!',
     '{player} pega mal na bola, fura o chute e protagoniza a cena mais bisonha da rodada.',
-    'Que risada na arquibancada! {player} tenta o voleio, pega no vento e cai de bunda no chão.',
   ],
   [EVENT_TYPES.WALL_SAVE]: [
     '{player} finaliza, mas {defender} faz uma defesaça.',

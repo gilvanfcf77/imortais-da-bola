@@ -133,6 +133,7 @@ const totals = {
   crowdSilenced: 0,
   showboating: 0,
   refereeDeflectionGoals: 0,
+  handballGoals: 0,
   specialAbilities: 0,
   stoppageTimeBooed: 0,
   throwInDelays: 0,
@@ -195,6 +196,7 @@ for (let i = 0; i < MATCH_COUNT; i++) {
   totals.crowdSilenced += result.stats.crowdSilenced;
   totals.showboating += result.stats.showboating;
   totals.refereeDeflectionGoals += result.stats.refereeDeflectionGoals;
+  totals.handballGoals += result.stats.handballGoals;
   totals.specialAbilities += result.stats.specialAbilities;
   totals.stoppageTimeBooed += result.stats.stoppageTimeBooed;
   totals.throwInDelays += result.stats.throwInDelays;
@@ -349,6 +351,9 @@ log(
 );
 log(
   `Gol com desvio no juiz: ${totals.refereeDeflectionGoals} (${(totals.refereeDeflectionGoals / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Gol de mão não visto pelo juiz: ${totals.handballGoals} (${(totals.handballGoals / MATCH_COUNT).toFixed(3)} por partida)`,
 );
 log(
   `Eventos especiais de jogador (specialAbility): ${totals.specialAbilities} (${(totals.specialAbilities / MATCH_COUNT).toFixed(3)} por partida)`,

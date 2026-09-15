@@ -712,6 +712,14 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         goalEventType = EVENT_TYPES.GOAL_REFEREE_DEFLECTION;
         stats.refereeDeflectionGoals++;
       }
+    } else if (style === 'plain') {
+      // A "Mão de Deus" moment: the finisher used a hand/arm and the
+      // referee missed it. Deliberately not gated on any trait — an honest
+      // ref not seeing an infraction is luck, not a skill of the scorer's.
+      if (rng.chance(GOAL_STYLE.PLAIN_HANDBALL_GOAL_CHANCE)) {
+        goalEventType = EVENT_TYPES.GOAL_HANDBALL;
+        stats.handballGoals++;
+      }
     }
 
     if (
@@ -748,7 +756,20 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     // goal has already been fully announced and celebrated — not as an
     // alternative to scoring in the first place. Disallowing it benefits
     // whoever was defending, i.e. the side that just conceded.
-    if (rng.chance(COMEDY.DISALLOWED_GOAL_CHANCE * refereeBiasMultiplier(defendingTeam.side))) {
+    //
+    // A handball goal gets its own, much higher chance here: unlike the
+    // baseline DISALLOWED_GOAL_CHANCE (a blown call — a phantom foul, an
+    // imaginary offside), catching this one back is the referee getting it
+    // right, just late. There's no video review in this world — just the
+    // referee, prompted by a linesman or the losing side's fury, abruptly
+    // changing his mind — but a handball this obvious usually gets caught
+    // that way anyway. GOAL_HANDBALL surviving all the way to full time
+    // should stay the rare exception, not the norm.
+    const disallowedChance =
+      goalEventType === EVENT_TYPES.GOAL_HANDBALL
+        ? COMEDY.HANDBALL_GOAL_DISALLOWED_CHANCE
+        : COMEDY.DISALLOWED_GOAL_CHANCE;
+    if (rng.chance(disallowedChance * refereeBiasMultiplier(defendingTeam.side))) {
       if (attackingTeam.side === 'home') score.home--;
       else score.away--;
       pushEvent(
@@ -1581,6 +1602,7 @@ export function simulateMatch({ home, away, rng }) {
     crowdSilenced: 0,
     showboating: 0,
     refereeDeflectionGoals: 0,
+    handballGoals: 0,
     specialAbilities: 0,
     stoppageTimeBooed: 0,
     throwInDelays: 0,
@@ -1712,6 +1734,7 @@ export function simulateMatch({ home, away, rng }) {
       crowdSilenced: stats.crowdSilenced,
       showboating: stats.showboating,
       refereeDeflectionGoals: stats.refereeDeflectionGoals,
+      handballGoals: stats.handballGoals,
       specialAbilities: stats.specialAbilities,
       stoppageTimeBooed: stats.stoppageTimeBooed,
       throwInDelays: stats.throwInDelays,
