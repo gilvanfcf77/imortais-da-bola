@@ -1020,9 +1020,13 @@ function resolveShowboating(team, minute, rng, stats) {
 // A player-specific special event (see `specialAbility` on a player in the
 // club data): unlike traits, which are shared categories applied to any
 // number of players, this is bespoke to one individual — their own trigger
-// chance, their own narration, and (via `conversionMultiplier`) their own
-// mechanical payoff. Modeled as a bonus clear-chance attempt for that player
-// alone, right after the ability's own flavor event.
+// chance and their own narration. When the ability also carries a
+// `conversionMultiplier`, it's modeled as a bonus clear-chance attempt for
+// that player right after the flavor event (e.g. Heróis de Paris' Talismã).
+// `conversionMultiplier` is optional: an ability with none is pure flavor —
+// e.g. Edílson's embaixadinhas (see `minLead` in the caller) showboat when
+// the game is already comfortable, they don't manufacture a scoring chance
+// out of it, so there's nothing to convert.
 function resolveSpecialAbility(team, player, minute, score, rng, stats) {
   const events = [];
   const ability = player.specialAbility;
@@ -1038,6 +1042,8 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
     { playerId: player.id }
   );
   stats.specialAbilities++;
+
+  if (!ability.conversionMultiplier) return events;
 
   const conversionChance = clamp(ATTACK.CONVERSION_CLEAR_CHANCE * ability.conversionMultiplier, 0, 0.95);
   if (rng.chance(conversionChance)) {
@@ -1296,6 +1302,13 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
   for (const team of [home, away]) {
     for (const player of activePlayers(team)) {
       if (!player.specialAbility) continue;
+      // Optional: an ability can require the team to already be ahead by at
+      // least this many goals before it's even rolled for — e.g. Edílson's
+      // embaixadinhas only make sense (and only happened, in the real 1999
+      // game this is modeled on) once the result is already comfortable, not
+      // at any moment in a close match. Abilities with no `minLead` roll
+      // every minute regardless of score, same as before this field existed.
+      if (player.specialAbility.minLead && goalMargin(team.side, score) < player.specialAbility.minLead) continue;
       if (rng.chance(player.specialAbility.chancePerMinute)) {
         events.push(...resolveSpecialAbility(team, player, minute, score, rng, stats));
       }

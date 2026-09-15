@@ -6,6 +6,6 @@
 export { createRng } from './rng.js';
 export { FORMATIONS, totalPlayers, ROLE_TO_POSITION } from './formations.js';
 export { TRAITS, getTraitIntensity, sumTraitIntensity, combineMultipliers, defaultGamesmanship } from './traits.js';
-export { draftEleven } from './draft.js';
+export { draftEleven, draftBestEleven, draftBestFormationEleven } from './draft.js';
 export { simulateMatch, resolvePenaltyShootout } from './match.js';
 export { EVENT_TYPES, GOAL_EVENT_TYPES, narrate } from './narration.js';

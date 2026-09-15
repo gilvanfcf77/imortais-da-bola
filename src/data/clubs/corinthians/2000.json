@@ -2,7 +2,7 @@
   "slug": "corinthians",
   "name": "Corinthians",
   "era": 2000,
-  "legendary": false,
+  "legendary": true,
   "cupEligible": true,
   "pool": [
     { "id": "cor00-gk-1", "personId": "dida-h4mq", "name": "Dida", "position": "GK", "roles": ["GOL"], "overall": 87, "traits": [{ "slug": "wall", "intensity": 3 }], "specialAbility": null },
@@ -27,7 +27,11 @@
     { "id": "cor00-mf-6", "personId": "marcos-senna-corinthians-s5vi", "name": "Marcos Senna", "position": "MF", "roles": ["VOL"], "overall": 64, "traits": [], "specialAbility": null },
     { "id": "cor00-mf-7", "personId": "pingo-e1ug", "name": "Pingo", "position": "MF", "roles": ["VOL"], "overall": 56, "traits": [], "specialAbility": null },
 
-    { "id": "cor00-fw-1", "personId": "edilson-corinthians-t6nb", "name": "Edílson", "position": "FW", "roles": ["CA", "PD"], "overall": 87, "traits": [{ "slug": "dribbler", "intensity": 3 }], "specialAbility": null },
+    { "id": "cor00-fw-1", "personId": "edilson-corinthians-t6nb", "name": "Edílson", "position": "FW", "roles": ["CA", "PD"], "overall": 89, "traits": [{ "slug": "dribbler", "intensity": 3 }], "specialAbility": { "minLead": 3, "chancePerMinute": 0.05, "templates": [
+      "{player} não resiste: com {team} já goleando, sobe a bola e faz embaixadinhas na cara do adversário — lembrança viva do 3 a 0 no Palmeiras em 1999!",
+      "Já com {team} 3 gols na frente, {player} para o jogo pra fazer embaixadinhas. A torcida vai à loucura.",
+      "{player} domina a bola no peito, encobre o marcador de calcanhar e continua as embaixadinhas — {team} já não sofre mais nessa partida."
+    ] } },
     { "id": "cor00-fw-2", "personId": "luizao-corinthians-j4my", "name": "Luizão", "position": "FW", "roles": ["CA"], "overall": 84, "traits": [{ "slug": "sharpshooter", "intensity": 2 }], "specialAbility": null },
     { "id": "cor00-fw-3", "personId": "andrezinho-corinthians-q8ck", "name": "Andrezinho", "position": "FW", "roles": ["PD"], "overall": 63, "traits": [], "specialAbility": null },
     { "id": "cor00-fw-4", "personId": "fernando-baiano-corinthians-v2rz", "name": "Fernando Baiano", "position": "FW", "roles": ["CA"], "overall": 61, "traits": [], "specialAbility": null },

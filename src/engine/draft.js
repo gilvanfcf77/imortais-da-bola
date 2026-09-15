@@ -12,7 +12,11 @@
 // filled this time, not whatever their data file happens to list first —
 // that's what lets every other engine mechanic (teamPower, GK checks, ...)
 // keep reading `position` exactly as before with no changes of its own.
-export function draftEleven(pool, formation, rng) {
+//
+// `pickCandidate` decides, for one slot, who among the eligible candidates
+// gets it — draftEleven and draftBestEleven below are just this loop with a
+// different pickCandidate.
+function draftWithPicker(pool, formation, rng, pickCandidate) {
   let available = [...pool];
   const lineup = [];
 
@@ -30,7 +34,7 @@ export function draftEleven(pool, formation, rng) {
         `Not enough players for role ${formationSlot.role} (${formationSlot.position}): none available`
       );
     }
-    const chosen = rng.pick(candidates);
+    const chosen = pickCandidate(candidates, rng);
     lineup.push({ ...chosen, role: formationSlot.role, position: formationSlot.position });
     // Compares by personId, not id, so the same real person can't be drafted
     // twice from two different era entries (id is per-passage; personId is
@@ -42,4 +46,48 @@ export function draftEleven(pool, formation, rng) {
   }
 
   return lineup;
+}
+
+// Genuinely random draft: every candidate eligible for a slot has an equal
+// chance, regardless of overall. This is the "sorteio" the player's own
+// squad is built from — CLAUDE.md's whole nostalgia pitch (a Corinthians
+// draw that happens to pair Sócrates with a bit-part squad player) depends
+// on it staying unweighted, and the user asked explicitly that the "complete
+// automatically" button keep drafting real random players so the player's
+// own team doesn't end up stacked.
+export function draftEleven(pool, formation, rng) {
+  return draftWithPicker(pool, formation, rng, (candidates) => rng.pick(candidates));
+}
+
+// Always-strongest draft: picks the single highest-overall eligible
+// candidate for each slot (ties broken randomly, so equal-overall players
+// aren't always resolved in data order). Used for the cup opponent's
+// lineup — the opponent should always field that club's best possible XI,
+// not a random one, so the player faces real max-strength opposition
+// instead of getting lucky with a weak draw against them.
+export function draftBestEleven(pool, formation, rng) {
+  return draftWithPicker(pool, formation, rng, (candidates) => {
+    const bestOverall = Math.max(...candidates.map((p) => p.overall));
+    const best = candidates.filter((p) => p.overall === bestOverall);
+    return rng.pick(best);
+  });
+}
+
+// Picks whichever formation best fits this specific pool's strongest
+// players, not a fixed default — e.g. a pool stacked with elite CAs but thin
+// on the wing extracts more total overall from 4-2-4's two CA slots than
+// from 4-3-3's CA/PE/PD/MAT shape. Tries draftBestEleven under every given
+// formation and keeps the one whose best XI has the highest summed overall.
+// Used for the cup opponent's lineup, alongside draftBestEleven itself —
+// "força máxima" means both the players AND the shape that best fits them.
+export function draftBestFormationEleven(pool, formations, rng) {
+  let best = null;
+  for (const formation of Object.values(formations)) {
+    const lineup = draftBestEleven(pool, formation, rng);
+    const total = lineup.reduce((sum, p) => sum + p.overall, 0);
+    if (!best || total > best.total) {
+      best = { formation, lineup, total };
+    }
+  }
+  return { formation: best.formation, lineup: best.lineup };
 }

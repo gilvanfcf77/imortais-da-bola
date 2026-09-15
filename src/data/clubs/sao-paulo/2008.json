@@ -2,7 +2,7 @@
   "slug": "sao-paulo",
   "name": "São Paulo",
   "era": 2008,
-  "legendary": false,
+  "legendary": true,
   "cupEligible": true,
   "pool": [
     { "id": "spa08-gk-1", "personId": "rogerio-ceni-w4nb", "name": "Rogério Ceni", "position": "GK", "roles": ["GOL"], "overall": 90, "traits": [{ "slug": "leader", "intensity": 3 }, { "slug": "freeKickSpecialist", "intensity": 2 }], "specialAbility": null },

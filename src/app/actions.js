@@ -11,6 +11,7 @@ import {
   FORMATIONS,
   ROLE_TO_POSITION,
   draftEleven,
+  draftBestFormationEleven,
   simulateMatch,
   resolvePenaltyShootout,
   defaultGamesmanship,
@@ -120,10 +121,35 @@ function toTeamConfig(participant) {
 // Draws one club's single-era squad — never mixes eras within one opponent's
 // lineup (CLAUDE.md: an NPC opponent is always "a real team from one
 // specific year", unlike the player's own hand-picked, mixed-era squad).
+//
+// Only draws from eras marked `legendary`: the cup should only ever pit the
+// player against a club's most iconic squads, not every curated-but-ordinary
+// season. This is separate from `cupEligible`, which gates whether the club
+// takes part in the cup at all (see DECISOES.md #15) — `legendary` narrows
+// that further to which of the club's eras can actually be the one drawn.
+// The player's own squad-building screen (drawEraSquad, below) intentionally
+// has no such filter — every era of the player's chosen club stays pickable
+// there, legendary or not.
+//
+// Falls back to every era if none are legendary, so a cupEligible club that
+// hasn't had an era curated as legendary yet still works as an opponent
+// instead of crashing on an empty draw.
+//
+// Uses draftBestFormationEleven, not draftEleven: the opponent should always
+// show up at that era's maximum strength — its actual best 11, AND in
+// whichever formation best fits those specific players (a pool loaded with
+// elite CAs but thin out wide gets more total quality from 4-2-4's two CA
+// slots than from 4-3-3's PE/PD/MAT shape) — not a random subset of either.
+// This is unlike the player's own squad, which the "complete automatically"
+// button in SquadScreen.jsx fills with a genuinely random draftEleven draw
+// under whatever formation the player picked (see completeSquadRandomly
+// below) so the player's side doesn't end up artificially stacked either.
 function drawSingleEraOpponent(clubEntry, rng) {
-  const era = rng.pick(getClubEras(clubEntry.slug));
-  const lineup = draftEleven(era.pool, FORMATIONS['4-4-2'], rng);
-  return { name: clubEntry.name, era: era.era, lineup };
+  const eras = getClubEras(clubEntry.slug);
+  const legendaryEras = eras.filter((e) => e.legendary);
+  const era = rng.pick(legendaryEras.length > 0 ? legendaryEras : eras);
+  const { formation, lineup } = draftBestFormationEleven(era.pool, FORMATIONS, rng);
+  return { name: clubEntry.name, era: era.era, formation: formation.name, lineup };
 }
 
 // Plays a single already-determined match — the semifinal or the final,

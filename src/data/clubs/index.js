@@ -9,19 +9,19 @@
 // it can't use fs — see the comment there for why the two aren't shared.
 //
 // A club can have just one era file (the test/stress clubs — one snapshot,
-// no historical depth needed) or several `<year>.json` files (the two
-// "real" clubs so far, Samangos do Vale and Capetas da Serra), one per era,
-// each with its own, different players. Every era file listed for a club
-// gets merged into one flat `pool`, with each player tagged with the `era`
-// it came from — matching CLAUDE.md's "sorteio é uma consulta sobre todas as
-// passagens elegíveis do clube, de qualquer época", not just one season's
-// squad. Single-era clubs are still named `<year>.json`, not `roster.json`,
-// so an opponent drawn from one of them still shows a year in the UI
-// instead of no era at all.
+// no historical depth needed) or several `<year>.json` files (e.g.
+// Corinthians, São Paulo), one per era, each with its own, different
+// players. Every era file listed for a club gets merged into one flat
+// `pool`, with each player tagged with the `era` it came from — matching
+// CLAUDE.md's "sorteio é uma consulta sobre todas as passagens elegíveis do
+// clube, de qualquer época", not just one season's squad. Single-era clubs
+// are still named `<year>.json`, not `roster.json`, so an opponent drawn
+// from one of them still shows a year in the UI instead of no era at all.
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { discoverClubs } from './discover.js';
 
 // Resolved once, from this module's own URL — avoids constructing a `new
 // URL(dynamicRelativePath, import.meta.url)` per file, which breaks under
@@ -29,16 +29,10 @@ import { dirname, join } from 'node:path';
 // URL` check there, even though it works fine under webpack).
 const CLUBS_DIR = dirname(fileURLToPath(import.meta.url));
 
-const CLUBS = [
-  { slug: 'corinthians', files: ['1977.json', '2000.json'] },
-  { slug: 'sao-paulo', files: ['1992.json', '2008.json'] },
-  { slug: 'samangos-do-vale', files: ['2005.json', '2012.json', '2026.json'] },
-  { slug: 'capetas-da-serra', files: ['2005.json', '2012.json', '2026.json'] },
-  { slug: 'uniao-da-porrada', files: ['2026.json'] },
-  { slug: 'ferrolho-do-sertao', files: ['2026.json'] },
-  { slug: 'ousadia-e-alegria', files: ['2026.json'] },
-  { slug: 'herois-de-paris', files: ['2026.json'] },
-];
+// Which clubs/eras exist is discovered from the filesystem (see discover.js)
+// instead of hardcoded here — adding a club is purely a matter of adding a
+// folder with era JSON files in it, no code change in this file needed.
+const CLUBS = discoverClubs(CLUBS_DIR);
 
 function loadClubFile(slug, file) {
   const path = join(CLUBS_DIR, slug, file);
@@ -57,6 +51,7 @@ const bySlug = Object.fromEntries(CLUBS.map((club) => [club.slug, loadClub(club)
 
 export const CORINTHIANS = bySlug['corinthians'];
 export const SAO_PAULO = bySlug['sao-paulo'];
+export const FLAMENGO = bySlug['flamengo'];
 export const SAMANGOS_DO_VALE = bySlug['samangos-do-vale'];
 export const CAPETAS_DA_SERRA = bySlug['capetas-da-serra'];
 export const UNIAO_DA_PORRADA = bySlug['uniao-da-porrada'];

@@ -389,20 +389,12 @@
     // Each club's data lives in its own folder under src/data/clubs/ (see
     // src/data/clubs/index.js for the Node-side equivalent of this same
     // loading/merging step, including why era files get combined into one
-    // pool). The browser can't use fs, and `import ... with { type: 'json'
-    // }` isn't reliably supported across browsers yet, so this just fetches
-    // each file — a top-level await here works because this is a
-    // <script type="module">.
-    const CLUBS = [
-      { slug: 'corinthians', files: ['1977.json', '2000.json'] },
-      { slug: 'sao-paulo', files: ['1992.json', '2008.json'] },
-      { slug: 'samangos-do-vale', files: ['2005.json', '2012.json', '2026.json'] },
-      { slug: 'capetas-da-serra', files: ['2005.json', '2012.json', '2026.json'] },
-      { slug: 'uniao-da-porrada', files: ['2026.json'] },
-      { slug: 'ferrolho-do-sertao', files: ['2026.json'] },
-      { slug: 'ousadia-e-alegria', files: ['2026.json'] },
-      { slug: 'herois-de-paris', files: ['2026.json'] },
-    ];
+    // pool). The browser can't list that directory itself, so the list of
+    // clubs/era files comes from scripts/serve-viewer.js's own
+    // /api/clubs-manifest endpoint (see discover.js for the shared scan
+    // logic) instead of being hardcoded here — a top-level await works
+    // because this is a <script type="module">.
+    const CLUBS = await fetch('/api/clubs-manifest').then((response) => response.json());
     const SAMPLE_CLUBS = await Promise.all(
       CLUBS.map(async ({ slug, files }) => {
         const parts = await Promise.all(

@@ -67,3 +67,72 @@ test('resolvePenaltyShootout never ends in a tie', () => {
     assert.equal(shootout.winnerSide === 'home', shootout.homeScore > shootout.awayScore);
   }
 });
+
+// A specialAbility can carry an optional `minLead` (see Edílson's
+// embaixadinhas in corinthians/2000.json) gating it to only roll once the
+// team is ahead by that many goals. An unreachable minLead should suppress
+// it entirely, even with chancePerMinute maxed out.
+test('a specialAbility with an unreachable minLead never fires', () => {
+  const pool = makePool();
+  const lineup = draftEleven(pool, FORMATIONS['4-4-2'], createRng(5));
+  const withAbility = {
+    ...lineup[0],
+    specialAbility: { minLead: 99, chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
+  };
+  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
+  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const result = simulateMatch({ home, away, rng: createRng(7) });
+
+  assert.equal(result.stats.specialAbilities, 0);
+});
+
+// Without a `minLead`, a specialAbility keeps rolling every minute regardless
+// of score, same as before that field existed.
+test('a specialAbility with no minLead can fire regardless of score', () => {
+  const pool = makePool();
+  const lineup = draftEleven(pool, FORMATIONS['4-4-2'], createRng(5));
+  const withAbility = {
+    ...lineup[0],
+    specialAbility: { chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
+  };
+  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
+  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const result = simulateMatch({ home, away, rng: createRng(7) });
+
+  assert.ok(result.stats.specialAbilities > 0);
+});
+
+// A specialAbility with no `conversionMultiplier` is pure flavor — it must
+// never itself put a goal on the board (see Edílson's embaixadinhas, which
+// shouldn't manufacture a scoring chance out of a showboating moment).
+test('a specialAbility with no conversionMultiplier never scores on its own', () => {
+  const pool = makePool();
+  const lineup = draftEleven(pool, FORMATIONS['4-4-2'], createRng(5));
+  const withAbility = {
+    ...lineup[0],
+    specialAbility: { chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
+  };
+  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
+  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const result = simulateMatch({ home, away, rng: createRng(7) });
+
+  // Isolates goals produced by the special-ability resolution itself (which
+  // immediately follows its own PLAYER_SPECIAL event, same minute, same
+  // player) from any ordinary goal this player might separately score
+  // through normal play elsewhere in the match — only the former is what
+  // "no conversionMultiplier" is supposed to rule out.
+  const specialEvents = result.events.filter(
+    (e) => e.type === EVENT_TYPES.PLAYER_SPECIAL && e.playerId === withAbility.id
+  );
+  assert.ok(specialEvents.length > 0, 'expected the ability to have fired at least once');
+  for (const special of specialEvents) {
+    const index = result.events.indexOf(special);
+    const next = result.events[index + 1];
+    const followedByBonusShot =
+      next &&
+      next.minute === special.minute &&
+      next.playerId === withAbility.id &&
+      (next.type === EVENT_TYPES.GOAL || next.type === EVENT_TYPES.CHANCE_MISSED);
+    assert.ok(!followedByBonusShot, `PLAYER_SPECIAL at minute ${special.minute} was followed by a bonus-shot event`);
+  }
+});
