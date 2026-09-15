@@ -1,6 +1,7 @@
 {
   "slug": "corinthians",
   "name": "Corinthians",
+  "playable": true,
   "era": 1977,
   "legendary": true,
   "cupEligible": true,

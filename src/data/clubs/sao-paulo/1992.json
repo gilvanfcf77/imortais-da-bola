@@ -1,6 +1,7 @@
 {
   "slug": "sao-paulo",
   "name": "São Paulo",
+  "playable": true,
   "era": 1992,
   "legendary": true,
   "cupEligible": true,

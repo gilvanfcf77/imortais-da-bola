@@ -1,6 +1,7 @@
 {
   "slug": "sao-paulo",
   "name": "São Paulo",
+  "playable": true,
   "era": 2008,
   "legendary": true,
   "cupEligible": true,

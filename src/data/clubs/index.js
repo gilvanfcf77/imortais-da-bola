@@ -58,6 +58,13 @@ function loadClub({ slug, files }) {
     // actually picks the right preposition contraction ("do"/"da",
     // "pro"/"pra", ...) in narration text.
     feminineArticle: parts[0].feminineArticle ?? false,
+    // Defaults to false, the other way around from feminineArticle above —
+    // absence has to mean "not shown to the player" rather than "shown", or
+    // a new experimental/stress-test club (most of them, historically —
+    // see DECISOES.md decision 15) would silently leak into the club-choice
+    // screen the moment its files exist, before anyone decided it's ready.
+    // Only the real, curated clubs opt in explicitly.
+    playable: parts[0].playable ?? false,
     pool,
   };
 }
@@ -86,6 +93,7 @@ export function getClubManifest() {
     slug,
     name: bySlug[slug].name,
     feminineArticle: bySlug[slug].feminineArticle,
+    playable: bySlug[slug].playable,
     cupEligible: getClubEras(slug).some((e) => e.cupEligible),
   }));
 }

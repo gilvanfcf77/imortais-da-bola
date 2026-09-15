@@ -1,6 +1,7 @@
 {
   "slug": "flamengo",
   "name": "Flamengo",
+  "playable": true,
   "era": 1995,
   "legendary": false,
   "cupEligible": true,

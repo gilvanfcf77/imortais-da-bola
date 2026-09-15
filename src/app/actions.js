@@ -18,8 +18,14 @@ import {
 } from '../engine/index.js';
 import { getClubManifest, getClubEras, getClubPool } from '../data/clubs/index.js';
 
+// Only clubs meant for the player to actually manage — excludes the
+// fictional stress-test clubs (see DECISOES.md decision 15) that stay in
+// src/data/clubs/ for engine testing/calibration but were never meant to
+// show up as a real option, same reasoning that already keeps them out of
+// the cup-opponent draw via `cupEligible`.
 export async function listClubs() {
-  return getClubManifest();
+  const manifest = getClubManifest();
+  return manifest.filter((club) => club.playable);
 }
 
 export async function drawEraSquad(clubSlug) {
