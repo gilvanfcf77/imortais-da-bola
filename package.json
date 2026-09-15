@@ -10,6 +10,7 @@
     "calibrate": "node scripts/calibration.js",
     "test:defensive-catimba": "node scripts/test-defensive-catimba.js",
     "view": "node scripts/serve-viewer.js",
+    "generate-narration": "node scripts/generate-narration-variants.js",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start"

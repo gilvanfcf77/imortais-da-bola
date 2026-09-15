@@ -131,6 +131,10 @@ const TEMPLATES = {
     'GOOOOL! {player} balança as redes para {team}!',
     '{player} não perdoa e marca para {team}!',
     'GOOOOL! Que golaço de {player} para deixar o {team} na frente do placar!',
+    'TÁ LÁ DENTRO! {player} chuta no canto e marca para o {team}!',
+    'É GOL! {player} pega a sobra e estufa a rede pro {team}!',
+    'NO CAPRICHO! {player} tira do goleiro e coloca o {team} na frente!',
+    'SABE DE QUEM? {player}! Ele surge livre na área e marca pro {team}!',
   ],
   [EVENT_TYPES.GOAL_ANOTHER]: [
     'É gol! {player} completa a jogada e faz mais um para {team}.',
@@ -388,6 +392,15 @@ export function narrate(type, context, rng) {
   const options = TEMPLATES[type];
   if (!options) throw new Error(`Unknown event type: ${type}`);
   return fillTemplate(rng.pick(options), context);
+}
+
+// Read-only view of one event type's current template pool — for tooling
+// (see scripts/generate-narration-variants.js) that needs to know what
+// already exists before proposing more, not for anything the match engine
+// itself uses (that's narrate(), above). Returns a copy, not the live
+// array, so a caller can't accidentally mutate TEMPLATES through it.
+export function templatesFor(type) {
+  return [...(TEMPLATES[type] ?? [])];
 }
 
 // Same template-filling as narrate(), but for text that isn't in the shared
