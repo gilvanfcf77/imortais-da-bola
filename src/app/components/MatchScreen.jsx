@@ -208,9 +208,15 @@ function eventRowClass(event) {
 function MobileLineupCard({ side, teamLabel, lineup }) {
   const ordered = sortByRole(lineup);
   const accent = side === 'home' ? 'border-sky-500' : 'border-orange-500';
+  const averageOverall = (lineup.reduce((sum, p) => sum + p.overall, 0) / lineup.length).toFixed(1);
   return (
     <li className={`rounded border bg-slate-900 px-4 py-3 md:hidden ${accent}`}>
-      <p className="mb-2 text-sm font-semibold text-slate-200">Escalação — {teamLabel}</p>
+      <p className="mb-2 flex items-center justify-between gap-2 text-sm font-semibold text-slate-200">
+        <span>Escalação — {teamLabel}</span>
+        <span className="text-[11px] font-normal text-slate-500">
+          Overall médio: <span className="font-semibold text-slate-300">{averageOverall}</span>
+        </span>
+      </p>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[13px]">
         {ordered.map((player) => (
           <div key={player.id} className="flex items-center gap-1.5 truncate">
