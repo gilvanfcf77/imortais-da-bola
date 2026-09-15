@@ -6,7 +6,9 @@ import { drawEraSquad, completeSquadRandomly } from '../actions.js';
 import { overallColorClass } from './overallColor.js';
 import PitchLineup from './PitchLineup.jsx';
 
-const POSTURE_LABELS = { attacking: 'ofensiva', balanced: 'equilibrada', defensive: 'defensiva' };
+// Object.entries preserves this insertion order for the <select> options
+// below — defensiva first, ofensiva last, per the user's request.
+const POSTURE_LABELS = { defensive: 'defensiva', balanced: 'equilibrada', attacking: 'ofensiva' };
 const FORMATION_NAMES = Object.keys(FORMATIONS);
 
 // English slugs come straight from the engine (src/engine/traits.js) — this

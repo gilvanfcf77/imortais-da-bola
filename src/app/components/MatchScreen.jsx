@@ -186,6 +186,12 @@ function eventTextClass(event) {
 // away), so a goal's highlight reads as "which side scored" at a glance.
 // PLAYER_SPECIAL gets its own gold treatment instead — gold isn't used by
 // either side, so it can't be misread as a goal highlight.
+//
+// Every other event (fouls, cards, penalties, saves, injuries...) still
+// belongs to a side, so it gets a thin left-edge stripe in that side's
+// color instead of the full border+background treatment goals get — that
+// keeps a penalty for the away side reading as "away", not as a plain
+// neutral card that could be mistaken for home's slate-blue-ish default.
 function eventRowClass(event) {
   if (isScoringEvent(event)) {
     return event.side === 'home'
@@ -194,6 +200,12 @@ function eventRowClass(event) {
   }
   if (event.type === EVENT_TYPES.PLAYER_SPECIAL) {
     return 'border-yellow-500 bg-yellow-500/10 font-bold';
+  }
+  if (event.side === 'home') {
+    return 'border-slate-800 border-l-4 border-l-sky-600 bg-slate-900';
+  }
+  if (event.side === 'away') {
+    return 'border-slate-800 border-l-4 border-l-orange-600 bg-slate-900';
   }
   return 'border-slate-800 bg-slate-900';
 }
