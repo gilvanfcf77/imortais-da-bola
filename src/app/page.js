@@ -8,6 +8,7 @@ import CupScreen from './components/CupScreen.jsx';
 import MatchScreen from './components/MatchScreen.jsx';
 import ResultScreen from './components/ResultScreen.jsx';
 import CupOutcomeScreen from './components/CupOutcomeScreen.jsx';
+import MusicPlayer from './components/MusicPlayer.jsx';
 
 // Forfeit outright beats the goal count — see the identical check in
 // wonMatch (src/app/actions.js) and CupOutcomeScreen.jsx. Without this, a
@@ -51,85 +52,98 @@ export default function Page() {
     setScreen('home');
   }
 
-  if (screen === 'home') return <HomeScreen onStart={() => setScreen('club')} />;
+  // The actual screen tree, kept as a separate function (rather than the
+  // component's own return) so MusicPlayer below can sit outside it —
+  // <audio> needs to survive a screen change without remounting, or the
+  // track would restart from 0:00 every time the player navigates.
+  function renderScreen() {
+    if (screen === 'home') return <HomeScreen onStart={() => setScreen('club')} />;
 
-  if (screen === 'club')
-    return (
-      <ClubScreen
-        onSelect={(selected) => {
-          setClub(selected);
-          setScreen('squad');
-        }}
-      />
-    );
+    if (screen === 'club')
+      return (
+        <ClubScreen
+          onSelect={(selected) => {
+            setClub(selected);
+            setScreen('squad');
+          }}
+        />
+      );
 
-  if (screen === 'squad')
-    return (
-      <SquadScreen
-        club={club}
-        onComplete={(finishedSquad, finishedPosture, finishedGamesmanship) => {
-          setSquad(finishedSquad);
-          setPosture(finishedPosture);
-          setGamesmanship(finishedGamesmanship);
-          setScreen('cup');
-        }}
-      />
-    );
+    if (screen === 'squad')
+      return (
+        <SquadScreen
+          club={club}
+          onComplete={(finishedSquad, finishedPosture, finishedGamesmanship) => {
+            setSquad(finishedSquad);
+            setPosture(finishedPosture);
+            setGamesmanship(finishedGamesmanship);
+            setScreen('cup');
+          }}
+        />
+      );
 
-  if (screen === 'cup')
+    if (screen === 'cup')
+      return (
+        <CupScreen
+          club={club}
+          squad={squad}
+          posture={posture}
+          gamesmanship={gamesmanship}
+          roundIndex={roundIndex}
+          bracket={bracket}
+          onBracketReady={setBracket}
+          onMatchReady={(data) => {
+            setMatchData(data);
+            setScreen('match');
+          }}
+        />
+      );
+
+    if (screen === 'match')
+      return (
+        <MatchScreen
+          matchData={matchData}
+          onFinished={() => {
+            setMatchHistory((prev) => [...prev, matchData]);
+            setScreen('result');
+          }}
+        />
+      );
+
+    // Always shown right after a match, win or lose — the player sees that
+    // match's full stats (including cards) before moving on, whether the
+    // next stop is the next round or the cup outcome.
+    if (screen === 'result')
+      return (
+        <ResultScreen
+          matchData={matchData}
+          onContinue={() => {
+            const isLastRound = roundIndex === bracket.rounds.length - 1;
+            if (!isLastRound && wonMatch(matchData)) {
+              setRoundIndex(roundIndex + 1);
+              setScreen('cup');
+            } else {
+              setScreen('champion');
+            }
+          }}
+        />
+      );
+
     return (
-      <CupScreen
-        club={club}
-        squad={squad}
-        posture={posture}
-        gamesmanship={gamesmanship}
+      <CupOutcomeScreen
+        matchData={matchData}
+        matchHistory={matchHistory}
         roundIndex={roundIndex}
         bracket={bracket}
-        onBracketReady={setBracket}
-        onMatchReady={(data) => {
-          setMatchData(data);
-          setScreen('match');
-        }}
+        onRestart={restart}
       />
     );
-
-  if (screen === 'match')
-    return (
-      <MatchScreen
-        matchData={matchData}
-        onFinished={() => {
-          setMatchHistory((prev) => [...prev, matchData]);
-          setScreen('result');
-        }}
-      />
-    );
-
-  // Always shown right after a match, win or lose — the player sees that
-  // match's full stats (including cards) before moving on, whether the next
-  // stop is the next round or the cup outcome.
-  if (screen === 'result')
-    return (
-      <ResultScreen
-        matchData={matchData}
-        onContinue={() => {
-          const isLastRound = roundIndex === bracket.rounds.length - 1;
-          if (!isLastRound && wonMatch(matchData)) {
-            setRoundIndex(roundIndex + 1);
-            setScreen('cup');
-          } else {
-            setScreen('champion');
-          }
-        }}
-      />
-    );
+  }
 
   return (
-    <CupOutcomeScreen
-      matchData={matchData}
-      matchHistory={matchHistory}
-      roundIndex={roundIndex}
-      bracket={bracket}
-      onRestart={restart}
-    />
+    <>
+      <MusicPlayer silent={screen === 'match'} />
+      {renderScreen()}
+    </>
   );
 }
