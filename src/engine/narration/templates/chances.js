@@ -38,14 +38,22 @@ export const TEMPLATES = {
     'Olha isso! {player} isola tanto que a bola vai parar lá no estacionamento, que vexame!',
     '{player} pega mal na bola, fura o chute e protagoniza a cena mais bisonha da rodada.',
   ],
+  // {defender} here is always the goalkeeper — see match.js's wall-trait
+  // check (`defenderPlayer.position === 'GK'`): an outfield player with the
+  // `wall` trait making the same kind of stop instead fires
+  // GOAL_LINE_CLEARANCE (or, if the handball roll lands, HANDBALL_ON_THE_LINE),
+  // never this event. Keep every template here describing a keeper's save
+  // (hands, diving, reflexes) — never a defensive-line block/clearance,
+  // which reads wrong for a goalkeeper (caught live: "bloqueia... com o
+  // corpo" and "aparece para cortar" both originally leaned defender-only).
   [EVENT_TYPES.WALL_SAVE]: [
     '{player} finaliza, mas {defender} faz uma defesaça.',
     '{player} bate forte, mas {defender} sai bem e evita o gol com uma defesa espetacular.',
     'Na hora certa, {defender} aparece para defender o chute de {player}.',
-    'Chute em cima da zaga! {defender} bloqueia a finalização de {player} com o corpo.',
+    'Chute colocado! {defender} se estica todo e bloqueia a finalização de {player} com o corpo.',
     '{player} tenta o arremate, mas {defender} se joga na bola e salva o time!',
     'Olha o chute... {defender} trava no momento exato e impede o gol de {player}!',
-    '{player} pega a sobra e manda pro gol, mas {defender} aparece milagrosamente para cortar!',
+    '{player} pega a sobra e manda pro gol, mas {defender} aparece milagrosamente para evitar o gol!',
   ],
   [EVENT_TYPES.GOAL_LINE_CLEARANCE]: [
     'Inacreditável! {defender} aparece do nada e tira o chute de {player} em cima da linha!',
