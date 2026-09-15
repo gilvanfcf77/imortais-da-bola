@@ -1,5 +1,6 @@
 // Proposes new narration variants for an existing EVENT_TYPES template pool
-// (src/engine/narration.js) or a specific player's `specialAbility.templates`
+// (src/engine/narration/, split by category — see index.js there) or a
+// specific player's `specialAbility.templates`
 // (a club era JSON file) — see CLAUDE.md "Tom dos eventos" and DECISOES.md
 // for why this exists as an offline, human-reviewed batch tool instead of a
 // live call from inside the match engine: the engine has to stay pure,
@@ -8,7 +9,7 @@
 // dozens of events, and non-deterministic wording would break calibration's
 // "same seed, same result" workflow.
 //
-// This script NEVER writes into narration.js or a club JSON file itself —
+// This script NEVER writes into src/engine/narration/ or a club JSON file —
 // it only prints candidates for a human to review and paste in by hand,
 // same as every other piece of narration text in this project. Two rules
 // baked into the prompt come from real mistakes caught while piloting this
@@ -250,7 +251,7 @@ async function runEventMode(eventTypeName, count, dryRun) {
   const eventType = EVENT_TYPES[eventTypeName];
   if (!eventType) {
     throw new Error(
-      `EVENT_TYPES.${eventTypeName} não existe. Veja os nomes válidos em src/engine/narration.js.`,
+      `EVENT_TYPES.${eventTypeName} não existe. Veja os nomes válidos em src/engine/narration/event-types.js.`,
     );
   }
   const existingTemplates = templatesFor(eventType);

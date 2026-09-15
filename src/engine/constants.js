@@ -192,7 +192,7 @@ export const WALL_SAVE = {
 // separately in resolveFoul, and not a penalty, decided separately in
 // resolvePenalty) gets narrated. "plain" keeps the original generic GOAL
 // text with no extra detail; every other key maps to its own event type
-// with a more specific narration (see narration.js). Weights are relative
+// with a more specific narration (see narration/). Weights are relative
 // to each other, not percentages — pickWeighted normalizes them.
 export const GOAL_STYLE = {
   WEIGHTS: {

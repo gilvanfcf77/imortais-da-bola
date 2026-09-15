@@ -1,0 +1,66 @@
+// Showboating aimed at a rival player rather than the ball — taunts,
+// trash talk, callouts — and what happens when it boils over into a brawl.
+
+import { EVENT_TYPES } from '../event-types.js';
+
+export const TEMPLATES = {
+  [EVENT_TYPES.NUTMEG_TAUNT]: [
+    '{player} dá um chapéu em {victim} e ainda manda um beijo! A torcida vai à loucura.',
+    'Depois de humilhar {victim} com um chapéu, {player} manda um beijo para ele. Isso não vai ficar barato.',
+    '{player} enfia uma caneta em {victim} e sai gargalhando — que vexame!',
+    'Depois da caneta em {victim}, {player} aponta pro próprio nome na camisa.',
+    '{player} solta uma sequência de pedaladas e deixa {victim} rodando no gramado.',
+    'Show de bola! {player} dá um drible da vaca em {victim} e ainda faz uma dancinha comemorando.',
+    '{player} passa a bola por entre as pernas de {victim} pela segunda vez seguida — e ainda tira satisfação.',
+    'Depois de driblar {victim}, {player} finge chorar de tanto rir.',
+    '{player} dá um rolinho em {victim} e ainda grita "fecha as pernas!" pra ele.',
+    'Olha o que {player} fez! Caneta desmoralizante em {victim} com direito a aceno pra galera.',
+    '{player} deixa {victim} tordo com esse drible e ainda gesticula pedindo calma pro adversário!',
+  ],
+  [EVENT_TYPES.TRASH_TALK]: [
+    '{player} manda {victim} "ir comer um caju" pra ver se acalma.',
+    '{player} pede silêncio pra {victim}, com o dedo na frente da boca.',
+    '{player} faz o gesto de "tá falando demais" na cara de {victim}.',
+    '{player} finge chorar, com a mão passando no rosto, provocando {victim}.',
+    '{player} debocha e manda {victim} calar a boca.',
+    'Depois do lance, {player} ainda faz questão de mandar {victim} comer caju.',
+    '{player} aponta pro relógio e avisa {victim} que o tempo dele já era.',
+    'Boca fechada não entra mosca, e {player} faz questão de lembrar {victim} disso.',
+    "{player} faz sinal de 'muito papo' com a mão pra cima de {victim}.",
+  ],
+  [EVENT_TYPES.FIGHT_CALLOUT]: [
+    '{player} parte pra cima e chama {victim} pra briga!',
+    'Climão em campo: {player} desafia {victim} a resolver no braço.',
+    '{player} avança e chama {victim} para a porrada.',
+    'Olha lá o {player} encarando {victim}, o clima ferveu em campo!',
+    '{player} aponta o dedo pra cara de {victim} e o bicho vai pegar!',
+    'Fechou o tempo! {player} peita {victim} bem na frente do árbitro.',
+    'O {player} perdeu a paciência e tá chamando o {victim} pra confusão!',
+  ],
+  [EVENT_TYPES.BRAWL]: [
+    '{victim} não gostou da provocação e a confusão generalizada toma conta do campo!',
+    'Começa o quebra-pau! Os dois times se envolvem numa confusão generalizada.',
+    'O tempo fecha de vez no gramado! {victim} vai tirar satisfação e o circo está armado!',
+    'Empurrões, xingamentos e {victim} no meio do bolo! O árbitro vai ter trabalho!',
+    'A chapa esquentou! {victim} peita o adversário e a confusão tá formada!',
+    'Olha o empurra-empurra! {victim} se estranha com o rival e os ânimos explodem!',
+  ],
+  [EVENT_TYPES.BRAWL_CARD_FIRST]: [
+    'Na confusão, {player} leva cartão.',
+    'O árbitro já tira o cartão para {player} no meio da bagunça.',
+    'A turma do deixa-disso não adiantou e {player} tomou o amarelo na confusão.',
+    'Empurrão pra lá, empurrão pra cá... e {player} é o primeiro a ser amarelado!',
+    'O clima esquentou de vez e {player} acaba de receber o cartão amarelo.',
+    'Cartão amarelo para {player} por inflamar os ânimos no meio do bolo!',
+    'A confusão armada e o árbitro já mostra o cartão para {player}.',
+  ],
+  [EVENT_TYPES.BRAWL_CARD]: [
+    'Na confusão, {player} também leva cartão.',
+    '{player} também é flagrado e leva cartão na bagunça.',
+    'A súmula anota mais um amarelado, é {player} quem toma o cartão.',
+    'Sobrou até para {player}, que não escapou do cartão do juiz.',
+    'O árbitro aponta o dedo e pune {player} com o cartão.',
+    'Cartão amarelo para {player} no meio dessa confusão generalizada.',
+    'Vai levar advertência também, cartão amarelo para {player}.',
+  ],
+};

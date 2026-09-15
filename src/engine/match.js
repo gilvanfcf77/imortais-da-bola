@@ -25,7 +25,7 @@ import {
   REFEREE,
 } from './constants.js';
 import { getTraitIntensity, sumTraitIntensity, combineMultipliers } from './traits.js';
-import { EVENT_TYPES, narrate, narrateCustom } from './narration.js';
+import { EVENT_TYPES, narrate, narrateCustom } from './narration/index.js';
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -841,7 +841,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     // at the rival: an away finisher gets jeered by the home crowd
     // (WHIFF). A home finisher's own miss instead gets a pained,
     // hands-on-head reaction from their own fans (WHIFF_HOME_MISS) — see
-    // narration.js for why that's a separate event type from WHIFF.
+    // narration/ for why that's a separate event type from WHIFF.
     if (attackingTeam.side === 'home') {
       pushEvent(
         events,
@@ -1031,7 +1031,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
   }
 
   // A scandalous foul's narration ends on the referee looking ready to act
-  // (see narration.js) — if nothing actually comes of it, that promise needs
+  // (see narration/) — if nothing actually comes of it, that promise needs
   // a payoff, or it reads as a plot hole. This is skipped by the ref-slap
   // and straight-red branches above since they already return early with a
   // card of their own.
