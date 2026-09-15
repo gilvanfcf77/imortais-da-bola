@@ -584,22 +584,39 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     let assistPlayerId = null;
 
     if (style === 'assisted') {
+      // The goalkeeper stays eligible here — unlike 'corner' below, a keeper
+      // genuinely can set up a goal with a long clearance or a throw, it's
+      // just rare — but gets a flat, un-scaled GOALKEEPER_ASSIST_WEIGHT
+      // instead of the usual playmaker-scaled formula, so it stays a rare
+      // highlight rather than a routine outcome.
       const teammates = activePlayers(attackingTeam).filter((p) => p.id !== finisher.id);
       if (teammates.length === 0) {
         goalEventType = EVENT_TYPES.GOAL;
       } else {
         const assistProvider = rng.pickWeighted(
           teammates,
-          teammates.map((p) => 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT)
+          teammates.map((p) =>
+            p.position === 'GK'
+              ? TRAIT_WEIGHTS.GOALKEEPER_ASSIST_WEIGHT
+              : 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT
+          )
         );
         context.assist = assistProvider.name;
         assistPlayerId = assistProvider.id;
       }
     } else if (style === 'corner') {
-      // Same fallback as 'assisted' above: with nobody left to have taken
-      // the corner (last man standing after red cards), there's no assist
-      // to credit — narrate it as a plain goal instead.
-      const teammates = activePlayers(attackingTeam).filter((p) => p.id !== finisher.id);
+      // Excludes the goalkeeper: corners are taken from the opponent's byline,
+      // nowhere near their own box, so the keeper is never a candidate —
+      // freeKickSpecialist means "trusted with frontal free kicks and
+      // penalties" (see pickSetPieceTaker), not "also takes corners". Without
+      // this, a keeper with that trait (e.g. Rogério Ceni) could get credited
+      // with taking every corner that led to a goal, which never happens in
+      // real football.
+      //
+      // Same fallback as before: with nobody left to have taken the corner
+      // (last man standing after red cards), there's no assist to credit —
+      // narrate it as a plain goal instead.
+      const teammates = activePlayers(attackingTeam).filter((p) => p.id !== finisher.id && p.position !== 'GK');
       if (teammates.length === 0) {
         goalEventType = EVENT_TYPES.GOAL;
       } else {

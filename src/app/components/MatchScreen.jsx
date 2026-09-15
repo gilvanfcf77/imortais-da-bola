@@ -195,12 +195,41 @@ function eventRowClass(event) {
   return 'border-slate-800 bg-slate-900';
 }
 
+// Mobile-only stand-in for LineupPanel (which is hidden below `md:` — see
+// the render below): since there's no persistent side panel to check the
+// squad on a phone, this renders the full lineup once, as its own card at
+// the top of the event log, so it just scrolls away naturally like any
+// other event instead of needing a toggle or its own screen. Desktop
+// already shows this in LineupPanel, so it's `md:hidden` here to avoid
+// showing the same 11 names twice.
+function MobileLineupCard({ side, teamLabel, lineup }) {
+  const ordered = sortByRole(lineup);
+  const accent = side === 'home' ? 'border-sky-500' : 'border-orange-500';
+  return (
+    <li className={`rounded border bg-slate-900 px-4 py-3 md:hidden ${accent}`}>
+      <p className="mb-2 text-sm font-semibold text-slate-200">Escalação — {teamLabel}</p>
+      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[13px]">
+        {ordered.map((player) => (
+          <div key={player.id} className="flex items-center gap-1.5 truncate">
+            <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
+              {player.role ?? player.position}
+            </span>
+            <span className="truncate">{player.name}</span>
+          </div>
+        ))}
+      </div>
+    </li>
+  );
+}
+
 function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
   const averageOverall = (lineup.reduce((sum, p) => sum + p.overall, 0) / lineup.length).toFixed(1);
   const ordered = sortByRole(lineup);
   return (
     <aside
-      className={`w-48 shrink-0 overflow-y-auto py-2 ${side === 'home' ? 'border-r' : 'border-l'} border-slate-800`}
+      className={`max-h-56 w-full shrink-0 overflow-y-auto py-2 md:max-h-none md:w-48 ${
+        side === 'home' ? 'md:border-r' : 'md:border-l'
+      } border-slate-800`}
     >
       <p className="px-3 pb-2 text-[11px] text-slate-500">
         Overall médio: <span className="font-semibold text-slate-300">{averageOverall}</span>
@@ -351,10 +380,10 @@ export default function MatchScreen({ matchData, onFinished }) {
   const finished = visibleCount === allEvents.length;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <div className="shrink-0 border-b border-slate-800 px-4 py-4">
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
-          <h2 className="text-2xl font-bold">
+    <div className="flex min-h-screen flex-col md:h-screen md:overflow-hidden">
+      <div className="sticky top-0 z-10 shrink-0 border-b border-slate-800 bg-slate-950 px-3 py-3 md:static md:px-4 md:py-4">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 md:gap-4">
+          <h2 className="text-lg font-bold md:text-2xl">
             {homeName} <span key={`home-${pulseKeys.home}`} className="animate-score-pulse">{score.home}</span> x{' '}
             <span key={`away-${pulseKeys.away}`} className="animate-score-pulse">{score.away}</span> {awayName}
             {awayEra ? ` (${awayEra})` : ''}
@@ -375,7 +404,7 @@ export default function MatchScreen({ matchData, onFinished }) {
           </label>
         </div>
         {shootoutActive && (
-          <div className="mx-auto mt-3 flex max-w-3xl items-center justify-center gap-4 rounded-lg border border-yellow-600/50 bg-yellow-500/10 px-4 py-2">
+          <div className="mx-auto mt-3 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-lg border border-yellow-600/50 bg-yellow-500/10 px-3 py-2 md:gap-4 md:px-4">
             <span className="text-sm font-semibold uppercase tracking-wide text-yellow-400">Disputa de pênaltis</span>
             <span className="text-xl font-bold tabular-nums">
               {shootoutScore.home} x {shootoutScore.away}
@@ -385,11 +414,15 @@ export default function MatchScreen({ matchData, onFinished }) {
         )}
       </div>
 
-      <div className="mx-auto flex w-full max-w-5xl flex-1 justify-center gap-6 overflow-hidden px-4 py-4">
-        <LineupPanel side="home" lineup={homeLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-3 px-3 py-3 md:flex-row md:justify-center md:gap-6 md:overflow-hidden md:px-4 md:py-4">
+        <div className="hidden md:block">
+          <LineupPanel side="home" lineup={homeLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+        </div>
 
-        <div className="flex h-full w-full max-w-2xl flex-col gap-4 overflow-hidden">
-          <ol className="flex flex-1 flex-col gap-2 overflow-y-auto">
+        <div className="flex w-full max-w-2xl flex-col gap-4 md:h-full md:overflow-hidden">
+          <ol className="flex flex-col gap-2 md:flex-1 md:overflow-y-auto">
+            <MobileLineupCard side="home" teamLabel={homeName} lineup={homeLineup} />
+            <MobileLineupCard side="away" teamLabel={awayEra ? `${awayName} (${awayEra})` : awayName} lineup={awayLineup} />
             {visibleEvents.map((event, index) =>
               DIVIDER_EVENT_TYPES.has(event.type) ? (
                 <li key={index} className="my-1 text-center font-semibold text-slate-400">
@@ -405,7 +438,7 @@ export default function MatchScreen({ matchData, onFinished }) {
               )
             )}
             {finished && (
-              <li className="flex items-center justify-between px-4 py-2">
+              <li className="flex flex-wrap items-center justify-between gap-2 px-4 py-2">
                 <p className="text-slate-400">Fim de jogo.</p>
                 <button
                   onClick={onFinished}
@@ -419,7 +452,9 @@ export default function MatchScreen({ matchData, onFinished }) {
           </ol>
         </div>
 
-        <LineupPanel side="away" lineup={awayLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+        <div className="hidden md:block">
+          <LineupPanel side="away" lineup={awayLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+        </div>
       </div>
     </div>
   );

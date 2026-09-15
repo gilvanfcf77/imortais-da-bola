@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRng, draftEleven, FORMATIONS, simulateMatch, resolvePenaltyShootout, EVENT_TYPES } from '../../src/engine/index.js';
-import { makePool } from './fixtures.js';
+import { makePool, makePlayer } from './fixtures.js';
 
 function makeTeams(seed) {
   const pool = makePool();
@@ -135,4 +135,54 @@ test('a specialAbility with no conversionMultiplier never scores on its own', ()
       (next.type === EVENT_TYPES.GOAL || next.type === EVENT_TYPES.CHANCE_MISSED);
     assert.ok(!followedByBonusShot, `PLAYER_SPECIAL at minute ${special.minute} was followed by a bonus-shot event`);
   }
+});
+
+// A goalkeeper never takes a corner — see the 'corner' branch in
+// resolveAttack (match.js). Before this was fixed, a keeper with a high
+// freeKickSpecialist intensity (e.g. Rogério Ceni, who in real life only
+// took frontal free kicks and penalties, never corners) could get weighted
+// so heavily that they'd be credited with taking every corner that led to a
+// goal. Stacks the odds against the fix on purpose — a tiny squad where the
+// keeper has max playmaker+freeKickSpecialist and every outfield player has
+// none, over many simulated matches — so if the exclusion regressed, this
+// would catch it almost immediately rather than relying on a rare natural
+// occurrence. Unlike a corner, an 'assisted' open-play goal genuinely can
+// have the goalkeeper credited (a long clearance/throw) — just rarely (see
+// GOALKEEPER_ASSIST_WEIGHT) — so this test only checks GOAL_CORNER events,
+// not every event with an assistPlayerId.
+test('a goalkeeper never takes a corner, even with max playmaker/freeKickSpecialist', () => {
+  const keeper = makePlayer('GK', 90, [
+    { slug: 'playmaker', intensity: 3 },
+    { slug: 'freeKickSpecialist', intensity: 3 },
+  ]);
+  // Every other role stays generic (makePool()'s usual fixtures), but the
+  // only GK-eligible candidate is the stacked keeper above — otherwise
+  // draftEleven's uniform pick could just as easily start one of the
+  // ordinary goalkeepers instead, making the check meaningless most seeds.
+  const lineupPool = [keeper, ...makePool().filter((p) => p.position !== 'GK')];
+
+  let sawCornerGoal = false;
+  for (let seed = 0; seed < 40; seed++) {
+    const rng = createRng(seed);
+    const home = {
+      name: 'Home',
+      lineup: draftEleven(lineupPool, FORMATIONS['4-4-2'], rng),
+      posture: 'attacking',
+      gamesmanship: 0,
+    };
+    const away = {
+      name: 'Away',
+      lineup: draftEleven(makePool(), FORMATIONS['4-4-2'], createRng(seed + 1000)),
+      posture: 'defensive',
+      gamesmanship: 0,
+    };
+    const result = simulateMatch({ home, away, rng });
+
+    for (const event of result.events) {
+      if (event.type !== EVENT_TYPES.GOAL_CORNER || event.assistPlayerId === undefined) continue;
+      sawCornerGoal = true;
+      assert.notEqual(event.assistPlayerId, keeper.id, `seed ${seed}: goalkeeper credited with taking a corner`);
+    }
+  }
+  assert.ok(sawCornerGoal, 'expected at least one corner goal across 40 seeds to actually exercise the check');
 });

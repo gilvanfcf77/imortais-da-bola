@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
+    "playwright": "^1.48.0",
     "tailwindcss": "^4.0.0"
   }
 }

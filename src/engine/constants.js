@@ -163,6 +163,17 @@ export const TRAIT_WEIGHTS = {
   SET_PIECE_SPECIALIST_WEIGHT: 1, // extra selection weight per point for corners and penalties
   PLAYMAKER_ASSIST_WEIGHT: 0.5, // extra weight per point of intensity, when picking who gets credited with the assist
   DRIBBLER_INDIVIDUAL_GOAL_WEIGHT: 0.5, // multiplies GOAL_STYLE.WEIGHTS.individual, per point of the scorer's dribbler intensity
+  // Flat weight for a goalkeeper being credited with an open-play assist (a
+  // long clearance or throw straight into a scoring chance) — well below the
+  // baseline 1 an outfield player starts at before any trait bonus, so it
+  // stays a rare highlight rather than a routine outcome. Deliberately not
+  // scaled by any trait (playmaker or otherwise) — this is about a low
+  // baseline chance of a long ball landing right, not creative buildup play.
+  // Corners are a separate, stricter case (see the 'corner' branch in
+  // resolveAttack): a goalkeeper never takes one, so they're excluded from
+  // that pool entirely rather than just heavily deprioritized. Not yet
+  // calibrated.
+  GOALKEEPER_ASSIST_WEIGHT: 0.08,
 };
 
 // A `wall` trait's last-ditch save reads very differently depending on who

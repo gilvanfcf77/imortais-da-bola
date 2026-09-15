@@ -4,3 +4,4 @@ logs/
 info/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+.claude/skills/run-imortais-da-bola/screenshots/

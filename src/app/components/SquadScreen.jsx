@@ -43,22 +43,24 @@ function LineupPanel({ clubName, formation, squad }) {
     ? (squad.reduce((sum, p) => sum + p.overall, 0) / squad.length).toFixed(1)
     : null;
   return (
-    <aside className="w-56 shrink-0 border-r border-slate-800 py-2">
+    <aside className="w-full shrink-0 border-b border-slate-800 py-2 md:w-56 md:border-r md:border-b-0">
       <h3 className="px-3 pb-2 text-sm font-semibold text-slate-300">{clubName}</h3>
-      {rows.map((row, index) => (
-        <div
-          key={index}
-          className={`flex items-center gap-2 border-l-2 px-3 py-1.5 text-sm ${
-            row.player ? 'border-emerald-500' : 'border-slate-800 text-slate-600'
-          }`}
-        >
-          <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
-          <span className="truncate">
-            {row.player ? row.player.name : 'vaga aberta'}
-            {row.player?.era ? ` '${String(row.player.era).slice(-2)}` : ''}
-          </span>
-        </div>
-      ))}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-1">
+        {rows.map((row, index) => (
+          <div
+            key={index}
+            className={`flex items-center gap-2 border-l-2 px-3 py-1.5 text-sm ${
+              row.player ? 'border-emerald-500' : 'border-slate-800 text-slate-600'
+            }`}
+          >
+            <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">{row.role}</span>
+            <span className="truncate">
+              {row.player ? row.player.name : 'vaga aberta'}
+              {row.player?.era ? ` '${String(row.player.era).slice(-2)}` : ''}
+            </span>
+          </div>
+        ))}
+      </div>
       <p className="mt-3 border-t border-slate-800 px-3 pt-3 text-sm text-slate-400">
         Overall médio: <span className="font-semibold text-slate-200">{averageOverall ?? '—'}</span>
       </p>
@@ -164,10 +166,10 @@ export default function SquadScreen({ club, onComplete }) {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
       <LineupPanel clubName={club.name} formation={formation} squad={squad} />
 
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6 md:py-8">
         <label className="flex w-fit items-center gap-2 text-sm text-slate-400">
           Formação
           <select
