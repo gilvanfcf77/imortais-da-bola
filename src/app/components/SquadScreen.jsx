@@ -163,7 +163,8 @@ export default function SquadScreen({ club, onComplete }) {
   }
 
   function handleStartCup() {
-    const gamesmanship = gamesmanshipChoice === 'auto' ? defaultGamesmanship(squad) : Number(gamesmanshipChoice);
+    const gamesmanship =
+      gamesmanshipChoice === 'auto' ? defaultGamesmanship(squad) : Number(gamesmanshipChoice);
     onComplete(squad, posture, gamesmanship);
   }
 
@@ -186,7 +187,9 @@ export default function SquadScreen({ club, onComplete }) {
               </option>
             ))}
           </select>
-          {squad.length > 0 && <span className="text-xs text-slate-500">(trava depois do 1º jogador escolhido)</span>}
+          {squad.length > 0 && (
+            <span className="text-xs text-slate-500">(trava depois do 1º jogador escolhido)</span>
+          )}
         </label>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -281,7 +284,8 @@ export default function SquadScreen({ club, onComplete }) {
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {drawnEra.pool.map((player) => {
                 const eligible = eligibleRolesFor(player);
-                const selectable = eligible.length > 0 && !pickedPersonIds.has(player.personId ?? player.id);
+                const selectable =
+                  eligible.length > 0 && !pickedPersonIds.has(player.personId ?? player.id);
                 const traits = player.traits ?? [];
                 return (
                   <button

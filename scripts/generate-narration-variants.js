@@ -59,7 +59,10 @@ function loadEnvFile(path) {
     if (eq === -1) continue;
     const key = trimmed.slice(0, eq).trim();
     let value = trimmed.slice(eq + 1).trim();
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       value = value.slice(1, -1);
     }
     // Real environment variables always win — same precedence dotenv uses.
@@ -132,7 +135,9 @@ function resolveProvider() {
     return {
       label: 'Gemini',
       apiKey: process.env.GEMINI_API_KEY,
-      baseUrl: process.env.LLM_BASE_URL ?? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+      baseUrl:
+        process.env.LLM_BASE_URL ??
+        'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
       model: process.env.LLM_MODEL ?? 'gemini-3.6-flash',
     };
   }
@@ -151,7 +156,7 @@ async function callOpenAI({ system, user }) {
   const provider = resolveProvider();
   if (!provider) {
     throw new Error(
-      'Nenhuma chave definida. Defina GEMINI_API_KEY (grátis, aistudio.google.com) ou OPENAI_API_KEY — exportada no ambiente, ou num .env.local na raiz do projeto (carregado automaticamente, já está no .gitignore; ver .env.local.example) — ou rode com --dry-run pra só ver o prompt sem chamar a API.'
+      'Nenhuma chave definida. Defina GEMINI_API_KEY (grátis, aistudio.google.com) ou OPENAI_API_KEY — exportada no ambiente, ou num .env.local na raiz do projeto (carregado automaticamente, já está no .gitignore; ver .env.local.example) — ou rode com --dry-run pra só ver o prompt sem chamar a API.',
     );
   }
 
@@ -199,22 +204,34 @@ function validateCandidate(candidate, { existingTemplates, placeholders, crowdAl
   const problems = [];
   const usedPlaceholders = extractPlaceholders(candidate);
   for (const p of usedPlaceholders) {
-    if (!placeholders.has(p)) problems.push(`usa {${p}}, que não está entre os placeholders existentes`);
+    if (!placeholders.has(p))
+      problems.push(`usa {${p}}, que não está entre os placeholders existentes`);
   }
   if (existingTemplates.includes(candidate)) problems.push('idêntica a um template já existente');
   if (mentionsCrowd(candidate) && !crowdAlreadyUsed) {
-    problems.push('menciona torcida/arquibancada sem que os templates existentes já façam isso — confira o lado casa/fora (ver memória narration-crowd-is-home-only)');
+    problems.push(
+      'menciona torcida/arquibancada sem que os templates existentes já façam isso — confira o lado casa/fora (ver memória narration-crowd-is-home-only)',
+    );
   }
-  if (candidate.length > 160) problems.push(`longa (${candidate.length} caracteres) — pode não caber bem numa tela de celular`);
+  if (candidate.length > 160)
+    problems.push(
+      `longa (${candidate.length} caracteres) — pode não caber bem numa tela de celular`,
+    );
   return problems;
 }
 
 function printReport(candidates, { existingTemplates, placeholders, crowdAlreadyUsed }) {
-  console.log(`\nPlaceholders disponíveis: ${[...placeholders].map((p) => `{${p}}`).join(', ') || '(nenhum)'}\n`);
+  console.log(
+    `\nPlaceholders disponíveis: ${[...placeholders].map((p) => `{${p}}`).join(', ') || '(nenhum)'}\n`,
+  );
   console.log('Candidatas geradas:\n');
   let okCount = 0;
   for (const candidate of candidates) {
-    const problems = validateCandidate(candidate, { existingTemplates, placeholders, crowdAlreadyUsed });
+    const problems = validateCandidate(candidate, {
+      existingTemplates,
+      placeholders,
+      crowdAlreadyUsed,
+    });
     if (problems.length === 0) {
       okCount++;
       console.log(`  [OK] ${candidate}`);
@@ -224,13 +241,17 @@ function printReport(candidates, { existingTemplates, placeholders, crowdAlready
     }
   }
   console.log(`\n${okCount}/${candidates.length} passaram na validação automática.`);
-  console.log('Nada foi escrito em nenhum arquivo — revise e cole manualmente as que valerem a pena.\n');
+  console.log(
+    'Nada foi escrito em nenhum arquivo — revise e cole manualmente as que valerem a pena.\n',
+  );
 }
 
 async function runEventMode(eventTypeName, count, dryRun) {
   const eventType = EVENT_TYPES[eventTypeName];
   if (!eventType) {
-    throw new Error(`EVENT_TYPES.${eventTypeName} não existe. Veja os nomes válidos em src/engine/narration.js.`);
+    throw new Error(
+      `EVENT_TYPES.${eventTypeName} não existe. Veja os nomes válidos em src/engine/narration.js.`,
+    );
   }
   const existingTemplates = templatesFor(eventType);
   const placeholders = allPlaceholdersUsed(existingTemplates);
@@ -244,7 +265,11 @@ async function runEventMode(eventTypeName, count, dryRun) {
   }
 
   const candidates = await callOpenAI({ system, user });
-  printReport(candidates, { existingTemplates, placeholders, crowdAlreadyUsed: existingTemplates.some(mentionsCrowd) });
+  printReport(candidates, {
+    existingTemplates,
+    placeholders,
+    crowdAlreadyUsed: existingTemplates.some(mentionsCrowd),
+  });
 }
 
 async function runAbilityMode(clubSlug, era, personIdOrName, count, dryRun) {
@@ -253,11 +278,16 @@ async function runAbilityMode(clubSlug, era, personIdOrName, count, dryRun) {
   if (!eraEntry) throw new Error(`Não achei a época ${era} para o clube ${clubSlug}.`);
 
   const player = eraEntry.pool.find(
-    (p) => p.personId === personIdOrName || p.name.toLowerCase() === personIdOrName.toLowerCase()
+    (p) => p.personId === personIdOrName || p.name.toLowerCase() === personIdOrName.toLowerCase(),
   );
-  if (!player) throw new Error(`Não achei um jogador com personId/nome "${personIdOrName}" em ${clubSlug}/${era}.`);
+  if (!player)
+    throw new Error(
+      `Não achei um jogador com personId/nome "${personIdOrName}" em ${clubSlug}/${era}.`,
+    );
   if (!player.specialAbility) {
-    throw new Error(`${player.name} não tem specialAbility definida — não há templates existentes pra usar de base.`);
+    throw new Error(
+      `${player.name} não tem specialAbility definida — não há templates existentes pra usar de base.`,
+    );
   }
 
   const existingTemplates = player.specialAbility.templates;
@@ -274,7 +304,11 @@ async function runAbilityMode(clubSlug, era, personIdOrName, count, dryRun) {
   }
 
   const candidates = await callOpenAI({ system, user });
-  printReport(candidates, { existingTemplates, placeholders, crowdAlreadyUsed: existingTemplates.some(mentionsCrowd) });
+  printReport(candidates, {
+    existingTemplates,
+    placeholders,
+    crowdAlreadyUsed: existingTemplates.some(mentionsCrowd),
+  });
 }
 
 async function main() {
@@ -285,19 +319,22 @@ async function main() {
 
   if (mode === 'event') {
     const [eventTypeName, countStr] = rest;
-    if (!eventTypeName) throw new Error('Uso: node scripts/generate-narration-variants.js event <EVENT_TYPE> [count] [--dry-run]');
+    if (!eventTypeName)
+      throw new Error(
+        'Uso: node scripts/generate-narration-variants.js event <EVENT_TYPE> [count] [--dry-run]',
+      );
     await runEventMode(eventTypeName, Number(countStr ?? 5), dryRun);
   } else if (mode === 'ability') {
     const [clubSlug, era, personIdOrName, countStr] = rest;
     if (!clubSlug || !era || !personIdOrName) {
       throw new Error(
-        'Uso: node scripts/generate-narration-variants.js ability <club-slug> <era> <personId-ou-nome> [count] [--dry-run]'
+        'Uso: node scripts/generate-narration-variants.js ability <club-slug> <era> <personId-ou-nome> [count] [--dry-run]',
       );
     }
     await runAbilityMode(clubSlug, era, personIdOrName, Number(countStr ?? 5), dryRun);
   } else {
     throw new Error(
-      'Uso:\n  node scripts/generate-narration-variants.js event <EVENT_TYPE> [count] [--dry-run]\n  node scripts/generate-narration-variants.js ability <club-slug> <era> <personId-ou-nome> [count] [--dry-run]'
+      'Uso:\n  node scripts/generate-narration-variants.js event <EVENT_TYPE> [count] [--dry-run]\n  node scripts/generate-narration-variants.js ability <club-slug> <era> <personId-ou-nome> [count] [--dry-run]',
     );
   }
 }

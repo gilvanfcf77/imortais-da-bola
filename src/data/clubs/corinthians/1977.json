@@ -5,34 +5,259 @@
   "legendary": true,
   "cupEligible": true,
   "pool": [
-    { "id": "cor77-gk-1", "personId": "tobias-v49o", "name": "Tobias", "position": "GK", "roles": ["GOL"], "overall": 84, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor77-gk-2", "personId": "jairo-nl0c", "name": "Jairo", "position": "GK", "roles": ["GOL"], "overall": 74, "traits": [], "specialAbility": null },
+    {
+      "id": "cor77-gk-1",
+      "personId": "tobias-v49o",
+      "name": "Tobias",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 84,
+      "traits": [{ "slug": "wall", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-gk-2",
+      "personId": "jairo-nl0c",
+      "name": "Jairo",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 74,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor77-cb-1", "personId": "moises-96fq", "name": "Moisés", "position": "CB", "roles": ["ZAG"], "overall": 81, "traits": [], "specialAbility": null },
-    { "id": "cor77-cb-2", "personId": "ze-eduardo-73v9", "name": "Zé Eduardo", "position": "CB", "roles": ["ZAG"], "overall": 77, "traits": [], "specialAbility": null },
-    { "id": "cor77-cb-3", "personId": "ademir-t9fi", "name": "Ademir", "position": "CB", "roles": ["ZAG"], "overall": 69, "traits": [], "specialAbility": null },
-    { "id": "cor77-cb-4", "personId": "darcy-rseu", "name": "Darcy", "position": "CB", "roles": ["ZAG", "LD"], "overall": 65, "traits": [], "specialAbility": null },
-    { "id": "cor77-cb-5", "personId": "wagner-basilio-u86y", "name": "Wagner Basílio", "position": "CB", "roles": ["ZAG", "VOL"], "overall": 57, "traits": [], "specialAbility": null },
+    {
+      "id": "cor77-cb-1",
+      "personId": "moises-96fq",
+      "name": "Moisés",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 81,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-cb-2",
+      "personId": "ze-eduardo-73v9",
+      "name": "Zé Eduardo",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 77,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-cb-3",
+      "personId": "ademir-t9fi",
+      "name": "Ademir",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 69,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-cb-4",
+      "personId": "darcy-rseu",
+      "name": "Darcy",
+      "position": "CB",
+      "roles": ["ZAG", "LD"],
+      "overall": 65,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-cb-5",
+      "personId": "wagner-basilio-u86y",
+      "name": "Wagner Basílio",
+      "position": "CB",
+      "roles": ["ZAG", "VOL"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor77-fb-1", "personId": "ze-maria-wfsc", "name": "Zé Maria", "position": "FB", "roles": ["LD"], "overall": 89, "traits": [], "specialAbility": null },
-    { "id": "cor77-fb-2", "personId": "wladimir-la7z", "name": "Wladimir", "position": "FB", "roles": ["LE"], "overall": 86, "traits": [], "specialAbility": null },
-    { "id": "cor77-fb-3", "personId": "claudio-mineiro-xvq2", "name": "Cláudio Mineiro", "position": "FB", "roles": ["LE", "LD"], "overall": 70, "traits": [], "specialAbility": null },
-    { "id": "cor77-fb-4", "personId": "beline-5w82", "name": "Beline", "position": "FB", "roles": ["LD"], "overall": 59, "traits": [], "specialAbility": null },
+    {
+      "id": "cor77-fb-1",
+      "personId": "ze-maria-wfsc",
+      "name": "Zé Maria",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 89,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fb-2",
+      "personId": "wladimir-la7z",
+      "name": "Wladimir",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 86,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fb-3",
+      "personId": "claudio-mineiro-xvq2",
+      "name": "Cláudio Mineiro",
+      "position": "FB",
+      "roles": ["LE", "LD"],
+      "overall": 70,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fb-4",
+      "personId": "beline-5w82",
+      "name": "Beline",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 59,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor77-mf-1", "personId": "ruco-bkkq", "name": "Ruço", "position": "MF", "roles": ["VOL"], "overall": 81, "traits": [], "specialAbility": null },
-    { "id": "cor77-mf-2", "personId": "givanildo-oliveira-juyg", "name": "Givanildo Oliveira", "position": "MF", "roles": ["VOL"], "overall": 72, "traits": [], "specialAbility": null },
-    { "id": "cor77-mf-3", "personId": "basilio-g36f", "name": "Basílio", "position": "MF", "roles": ["MC", "MAT"], "overall": 83, "traits": [], "specialAbility": null },
-    { "id": "cor77-mf-4", "personId": "luciano-jorge-p6ew", "name": "Luciano", "position": "MF", "roles": ["MC", "MD"], "overall": 69, "traits": [], "specialAbility": null },
-    { "id": "cor77-mf-5", "personId": "romeu-y9dr", "name": "Romeu", "position": "MF", "roles": ["ME", "MAT"], "overall": 79, "traits": [], "specialAbility": null },
+    {
+      "id": "cor77-mf-1",
+      "personId": "ruco-bkkq",
+      "name": "Ruço",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 81,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-mf-2",
+      "personId": "givanildo-oliveira-juyg",
+      "name": "Givanildo Oliveira",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 72,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-mf-3",
+      "personId": "basilio-g36f",
+      "name": "Basílio",
+      "position": "MF",
+      "roles": ["MC", "MAT"],
+      "overall": 83,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-mf-4",
+      "personId": "luciano-jorge-p6ew",
+      "name": "Luciano",
+      "position": "MF",
+      "roles": ["MC", "MD"],
+      "overall": 69,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-mf-5",
+      "personId": "romeu-y9dr",
+      "name": "Romeu",
+      "position": "MF",
+      "roles": ["ME", "MAT"],
+      "overall": 79,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor77-fw-1", "personId": "palhinha-ezck", "name": "Palhinha", "position": "FW", "roles": ["CA"], "overall": 90, "traits": [{ "slug": "sharpshooter", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor77-fw-2", "personId": "geraldao-y5n7", "name": "Geraldão", "position": "FW", "roles": ["CA"], "overall": 85, "traits": [{ "slug": "sharpshooter", "intensity": 3 }], "specialAbility": null },
-    { "id": "cor77-fw-3", "personId": "vaguinho-81xa", "name": "Vaguinho", "position": "FW", "roles": ["PD", "PE"], "overall": 81, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-4", "personId": "adaozinho-3e1c", "name": "Adãozinho", "position": "FW", "roles": ["PE"], "overall": 78, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-5", "personId": "edu-39yb", "name": "Edu", "position": "FW", "roles": ["PE"], "overall": 77, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-6", "personId": "rubens-nicola-yh02", "name": "Rubens Nicola", "position": "FW", "roles": ["CA", "PD"], "overall": 55, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-7", "personId": "jenildo-uyu7", "name": "Jenildo", "position": "FW", "roles": ["CA"], "overall": 58, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-8", "personId": "lance-zipf", "name": "Lance", "position": "FW", "roles": ["CA", "PE"], "overall": 73, "traits": [], "specialAbility": null },
-    { "id": "cor77-fw-9", "personId": "toninho-metralha-anes", "name": "Toninho Metralha", "position": "FW", "roles": ["CA", "PE"], "overall": 57, "traits": [], "specialAbility": null }
+    {
+      "id": "cor77-fw-1",
+      "personId": "palhinha-ezck",
+      "name": "Palhinha",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 90,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-2",
+      "personId": "geraldao-y5n7",
+      "name": "Geraldão",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 85,
+      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-3",
+      "personId": "vaguinho-81xa",
+      "name": "Vaguinho",
+      "position": "FW",
+      "roles": ["PD", "PE"],
+      "overall": 81,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-4",
+      "personId": "adaozinho-3e1c",
+      "name": "Adãozinho",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 78,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-5",
+      "personId": "edu-39yb",
+      "name": "Edu",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 77,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-6",
+      "personId": "rubens-nicola-yh02",
+      "name": "Rubens Nicola",
+      "position": "FW",
+      "roles": ["CA", "PD"],
+      "overall": 55,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-7",
+      "personId": "jenildo-uyu7",
+      "name": "Jenildo",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 58,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-8",
+      "personId": "lance-zipf",
+      "name": "Lance",
+      "position": "FW",
+      "roles": ["CA", "PE"],
+      "overall": 73,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor77-fw-9",
+      "personId": "toninho-metralha-anes",
+      "name": "Toninho Metralha",
+      "position": "FW",
+      "roles": ["CA", "PE"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    }
   ]
 }

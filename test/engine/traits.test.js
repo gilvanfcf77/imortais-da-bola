@@ -1,6 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getTraitIntensity, sumTraitIntensity, combineMultipliers, defaultGamesmanship } from '../../src/engine/index.js';
+import {
+  getTraitIntensity,
+  sumTraitIntensity,
+  combineMultipliers,
+  defaultGamesmanship,
+} from '../../src/engine/index.js';
 
 test('getTraitIntensity returns 0 when the player lacks the trait', () => {
   const player = { traits: [{ slug: 'sharpshooter', intensity: 2 }] };
@@ -36,7 +41,9 @@ test('defaultGamesmanship is 0 for a squad with no cynicalFouler', () => {
 });
 
 test('defaultGamesmanship always stays within 0-3', () => {
-  const squad = Array.from({ length: 11 }, () => ({ traits: [{ slug: 'cynicalFouler', intensity: 3 }] }));
+  const squad = Array.from({ length: 11 }, () => ({
+    traits: [{ slug: 'cynicalFouler', intensity: 3 }],
+  }));
   const level = defaultGamesmanship(squad);
   assert.ok(level >= 0 && level <= 3, `${level} outside [0, 3]`);
 });

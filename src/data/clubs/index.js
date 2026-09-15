@@ -42,7 +42,11 @@ function loadClubFile(slug, file) {
 function loadClub({ slug, files }) {
   const parts = files.map((file) => loadClubFile(slug, file));
   const pool = parts.flatMap((part) =>
-    part.pool.map((player) => ({ ...player, era: part.era ?? null, legendary: part.legendary ?? false }))
+    part.pool.map((player) => ({
+      ...player,
+      era: part.era ?? null,
+      legendary: part.legendary ?? false,
+    })),
   );
   return { slug: parts[0].slug, name: parts[0].name, pool };
 }

@@ -8,7 +8,8 @@
     {
       "id": "ev-gk-1",
       "name": "Adao Ventura",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 82,
       "traits": [
         {
@@ -21,7 +22,8 @@
     {
       "id": "ev-gk-2",
       "name": "Rui Barbante",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 71,
       "traits": [],
       "specialAbility": null
@@ -29,7 +31,8 @@
     {
       "id": "ev-gk-3",
       "name": "Nino Salvador",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 66,
       "traits": [],
       "specialAbility": null
@@ -37,7 +40,8 @@
     {
       "id": "ev-cb-1",
       "name": "Beto Muralha",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 79,
       "traits": [
         {
@@ -50,7 +54,8 @@
     {
       "id": "ev-cb-2",
       "name": "Cacau Ferro",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 74,
       "traits": [],
       "specialAbility": null
@@ -58,7 +63,8 @@
     {
       "id": "ev-cb-3",
       "name": "Dedé Trator",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 70,
       "traits": [
         {
@@ -71,7 +77,8 @@
     {
       "id": "ev-cb-4",
       "name": "Elias Rocha",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 68,
       "traits": [],
       "specialAbility": null
@@ -79,7 +86,8 @@
     {
       "id": "ev-cb-5",
       "name": "Fabinho Prego",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 65,
       "traits": [
         {
@@ -92,7 +100,8 @@
     {
       "id": "ev-fb-1",
       "name": "Gil Relampago",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 76,
       "traits": [
         {
@@ -105,7 +114,8 @@
     {
       "id": "ev-fb-2",
       "name": "Heitor Bala",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 73,
       "traits": [],
       "specialAbility": null
@@ -113,7 +123,8 @@
     {
       "id": "ev-fb-3",
       "name": "Ivo Corredor",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 69,
       "traits": [],
       "specialAbility": null
@@ -121,7 +132,8 @@
     {
       "id": "ev-fb-4",
       "name": "Juca Vento",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 64,
       "traits": [],
       "specialAbility": null
@@ -129,7 +141,8 @@
     {
       "id": "ev-mf-1",
       "name": "Kaká Batuta",
-      "position": "MF", "roles": ["ME"],
+      "position": "MF",
+      "roles": ["ME"],
       "overall": 88,
       "traits": [
         {
@@ -142,7 +155,8 @@
     {
       "id": "ev-mf-2",
       "name": "Lino Craque",
-      "position": "MF", "roles": ["MD", "VOL"],
+      "position": "MF",
+      "roles": ["MD", "VOL"],
       "overall": 91,
       "traits": [
         {
@@ -159,7 +173,8 @@
     {
       "id": "ev-mf-3",
       "name": "Mano Cerebral",
-      "position": "MF", "roles": ["MAT"],
+      "position": "MF",
+      "roles": ["MAT"],
       "overall": 77,
       "traits": [
         {
@@ -172,7 +187,8 @@
     {
       "id": "ev-mf-4",
       "name": "Nando Chinelo",
-      "position": "MF", "roles": ["VOL"],
+      "position": "MF",
+      "roles": ["VOL"],
       "overall": 75,
       "traits": [
         {
@@ -185,7 +201,8 @@
     {
       "id": "ev-mf-5",
       "name": "Otavio Régua",
-      "position": "MF", "roles": ["MC"],
+      "position": "MF",
+      "roles": ["MC"],
       "overall": 72,
       "traits": [],
       "specialAbility": null
@@ -193,7 +210,8 @@
     {
       "id": "ev-mf-6",
       "name": "Pedro Bicicleta",
-      "position": "MF", "roles": ["ME"],
+      "position": "MF",
+      "roles": ["ME"],
       "overall": 70,
       "traits": [],
       "specialAbility": null
@@ -201,7 +219,8 @@
     {
       "id": "ev-mf-7",
       "name": "Quinzinho Alma",
-      "position": "MF", "roles": ["MD", "ME"],
+      "position": "MF",
+      "roles": ["MD", "ME"],
       "overall": 67,
       "traits": [],
       "specialAbility": null
@@ -209,7 +228,8 @@
     {
       "id": "ev-mf-8",
       "name": "Renan Sereno",
-      "position": "MF", "roles": ["MAT", "ME"],
+      "position": "MF",
+      "roles": ["MAT", "ME"],
       "overall": 63,
       "traits": [
         {
@@ -222,7 +242,8 @@
     {
       "id": "ev-fw-1",
       "name": "Sabiá Artilheiro",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 93,
       "traits": [
         {
@@ -235,7 +256,8 @@
     {
       "id": "ev-fw-2",
       "name": "Tuca Faro",
-      "position": "FW", "roles": ["PE"],
+      "position": "FW",
+      "roles": ["PE"],
       "overall": 80,
       "traits": [
         {
@@ -248,7 +270,8 @@
     {
       "id": "ev-fw-3",
       "name": "Ubiratã Foguete",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 74,
       "traits": [],
       "specialAbility": null
@@ -256,7 +279,8 @@
     {
       "id": "ev-fw-4",
       "name": "Valter Ponta",
-      "position": "FW", "roles": ["CA", "PE"],
+      "position": "FW",
+      "roles": ["CA", "PE"],
       "overall": 71,
       "traits": [
         {
@@ -269,7 +293,8 @@
     {
       "id": "ev-fw-5",
       "name": "Xandão Cabeça",
-      "position": "FW", "roles": ["PE"],
+      "position": "FW",
+      "roles": ["PE"],
       "overall": 68,
       "traits": [],
       "specialAbility": null
@@ -277,7 +302,8 @@
     {
       "id": "ev-fw-6",
       "name": "Zeca Retranca",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 62,
       "traits": [],
       "specialAbility": null

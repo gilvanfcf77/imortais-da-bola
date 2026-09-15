@@ -8,7 +8,8 @@
     {
       "id": "oa-gk-1",
       "name": "Sorriso Bezerra",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -21,7 +22,8 @@
     {
       "id": "oa-gk-2",
       "name": "Leveza Martins",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -34,7 +36,8 @@
     {
       "id": "oa-gk-3",
       "name": "Encanto Rocha",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -47,7 +50,8 @@
     {
       "id": "oa-cb-1",
       "name": "Doçura Andrade",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -60,7 +64,8 @@
     {
       "id": "oa-cb-2",
       "name": "Gentileza Farias",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -73,7 +78,8 @@
     {
       "id": "oa-cb-3",
       "name": "Harmonia Castro",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -86,7 +92,8 @@
     {
       "id": "oa-cb-4",
       "name": "Ternura Basílio",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -99,7 +106,8 @@
     {
       "id": "oa-cb-5",
       "name": "Serenidade Prado",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -112,7 +120,8 @@
     {
       "id": "oa-fb-1",
       "name": "Ginga Alencar",
-      "position": "FB", "roles": ["LE", "LD"],
+      "position": "FB",
+      "roles": ["LE", "LD"],
       "overall": 99,
       "traits": [
         {
@@ -125,7 +134,8 @@
     {
       "id": "oa-fb-2",
       "name": "Molejo Barros",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 99,
       "traits": [
         {
@@ -138,7 +148,8 @@
     {
       "id": "oa-fb-3",
       "name": "Balanço Correia",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 99,
       "traits": [
         {
@@ -151,7 +162,8 @@
     {
       "id": "oa-fb-4",
       "name": "Cadência Nunes",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 99,
       "traits": [
         {
@@ -164,7 +176,8 @@
     {
       "id": "oa-mf-1",
       "name": "Poesia Cardoso",
-      "position": "MF", "roles": ["ME"],
+      "position": "MF",
+      "roles": ["ME"],
       "overall": 99,
       "traits": [
         {
@@ -177,7 +190,8 @@
     {
       "id": "oa-mf-2",
       "name": "Magia Teixeira",
-      "position": "MF", "roles": ["MD"],
+      "position": "MF",
+      "roles": ["MD"],
       "overall": 99,
       "traits": [
         {
@@ -190,7 +204,8 @@
     {
       "id": "oa-mf-3",
       "name": "Feitiço Ribas",
-      "position": "MF", "roles": ["MAT", "MC"],
+      "position": "MF",
+      "roles": ["MAT", "MC"],
       "overall": 99,
       "traits": [
         {
@@ -203,7 +218,8 @@
     {
       "id": "oa-mf-4",
       "name": "Embaixadinha Rosa",
-      "position": "MF", "roles": ["VOL", "ME"],
+      "position": "MF",
+      "roles": ["VOL", "ME"],
       "overall": 99,
       "traits": [
         {
@@ -216,7 +232,8 @@
     {
       "id": "oa-mf-5",
       "name": "Batucada Freitas",
-      "position": "MF", "roles": ["MC"],
+      "position": "MF",
+      "roles": ["MC"],
       "overall": 99,
       "traits": [
         {
@@ -229,7 +246,8 @@
     {
       "id": "oa-mf-6",
       "name": "Samba Vilela",
-      "position": "MF", "roles": ["ME", "MD"],
+      "position": "MF",
+      "roles": ["ME", "MD"],
       "overall": 99,
       "traits": [
         {
@@ -242,7 +260,8 @@
     {
       "id": "oa-mf-7",
       "name": "Alegria Sabino",
-      "position": "MF", "roles": ["MD", "MC"],
+      "position": "MF",
+      "roles": ["MD", "MC"],
       "overall": 99,
       "traits": [
         {
@@ -255,7 +274,8 @@
     {
       "id": "oa-mf-8",
       "name": "Encantamento Dias",
-      "position": "MF", "roles": ["MAT"],
+      "position": "MF",
+      "roles": ["MAT"],
       "overall": 99,
       "traits": [
         {
@@ -268,7 +288,8 @@
     {
       "id": "oa-fw-1",
       "name": "Ousadia Franco",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 99,
       "traits": [
         {
@@ -281,7 +302,8 @@
     {
       "id": "oa-fw-2",
       "name": "Malabares Costa",
-      "position": "FW", "roles": ["PE", "PD"],
+      "position": "FW",
+      "roles": ["PE", "PD"],
       "overall": 99,
       "traits": [
         {
@@ -294,7 +316,8 @@
     {
       "id": "oa-fw-3",
       "name": "Arte Lima",
-      "position": "FW", "roles": ["PD", "CA"],
+      "position": "FW",
+      "roles": ["PD", "CA"],
       "overall": 99,
       "traits": [
         {
@@ -307,7 +330,8 @@
     {
       "id": "oa-fw-4",
       "name": "Fantasia Guedes",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 99,
       "traits": [
         {
@@ -320,7 +344,8 @@
     {
       "id": "oa-fw-5",
       "name": "Show Bonito Reis",
-      "position": "FW", "roles": ["PE"],
+      "position": "FW",
+      "roles": ["PE"],
       "overall": 99,
       "traits": [
         {
@@ -333,7 +358,8 @@
     {
       "id": "oa-fw-6",
       "name": "Gol de Placa Neto",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 99,
       "traits": [
         {

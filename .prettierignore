@@ -1,0 +1,12 @@
+# Markdown here is hand-authored documentation for humans (CLAUDE.md,
+# README.md, info/*.md), not code — the user's request was specifically
+# about code indentation/line length/object wrapping. Prettier's default
+# Markdown formatting (table column padding, *em* -> _em_, etc.) is
+# cosmetically harmless but wasn't asked for and touches prose someone
+# may have deliberately hand-formatted, so it's excluded.
+*.md
+
+node_modules/
+.next/
+logs/
+package-lock.json

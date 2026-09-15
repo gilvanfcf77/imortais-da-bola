@@ -12,14 +12,28 @@ const formation = FORMATIONS['4-4-2'];
 const homeLineup = draftEleven(SAMANGOS_DO_VALE.pool, formation, rng);
 const awayLineup = draftEleven(UNIAO_DA_PORRADA.pool, formation, rng);
 
-const home = { name: SAMANGOS_DO_VALE.name, lineup: homeLineup, posture: 'balanced', gamesmanship: 2 };
-const away = { name: UNIAO_DA_PORRADA.name, lineup: awayLineup, posture: 'defensive', gamesmanship: 3 };
+const home = {
+  name: SAMANGOS_DO_VALE.name,
+  lineup: homeLineup,
+  posture: 'balanced',
+  gamesmanship: 2,
+};
+const away = {
+  name: UNIAO_DA_PORRADA.name,
+  lineup: awayLineup,
+  posture: 'defensive',
+  gamesmanship: 3,
+};
 
 function printLineup(team) {
-  console.log(`${team.name} (${formation.name}, postura ${team.posture}, catimba ${team.gamesmanship}):`);
+  console.log(
+    `${team.name} (${formation.name}, postura ${team.posture}, catimba ${team.gamesmanship}):`,
+  );
   for (const player of team.lineup) {
     const traits = player.traits.map((t) => `${t.slug}:${t.intensity}`).join(', ');
-    console.log(`  [${player.position}] ${player.name} (${player.overall})${traits ? ' — ' + traits : ''}`);
+    console.log(
+      `  [${player.position}] ${player.name} (${player.overall})${traits ? ' — ' + traits : ''}`,
+    );
   }
   console.log('');
 }
@@ -36,5 +50,5 @@ for (const event of result.events) {
 console.log('');
 console.log(`Placar final: ${home.name} ${result.homeGoals} x ${result.awayGoals} ${away.name}`);
 console.log(
-  `Faltas: ${result.stats.fouls} | Amarelos: ${result.stats.yellowCards} | Vermelhos: ${result.stats.redCards}`
+  `Faltas: ${result.stats.fouls} | Amarelos: ${result.stats.yellowCards} | Vermelhos: ${result.stats.redCards}`,
 );

@@ -12,23 +12,42 @@ function opponentLabel(opponent) {
   return opponent.era ? `${opponent.name} (${opponent.era})` : opponent.name;
 }
 
-export default function BracketTable({ rounds, upToRoundIndex, playerClubName, lastRoundOutcome = null }) {
+export default function BracketTable({
+  rounds,
+  upToRoundIndex,
+  playerClubName,
+  lastRoundOutcome = null,
+}) {
   const visibleRounds = rounds.slice(0, upToRoundIndex + 1);
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-3">
       {visibleRounds.map((round, i) => {
         const isLastShown = i === upToRoundIndex;
-        const playerStatus = !isLastShown ? 'venceu' : lastRoundOutcome === 'won' ? 'venceu' : lastRoundOutcome === 'lost' ? 'perdeu' : null;
+        const playerStatus = !isLastShown
+          ? 'venceu'
+          : lastRoundOutcome === 'won'
+            ? 'venceu'
+            : lastRoundOutcome === 'lost'
+              ? 'perdeu'
+              : null;
 
         return (
           <div key={i} className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-3">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{round.name}</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              {round.name}
+            </p>
             <div className="flex flex-col gap-1.5 text-sm">
               <div className="flex items-center justify-between gap-2 font-semibold text-emerald-400">
                 <span className="truncate">{playerClubName}</span>
-                {playerStatus && <span className="shrink-0 text-xs font-normal text-slate-500">{playerStatus}</span>}
-                <span className="truncate text-right font-normal text-slate-300">{opponentLabel(round.playerOpponent)}</span>
+                {playerStatus && (
+                  <span className="shrink-0 text-xs font-normal text-slate-500">
+                    {playerStatus}
+                  </span>
+                )}
+                <span className="truncate text-right font-normal text-slate-300">
+                  {opponentLabel(round.playerOpponent)}
+                </span>
               </div>
               {round.otherMatches.map((match, j) => (
                 <div key={j} className="flex items-center justify-between gap-2 text-slate-500">

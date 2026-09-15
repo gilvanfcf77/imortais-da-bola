@@ -36,7 +36,11 @@ export default function ResultScreen({ matchData, onContinue }) {
         </div>
         <StatRow label="Posse de bola" home={`${possession.home}%`} away={`${possession.away}%`} />
         <StatRow label="Finalizações" home={shots.home} away={shots.away} />
-        <StatRow label="Faltas" home={result.stats.foulsBySide.home} away={result.stats.foulsBySide.away} />
+        <StatRow
+          label="Faltas"
+          home={result.stats.foulsBySide.home}
+          away={result.stats.foulsBySide.away}
+        />
         <StatRow
           label="Cartões amarelos"
           home={result.stats.yellowCardsBySide.home}

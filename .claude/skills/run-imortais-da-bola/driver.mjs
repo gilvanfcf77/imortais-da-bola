@@ -53,7 +53,9 @@ async function step(label, action) {
   await page.screenshot({ path: shotPath });
   results.push({ label, overflow, scrollWidth, clientWidth, shotPath });
   const status = overflow ? 'OVERFLOW' : 'ok';
-  console.log(`[${label}] ${status} (scrollWidth=${scrollWidth} clientWidth=${clientWidth}) -> ${shotPath}`);
+  console.log(
+    `[${label}] ${status} (scrollWidth=${scrollWidth} clientWidth=${clientWidth}) -> ${shotPath}`,
+  );
 }
 
 await step('home', async () => {
@@ -96,7 +98,9 @@ await step('match-progress', async () => {
 await browser.close();
 
 console.log('');
-console.log(`Viewport: ${viewportName} (${VIEWPORTS[viewportName].width}x${VIEWPORTS[viewportName].height})`);
+console.log(
+  `Viewport: ${viewportName} (${VIEWPORTS[viewportName].width}x${VIEWPORTS[viewportName].height})`,
+);
 console.log(`Screenshots: ${SHOT_DIR}`);
 console.log(`Console errors: ${consoleErrors.length ? consoleErrors.join(' | ') : 'none'}`);
 

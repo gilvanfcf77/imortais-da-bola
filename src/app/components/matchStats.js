@@ -76,7 +76,11 @@ function tallyLeaderboard(matches, extractId, limit) {
 }
 
 export function cupScorerLeaderboard(matches, limit = 10) {
-  return tallyLeaderboard(matches, (e) => (GOAL_EVENT_TYPES.has(e.type) ? e.playerId : null), limit);
+  return tallyLeaderboard(
+    matches,
+    (e) => (GOAL_EVENT_TYPES.has(e.type) ? e.playerId : null),
+    limit,
+  );
 }
 
 // Only GOAL_ASSISTED and GOAL_CORNER goals carry an assistPlayerId (see

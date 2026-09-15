@@ -48,7 +48,13 @@ function Leaderboard({ title, entries }) {
 // Per-match stats (possession, shots, fouls, cards) live on ResultScreen now
 // — page.js always shows that right after the match, before landing here —
 // so this screen sticks to the outcome itself plus the cup-wide leaderboards.
-export default function CupOutcomeScreen({ matchData, matchHistory, roundIndex, bracket, onRestart }) {
+export default function CupOutcomeScreen({
+  matchData,
+  matchHistory,
+  roundIndex,
+  bracket,
+  onRestart,
+}) {
   const { result, homeName, awayName, shootout } = matchData;
   // Forfeit outright beats the goal count — see wonMatch in src/app/actions.js.
   const won = result.abandoned
@@ -65,19 +71,29 @@ export default function CupOutcomeScreen({ matchData, matchHistory, roundIndex, 
   // actions.js) covers the rest of the bracket, already simulated up front
   // in startCup regardless of how far the player has gotten.
   const allMatches = [
-    ...matchHistory.map((m) => ({ events: m.result.events, homeLineup: m.homeLineup, awayLineup: m.awayLineup })),
+    ...matchHistory.map((m) => ({
+      events: m.result.events,
+      homeLineup: m.homeLineup,
+      awayLineup: m.awayLineup,
+    })),
     ...bracket.rounds.flatMap((r) => r.otherMatches),
   ];
   const scorers = cupScorerLeaderboard(allMatches);
   const assisters = cupAssisterLeaderboard(allMatches);
 
-  const title = eliminated ? `❌ Eliminado na ${bracket.rounds[roundIndex].name.toLowerCase()}` : won ? '🏆 Campeão!' : '🥈 Vice-campeão';
+  const title = eliminated
+    ? `❌ Eliminado na ${bracket.rounds[roundIndex].name.toLowerCase()}`
+    : won
+      ? '🏆 Campeão!'
+      : '🥈 Vice-campeão';
   const titleOutcome = eliminated ? bracket.rounds[roundIndex].ifEliminatedHere : null;
 
   return (
     <div className="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-8 px-4 py-8">
       <div className="text-center">
-        <p className="text-sm uppercase tracking-wide text-slate-500">Fase: {bracket.rounds[roundIndex].name}</p>
+        <p className="text-sm uppercase tracking-wide text-slate-500">
+          Fase: {bracket.rounds[roundIndex].name}
+        </p>
         <h2 className="text-4xl font-bold">{title}</h2>
         <p className="mt-2 text-lg text-slate-300">
           {homeName} {result.homeGoals} x {result.awayGoals} {awayName}
@@ -92,7 +108,8 @@ export default function CupOutcomeScreen({ matchData, matchHistory, roundIndex, 
         {titleOutcome && (
           <p className="mt-3 text-sm text-slate-400">
             Campeão: {titleOutcome.championName}
-            {titleOutcome.championEra ? ` (${titleOutcome.championEra})` : ''} — Vice: {titleOutcome.runnerUpName}
+            {titleOutcome.championEra ? ` (${titleOutcome.championEra})` : ''} — Vice:{' '}
+            {titleOutcome.runnerUpName}
             {titleOutcome.runnerUpEra ? ` (${titleOutcome.runnerUpEra})` : ''}
             <br />({titleOutcome.trail.join(' · ')})
           </p>

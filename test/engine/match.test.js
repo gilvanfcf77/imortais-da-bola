@@ -1,13 +1,30 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createRng, draftEleven, FORMATIONS, simulateMatch, resolvePenaltyShootout, EVENT_TYPES } from '../../src/engine/index.js';
+import {
+  createRng,
+  draftEleven,
+  FORMATIONS,
+  simulateMatch,
+  resolvePenaltyShootout,
+  EVENT_TYPES,
+} from '../../src/engine/index.js';
 import { makePool, makePlayer } from './fixtures.js';
 
 function makeTeams(seed) {
   const pool = makePool();
   const rng = createRng(seed);
-  const home = { name: 'Home', lineup: draftEleven(pool, FORMATIONS['4-4-2'], rng), posture: 'balanced', gamesmanship: 1 };
-  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], rng), posture: 'balanced', gamesmanship: 1 };
+  const home = {
+    name: 'Home',
+    lineup: draftEleven(pool, FORMATIONS['4-4-2'], rng),
+    posture: 'balanced',
+    gamesmanship: 1,
+  };
+  const away = {
+    name: 'Away',
+    lineup: draftEleven(pool, FORMATIONS['4-4-2'], rng),
+    posture: 'balanced',
+    gamesmanship: 1,
+  };
   return { home, away, rng };
 }
 
@@ -25,7 +42,7 @@ test('simulateMatch is deterministic for the same seed', () => {
   assert.equal(resultA.awayGoals, resultB.awayGoals);
   assert.deepEqual(
     resultA.events.map((e) => e.type),
-    resultB.events.map((e) => e.type)
+    resultB.events.map((e) => e.type),
   );
 });
 
@@ -47,8 +64,14 @@ test('per-side stats add up to the aggregate totals', () => {
   const { home, away, rng } = makeTeams(21);
   const result = simulateMatch({ home, away, rng });
   assert.equal(result.stats.foulsBySide.home + result.stats.foulsBySide.away, result.stats.fouls);
-  assert.equal(result.stats.yellowCardsBySide.home + result.stats.yellowCardsBySide.away, result.stats.yellowCards);
-  assert.equal(result.stats.redCardsBySide.home + result.stats.redCardsBySide.away, result.stats.redCards);
+  assert.equal(
+    result.stats.yellowCardsBySide.home + result.stats.yellowCardsBySide.away,
+    result.stats.yellowCards,
+  );
+  assert.equal(
+    result.stats.redCardsBySide.home + result.stats.redCardsBySide.away,
+    result.stats.redCards,
+  );
 });
 
 // The whole reason a shootout exists (see resolvePenaltyShootout's own doc
@@ -77,10 +100,24 @@ test('a specialAbility with an unreachable minLead never fires', () => {
   const lineup = draftEleven(pool, FORMATIONS['4-4-2'], createRng(5));
   const withAbility = {
     ...lineup[0],
-    specialAbility: { minLead: 99, chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
+    specialAbility: {
+      minLead: 99,
+      chancePerMinute: 1,
+      templates: ['{player} shows off for {team}.'],
+    },
   };
-  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
-  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const home = {
+    name: 'Home',
+    lineup: [withAbility, ...lineup.slice(1)],
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
+  const away = {
+    name: 'Away',
+    lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)),
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
   const result = simulateMatch({ home, away, rng: createRng(7) });
 
   assert.equal(result.stats.specialAbilities, 0);
@@ -95,8 +132,18 @@ test('a specialAbility with no minLead can fire regardless of score', () => {
     ...lineup[0],
     specialAbility: { chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
   };
-  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
-  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const home = {
+    name: 'Home',
+    lineup: [withAbility, ...lineup.slice(1)],
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
+  const away = {
+    name: 'Away',
+    lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)),
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
   const result = simulateMatch({ home, away, rng: createRng(7) });
 
   assert.ok(result.stats.specialAbilities > 0);
@@ -112,8 +159,18 @@ test('a specialAbility with no conversionMultiplier never scores on its own', ()
     ...lineup[0],
     specialAbility: { chancePerMinute: 1, templates: ['{player} shows off for {team}.'] },
   };
-  const home = { name: 'Home', lineup: [withAbility, ...lineup.slice(1)], posture: 'balanced', gamesmanship: 0 };
-  const away = { name: 'Away', lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)), posture: 'balanced', gamesmanship: 0 };
+  const home = {
+    name: 'Home',
+    lineup: [withAbility, ...lineup.slice(1)],
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
+  const away = {
+    name: 'Away',
+    lineup: draftEleven(pool, FORMATIONS['4-4-2'], createRng(6)),
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
   const result = simulateMatch({ home, away, rng: createRng(7) });
 
   // Isolates goals produced by the special-ability resolution itself (which
@@ -122,7 +179,7 @@ test('a specialAbility with no conversionMultiplier never scores on its own', ()
   // through normal play elsewhere in the match — only the former is what
   // "no conversionMultiplier" is supposed to rule out.
   const specialEvents = result.events.filter(
-    (e) => e.type === EVENT_TYPES.PLAYER_SPECIAL && e.playerId === withAbility.id
+    (e) => e.type === EVENT_TYPES.PLAYER_SPECIAL && e.playerId === withAbility.id,
   );
   assert.ok(specialEvents.length > 0, 'expected the ability to have fired at least once');
   for (const special of specialEvents) {
@@ -133,7 +190,10 @@ test('a specialAbility with no conversionMultiplier never scores on its own', ()
       next.minute === special.minute &&
       next.playerId === withAbility.id &&
       (next.type === EVENT_TYPES.GOAL || next.type === EVENT_TYPES.CHANCE_MISSED);
-    assert.ok(!followedByBonusShot, `PLAYER_SPECIAL at minute ${special.minute} was followed by a bonus-shot event`);
+    assert.ok(
+      !followedByBonusShot,
+      `PLAYER_SPECIAL at minute ${special.minute} was followed by a bonus-shot event`,
+    );
   }
 });
 
@@ -181,8 +241,15 @@ test('a goalkeeper never takes a corner, even with max playmaker/freeKickSpecial
     for (const event of result.events) {
       if (event.type !== EVENT_TYPES.GOAL_CORNER || event.assistPlayerId === undefined) continue;
       sawCornerGoal = true;
-      assert.notEqual(event.assistPlayerId, keeper.id, `seed ${seed}: goalkeeper credited with taking a corner`);
+      assert.notEqual(
+        event.assistPlayerId,
+        keeper.id,
+        `seed ${seed}: goalkeeper credited with taking a corner`,
+      );
     }
   }
-  assert.ok(sawCornerGoal, 'expected at least one corner goal across 40 seeds to actually exercise the check');
+  assert.ok(
+    sawCornerGoal,
+    'expected at least one corner goal across 40 seeds to actually exercise the check',
+  );
 });

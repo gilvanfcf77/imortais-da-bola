@@ -16,7 +16,8 @@
 export const TRAITS = {
   freeKickSpecialist: {
     name: 'Free-kick specialist',
-    description: 'Preferred taker for free kicks, corners, and penalties, with a higher chance of scoring directly from a foul.',
+    description:
+      'Preferred taker for free kicks, corners, and penalties, with a higher chance of scoring directly from a foul.',
   },
   shortFuse: {
     name: 'Short fuse',
@@ -37,8 +38,7 @@ export const TRAITS = {
   },
   wall: {
     name: 'Wall',
-    description:
-      'Decisive keeper/defender: reduces the opponent conversion rate.',
+    description: 'Decisive keeper/defender: reduces the opponent conversion rate.',
   },
   dribbler: {
     name: 'Dribbler',

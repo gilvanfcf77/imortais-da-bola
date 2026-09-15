@@ -8,14 +8,23 @@ import BracketTable from './BracketTable.jsx';
 // in page.js state, not here — this screen gets re-mounted once per round,
 // and re-drawing on a later visit would throw away the rest of the bracket
 // startCup already determined.
-export default function CupScreen({ club, squad, posture, gamesmanship, roundIndex, bracket, onBracketReady, onMatchReady }) {
+export default function CupScreen({
+  club,
+  squad,
+  posture,
+  gamesmanship,
+  roundIndex,
+  bracket,
+  onBracketReady,
+  onMatchReady,
+}) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!bracket) {
-      startCup(club.slug, squad).then(onBracketReady);
+      startCup(club.slug).then(onBracketReady);
     }
-  }, [bracket, club.slug, squad, onBracketReady]);
+  }, [bracket, club.slug, onBracketReady]);
 
   const round = bracket?.rounds[roundIndex];
   const opponent = round?.playerOpponent;
@@ -45,7 +54,11 @@ export default function CupScreen({ club, squad, posture, gamesmanship, roundInd
             Fase: {round.name} — {club.name} x {opponent.name}
             {opponent.era ? ` (${opponent.era})` : ''}
           </p>
-          <BracketTable rounds={bracket.rounds} upToRoundIndex={roundIndex} playerClubName={club.name} />
+          <BracketTable
+            rounds={bracket.rounds}
+            upToRoundIndex={roundIndex}
+            playerClubName={club.name}
+          />
           <button
             onClick={handlePlay}
             disabled={loading}

@@ -52,10 +52,20 @@ function playPair(seed) {
 
   const away = { name: STRONG.name, lineup: strongLineup, posture: 'balanced', gamesmanship: 1 };
 
-  const baselineHome = { name: WEAK.name, lineup: weakLineup, posture: 'balanced', gamesmanship: 0 };
+  const baselineHome = {
+    name: WEAK.name,
+    lineup: weakLineup,
+    posture: 'balanced',
+    gamesmanship: 0,
+  };
   const baselineResult = simulateMatch({ home: baselineHome, away, rng: createRng(seed + 1) });
 
-  const defensiveHome = { name: WEAK.name, lineup: weakLineup, posture: 'defensive', gamesmanship: 3 };
+  const defensiveHome = {
+    name: WEAK.name,
+    lineup: weakLineup,
+    posture: 'defensive',
+    gamesmanship: 3,
+  };
   const defensiveResult = simulateMatch({ home: defensiveHome, away, rng: createRng(seed + 1) });
 
   return { baselineResult, defensiveResult };
@@ -86,8 +96,10 @@ for (let i = 0; i < MATCH_COUNT; i++) {
   defensiveGoalDiff += defensiveResult.homeGoals - defensiveResult.awayGoals;
   baselineFouls += baselineResult.stats.foulsBySide.home;
   defensiveFouls += defensiveResult.stats.foulsBySide.home;
-  baselineCards += baselineResult.stats.yellowCardsBySide.home + baselineResult.stats.redCardsBySide.home;
-  defensiveCards += defensiveResult.stats.yellowCardsBySide.home + defensiveResult.stats.redCardsBySide.home;
+  baselineCards +=
+    baselineResult.stats.yellowCardsBySide.home + baselineResult.stats.redCardsBySide.home;
+  defensiveCards +=
+    defensiveResult.stats.yellowCardsBySide.home + defensiveResult.stats.redCardsBySide.home;
 }
 
 function pct(n) {
@@ -98,15 +110,29 @@ function avg(n) {
 }
 
 log(`Postura defensiva + catimba 3 realmente ajudam a segurar um empate?`);
-log(`${WEAK.name} (casa, fraco) x ${STRONG.name} (fora, forte) — ${MATCH_COUNT} pares de partidas (seed base ${BASE_SEED})`);
-log(`Cada par usa o MESMO sorteio de elenco dos dois lados; só a postura/catimba da casa muda entre os dois braços.`);
+log(
+  `${WEAK.name} (casa, fraco) x ${STRONG.name} (fora, forte) — ${MATCH_COUNT} pares de partidas (seed base ${BASE_SEED})`,
+);
+log(
+  `Cada par usa o MESMO sorteio de elenco dos dois lados; só a postura/catimba da casa muda entre os dois braços.`,
+);
 log('');
-log(`Empate ou vitória da casa — baseline (equilibrada, catimba 0):     ${baselineHeld} (${pct(baselineHeld)}%)`);
-log(`Empate ou vitória da casa — defensiva + catimba 3:                ${defensiveHeld} (${pct(defensiveHeld)}%)`);
-log(`Diferença: ${pct(defensiveHeld) - pct(baselineHeld) >= 0 ? '+' : ''}${(pct(defensiveHeld) - pct(baselineHeld)).toFixed(1)} pontos percentuais`);
+log(
+  `Empate ou vitória da casa — baseline (equilibrada, catimba 0):     ${baselineHeld} (${pct(baselineHeld)}%)`,
+);
+log(
+  `Empate ou vitória da casa — defensiva + catimba 3:                ${defensiveHeld} (${pct(defensiveHeld)}%)`,
+);
+log(
+  `Diferença: ${pct(defensiveHeld) - pct(baselineHeld) >= 0 ? '+' : ''}${(pct(defensiveHeld) - pct(baselineHeld)).toFixed(1)} pontos percentuais`,
+);
 log('');
-log(`Pares que viraram de "perdendo" pra "segurou" com defensiva+catimba: ${flippedToHeld} (${pct(flippedToHeld)}%)`);
-log(`Pares que viraram de "segurou" pra "perdendo" com defensiva+catimba: ${flippedToLost} (${pct(flippedToLost)}%)`);
+log(
+  `Pares que viraram de "perdendo" pra "segurou" com defensiva+catimba: ${flippedToHeld} (${pct(flippedToHeld)}%)`,
+);
+log(
+  `Pares que viraram de "segurou" pra "perdendo" com defensiva+catimba: ${flippedToLost} (${pct(flippedToLost)}%)`,
+);
 log('');
 log(`Saldo de gols médio da casa — baseline:            ${avg(baselineGoalDiff)}`);
 log(`Saldo de gols médio da casa — defensiva + catimba: ${avg(defensiveGoalDiff)}`);
@@ -121,7 +147,7 @@ log(
     ? '=> Hipótese CONFIRMADA: defensiva + catimba máxima aumenta a taxa de "pelo menos empate" da casa.'
     : defensiveHeld === baselineHeld
       ? '=> Hipótese NÃO CONFIRMADA: nenhuma diferença na taxa de "pelo menos empate".'
-      : '=> Hipótese CONTRARIADA: defensiva + catimba máxima piorou a taxa de "pelo menos empate" da casa.'
+      : '=> Hipótese CONTRARIADA: defensiva + catimba máxima piorou a taxa de "pelo menos empate" da casa.',
 );
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));

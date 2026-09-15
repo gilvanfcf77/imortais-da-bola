@@ -66,15 +66,23 @@ function teamPower(team) {
   // but should suffer more on the defensive end — an extra cut on top of the
   // proportional one above, defense only.
   const defenseFactor =
-    active.length < team.config.lineup.length ? numericFactor * CARDS.SHORT_HANDED_DEFENSE_PENALTY : numericFactor;
+    active.length < team.config.lineup.length
+      ? numericFactor * CARDS.SHORT_HANDED_DEFENSE_PENALTY
+      : numericFactor;
   // On top of the short-handed cut above — an outfield player standing in
   // for a sent-off goalkeeper (see maybeAssignStandInGoalkeeper) is that
   // much more exposed on his own, independent of just being a man down.
-  const standInGoalkeeperFactor = team.standInGoalkeeperId ? GOALKEEPER.STAND_IN_DEFENSE_PENALTY : 1;
+  const standInGoalkeeperFactor = team.standInGoalkeeperId
+    ? GOALKEEPER.STAND_IN_DEFENSE_PENALTY
+    : 1;
   const mods = POSTURE_MODIFIERS[team.config.posture];
   return {
     attack: sectorStrength(active, ['FW', 'MF']) * mods.attack * numericFactor,
-    defense: sectorStrength(active, ['CB', 'FB', 'GK']) * mods.defense * defenseFactor * standInGoalkeeperFactor,
+    defense:
+      sectorStrength(active, ['CB', 'FB', 'GK']) *
+      mods.defense *
+      defenseFactor *
+      standInGoalkeeperFactor,
   };
 }
 
@@ -127,7 +135,7 @@ function maybeAssignStandInGoalkeeper(team, minute, rng, stats) {
     team.side,
     { player: chosen.name, team: team.config.name },
     rng,
-    { playerId: chosen.id }
+    { playerId: chosen.id },
   );
   return events;
 }
@@ -144,10 +152,18 @@ function sendOff(team, player, minute, rng, stats) {
 function issueYellowCard(team, player, minute, rng, stats) {
   const events = [];
   if (team.yellowCards.has(player.id)) {
-    pushEvent(events, minute, EVENT_TYPES.SECOND_YELLOW_RED, team.side, { player: player.name }, rng, {
-      playerId: player.id,
-      cardType: 'red',
-    });
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.SECOND_YELLOW_RED,
+      team.side,
+      { player: player.name },
+      rng,
+      {
+        playerId: player.id,
+        cardType: 'red',
+      },
+    );
     events.push(...sendOff(team, player, minute, rng, stats));
   } else {
     team.yellowCards.add(player.id);
@@ -188,7 +204,10 @@ function averageOverall(players) {
 // A big-underdog-nursing-a-shock-lead situation — see
 // GAMESMANSHIP.UNDERDOG_* in constants.js.
 function isUnderdog(team, opponent) {
-  return averageOverall(activePlayers(opponent)) - averageOverall(activePlayers(team)) >= GAMESMANSHIP.UNDERDOG_OVERALL_GAP;
+  return (
+    averageOverall(activePlayers(opponent)) - averageOverall(activePlayers(team)) >=
+    GAMESMANSHIP.UNDERDOG_OVERALL_GAP
+  );
 }
 
 // Gamesmanship only makes sense as a way to run down the clock on a result
@@ -212,7 +231,11 @@ function effectiveGamesmanship(team, opponent, minute, score) {
   const situation = scoreSituation(team.side, score);
   if (situation === 'losing') return 0;
   const configured = team.config.gamesmanship ?? 0;
-  if (situation === 'winning' && minute >= GAMESMANSHIP.UNDERDOG_LATE_GAME_MINUTE && isUnderdog(team, opponent)) {
+  if (
+    situation === 'winning' &&
+    minute >= GAMESMANSHIP.UNDERDOG_LATE_GAME_MINUTE &&
+    isUnderdog(team, opponent)
+  ) {
     return Math.max(configured, GAMESMANSHIP.UNDERDOG_INSTINCTIVE_LEVEL);
   }
   return configured;
@@ -232,7 +255,7 @@ function wallReductionMultiplier(defendingTeam) {
   if (intensity === 0) return 1;
   const reduction = Math.min(
     TRAIT_WEIGHTS.WALL_REDUCTION_CAP,
-    intensity * TRAIT_WEIGHTS.WALL_REDUCTION_PER_INTENSITY
+    intensity * TRAIT_WEIGHTS.WALL_REDUCTION_PER_INTENSITY,
   );
   return 1 - reduction;
 }
@@ -266,7 +289,7 @@ function pickFinisher(team, rng, exclude) {
   const weights = candidates.map(
     (p) =>
       ATTACK.FINISHER_WEIGHT[p.position] +
-      getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT
+      getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT,
   );
   return rng.pickWeighted(candidates, weights);
 }
@@ -280,8 +303,8 @@ function pickSetPieceTaker(team, rng, exclude) {
       (p) =>
         1 +
         getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT +
-        getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT
-    )
+        getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT,
+    ),
   );
 }
 
@@ -334,8 +357,10 @@ function pickGoalStyle(rng, finisher, opponentHasStandInGoalkeeper) {
   const styles = Object.keys(GOAL_STYLE.WEIGHTS);
   const weights = styles.map((style) => {
     const base = GOAL_STYLE.WEIGHTS[style];
-    if (style === 'individual') return base * (1 + dribblerIntensity * TRAIT_WEIGHTS.DRIBBLER_INDIVIDUAL_GOAL_WEIGHT);
-    if (style === 'longShot' && opponentHasStandInGoalkeeper) return base * GOALKEEPER.OPPONENT_LONG_SHOT_WEIGHT;
+    if (style === 'individual')
+      return base * (1 + dribblerIntensity * TRAIT_WEIGHTS.DRIBBLER_INDIVIDUAL_GOAL_WEIGHT);
+    if (style === 'longShot' && opponentHasStandInGoalkeeper)
+      return base * GOALKEEPER.OPPONENT_LONG_SHOT_WEIGHT;
     return base;
   });
   return rng.pickWeighted(styles, weights);
@@ -357,7 +382,8 @@ function pickGoalStyle(rng, finisher, opponentHasStandInGoalkeeper) {
 function checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats) {
   const homeCount = activePlayers(homeTeam).length;
   const awayCount = activePlayers(awayTeam).length;
-  if (homeCount >= MATCH.MIN_PLAYERS_TO_CONTINUE && awayCount >= MATCH.MIN_PLAYERS_TO_CONTINUE) return null;
+  if (homeCount >= MATCH.MIN_PLAYERS_TO_CONTINUE && awayCount >= MATCH.MIN_PLAYERS_TO_CONTINUE)
+    return null;
 
   // Both sides collapsing in the same minute (e.g. a mass brawl sending off
   // players on both teams at once) is a rare edge case — whichever has
@@ -380,7 +406,7 @@ function checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats) {
     offendingSide,
     { team: offendingTeam.config.name, opponent: winningTeam.config.name },
     rng,
-    { homeGoals: score.home, awayGoals: score.away }
+    { homeGoals: score.home, awayGoals: score.away },
   );
   stats.matchAbandoned = true;
   return { events, offendingSide };
@@ -391,7 +417,8 @@ function checkMatchAbandoned(homeTeam, awayTeam, minute, score, rng, stats) {
 // own fans. Only fires on the specific goal that flips the match into the
 // away team's favor, not on every goal scored while already ahead.
 function maybeSilenceCrowd(scoringTeam, tookTheLead, scorer, minute, rng, stats) {
-  if (scoringTeam.side !== 'away' || !tookTheLead || !rng.chance(COMEDY.CROWD_SILENCED_CHANCE)) return [];
+  if (scoringTeam.side !== 'away' || !tookTheLead || !rng.chance(COMEDY.CROWD_SILENCED_CHANCE))
+    return [];
   const events = [];
   pushEvent(
     events,
@@ -400,7 +427,7 @@ function maybeSilenceCrowd(scoringTeam, tookTheLead, scorer, minute, rng, stats)
     scoringTeam.side,
     { player: scorer.name, team: scoringTeam.config.name },
     rng,
-    { playerId: scorer.id }
+    { playerId: scorer.id },
   );
   stats.crowdSilenced++;
   return events;
@@ -415,7 +442,16 @@ function maybeSilenceCrowd(scoringTeam, tookTheLead, scorer, minute, rng, stats)
 // referee still points to the spot). Both error cases skip NOT_GIVEN_CHANCE:
 // the referee has already made up their mind wrongly, there's no second roll
 // for whether they also wave it off.
-function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, situation) {
+function resolvePenalty(
+  attackingTeam,
+  defendingTeam,
+  finisher,
+  minute,
+  score,
+  rng,
+  stats,
+  situation,
+) {
   const events = [];
   finisher = pickSetPieceTaker(attackingTeam, rng);
 
@@ -426,7 +462,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_PHANTOM,
       attackingTeam.side,
       { player: finisher.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
     stats.penaltiesPhantom++;
   } else if (situation === 'wrongLocation') {
@@ -436,7 +472,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_WRONG_LOCATION,
       attackingTeam.side,
       { player: finisher.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
     stats.penaltiesWrongLocation++;
     // Not giving a deserved penalty benefits whoever was defending it.
@@ -447,7 +483,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_NOT_GIVEN,
       attackingTeam.side,
       { player: finisher.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
     stats.penaltiesNotGiven++;
     return events;
@@ -458,7 +494,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_AWARDED,
       attackingTeam.side,
       { player: finisher.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
     stats.penaltiesAwarded++;
   }
@@ -472,7 +508,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_MIND_GAMES,
       defendingTeam.side,
       { player: finisher.name, keeper: keeper.name },
-      rng
+      rng,
     );
     mindGamesMultiplier = PENALTY.MIND_GAMES_MISS_WEIGHT;
     stats.penaltyMindGames++;
@@ -483,7 +519,9 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
   // An outfield player standing in for a sent-off goalkeeper (see
   // maybeAssignStandInGoalkeeper) has no idea how to read a penalty —
   // easier for the kicker to convert than against a real keeper.
-  const standInMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER : 1;
+  const standInMultiplier = defendingTeam.standInGoalkeeperId
+    ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER
+    : 1;
   const missChance = clamp(
     PENALTY.BASE_MISS_CHANCE *
       (1 + wallIntensity * PENALTY.WALL_MISS_WEIGHT) *
@@ -491,7 +529,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       mindGamesMultiplier *
       standInMultiplier,
     PENALTY.MISS_CHANCE_FLOOR,
-    PENALTY.MISS_CHANCE_CEIL
+    PENALTY.MISS_CHANCE_CEIL,
   );
 
   if (rng.chance(missChance)) {
@@ -501,7 +539,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
       EVENT_TYPES.PENALTY_MISSED,
       attackingTeam.side,
       { player: finisher.name, keeper: keeper.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
     stats.penaltiesMissed++;
     return events;
@@ -519,7 +557,7 @@ function resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, r
     attackingTeam.side,
     { player: finisher.name, team: attackingTeam.config.name },
     rng,
-    { playerId: finisher.id }
+    { playerId: finisher.id },
   );
   stats.goalStyles.penalty++;
   events.push(...maybeSilenceCrowd(attackingTeam, tookTheLead, finisher, minute, rng, stats));
@@ -534,27 +572,51 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
   const finisher = pickFinisher(attackingTeam, rng);
   // A phantom penalty benefits whoever gets awarded it — the attacking side.
   if (rng.chance(PENALTY.PHANTOM_CHANCE * refereeBiasMultiplier(attackingTeam.side))) {
-    return resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, 'phantom');
+    return resolvePenalty(
+      attackingTeam,
+      defendingTeam,
+      finisher,
+      minute,
+      score,
+      rng,
+      stats,
+      'phantom',
+    );
   }
   if (rng.chance(PENALTY.SITUATION_CHANCE)) {
-    return resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, 'normal');
+    return resolvePenalty(
+      attackingTeam,
+      defendingTeam,
+      finisher,
+      minute,
+      score,
+      rng,
+      stats,
+      'normal',
+    );
   }
 
   const playmakerIntensity = sumTraitIntensity(active, 'playmaker');
   const clearChanceRate = clamp(
-    ATTACK.BASE_CLEAR_CHANCE_RATE * (1 + playmakerIntensity * TRAIT_WEIGHTS.PLAYMAKER_CLEAR_CHANCE_WEIGHT),
+    ATTACK.BASE_CLEAR_CHANCE_RATE *
+      (1 + playmakerIntensity * TRAIT_WEIGHTS.PLAYMAKER_CLEAR_CHANCE_WEIGHT),
     0,
-    0.9
+    0.9,
   );
   const isClearChance = rng.chance(clearChanceRate);
-  const baseConversion = isClearChance ? ATTACK.CONVERSION_CLEAR_CHANCE : ATTACK.CONVERSION_NORMAL_CHANCE;
+  const baseConversion = isClearChance
+    ? ATTACK.CONVERSION_CLEAR_CHANCE
+    : ATTACK.CONVERSION_NORMAL_CHANCE;
 
   const finisherMultiplier = combineMultipliers(
     [1 + getTraitIntensity(finisher, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT],
-    INDIVIDUAL_MULTIPLIER_CAP
+    INDIVIDUAL_MULTIPLIER_CAP,
   );
   const comebackMultiplier = leaderComebackMultiplier(attackingTeam, score);
-  const attackMultiplier = combineMultipliers([finisherMultiplier, comebackMultiplier], COMBINED_MULTIPLIER_CAP);
+  const attackMultiplier = combineMultipliers(
+    [finisherMultiplier, comebackMultiplier],
+    COMBINED_MULTIPLIER_CAP,
+  );
 
   const wallMultiplier = wallReductionMultiplier(defendingTeam);
   const holdMultiplier = leaderHoldMultiplier(defendingTeam, minute, score);
@@ -563,12 +625,14 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
   // outfield player standing in as goalkeeper (see
   // maybeAssignStandInGoalkeeper), so it's kept as its own factor rather
   // than folded into defenseMultiplier above.
-  const standInGoalkeeperMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.OPPONENT_ATTACK_BOOST : 1;
+  const standInGoalkeeperMultiplier = defendingTeam.standInGoalkeeperId
+    ? GOALKEEPER.OPPONENT_ATTACK_BOOST
+    : 1;
 
   const finalChance = clamp(
     baseConversion * attackMultiplier * defenseMultiplier * standInGoalkeeperMultiplier,
     0,
-    0.95
+    0.95,
   );
 
   if (rng.chance(finalChance)) {
@@ -576,7 +640,8 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     if (attackingTeam.side === 'home') score.home++;
     else score.away++;
     const isFirstGoalForTeam = score[attackingTeam.side] === 1;
-    const tookTheLead = !wasWinningBefore && scoreSituation(attackingTeam.side, score) === 'winning';
+    const tookTheLead =
+      !wasWinningBefore && scoreSituation(attackingTeam.side, score) === 'winning';
 
     const style = pickGoalStyle(rng, finisher, Boolean(defendingTeam.standInGoalkeeperId));
     const context = { player: finisher.name, team: attackingTeam.config.name };
@@ -598,8 +663,8 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
           teammates.map((p) =>
             p.position === 'GK'
               ? TRAIT_WEIGHTS.GOALKEEPER_ASSIST_WEIGHT
-              : 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT
-          )
+              : 1 + getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT,
+          ),
         );
         context.assist = assistProvider.name;
         assistPlayerId = assistProvider.id;
@@ -616,7 +681,9 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       // Same fallback as before: with nobody left to have taken the corner
       // (last man standing after red cards), there's no assist to credit —
       // narrate it as a plain goal instead.
-      const teammates = activePlayers(attackingTeam).filter((p) => p.id !== finisher.id && p.position !== 'GK');
+      const teammates = activePlayers(attackingTeam).filter(
+        (p) => p.id !== finisher.id && p.position !== 'GK',
+      );
       if (teammates.length === 0) {
         goalEventType = EVENT_TYPES.GOAL;
       } else {
@@ -626,8 +693,9 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
             (p) =>
               1 +
               getTraitIntensity(p, 'playmaker') * TRAIT_WEIGHTS.PLAYMAKER_ASSIST_WEIGHT +
-              getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT
-          )
+              getTraitIntensity(p, 'freeKickSpecialist') *
+                TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT,
+          ),
         );
         context.assist = kicker.name;
         assistPlayerId = kicker.id;
@@ -658,7 +726,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         EVENT_TYPES.GOALKEEPER_FORWARD,
         attackingTeam.side,
         { keeper: keeper.name, team: attackingTeam.config.name },
-        rng
+        rng,
       );
       stats.goalkeeperForward++;
     }
@@ -689,7 +757,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         EVENT_TYPES.DISALLOWED_GOAL,
         attackingTeam.side,
         { player: finisher.name, team: attackingTeam.config.name },
-        rng
+        rng,
       );
       stats.disallowedGoals++;
 
@@ -702,7 +770,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
           attackingTeam.side,
           { player: instigator.name, team: attackingTeam.config.name },
           rng,
-          { playerId: instigator.id, cardType: 'red' }
+          { playerId: instigator.id, cardType: 'red' },
         );
         events.push(...sendOff(attackingTeam, instigator, minute, rng, stats));
         stats.officialsAssaulted++;
@@ -712,10 +780,16 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
     return events;
   }
 
-  const wallDefenders = activePlayers(defendingTeam).filter((p) => getTraitIntensity(p, 'wall') > 0);
+  const wallDefenders = activePlayers(defendingTeam).filter(
+    (p) => getTraitIntensity(p, 'wall') > 0,
+  );
   if (wallDefenders.length > 0 && rng.chance(0.5)) {
     const defenderPlayer = rng.pick(wallDefenders);
-    const saveContext = { player: finisher.name, defender: defenderPlayer.name, team: attackingTeam.config.name };
+    const saveContext = {
+      player: finisher.name,
+      defender: defenderPlayer.name,
+      team: attackingTeam.config.name,
+    };
 
     if (defenderPlayer.position === 'GK') {
       // Goalkeepers are allowed to use their hands — this is always a clean save.
@@ -724,15 +798,42 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       // An outfield player isn't allowed to use their hands — this is a
       // penalty situation, resolved exactly like any other one (award vs.
       // not given by referee error, goalkeeper mind games, miss chance).
-      pushEvent(events, minute, EVENT_TYPES.HANDBALL_ON_THE_LINE, attackingTeam.side, saveContext, rng, {
-        playerId: defenderPlayer.id,
-      });
+      pushEvent(
+        events,
+        minute,
+        EVENT_TYPES.HANDBALL_ON_THE_LINE,
+        attackingTeam.side,
+        saveContext,
+        rng,
+        {
+          playerId: defenderPlayer.id,
+        },
+      );
       stats.handballsOnTheLine++;
-      events.push(...resolvePenalty(attackingTeam, defendingTeam, finisher, minute, score, rng, stats, 'normal'));
+      events.push(
+        ...resolvePenalty(
+          attackingTeam,
+          defendingTeam,
+          finisher,
+          minute,
+          score,
+          rng,
+          stats,
+          'normal',
+        ),
+      );
     } else {
-      pushEvent(events, minute, EVENT_TYPES.GOAL_LINE_CLEARANCE, attackingTeam.side, saveContext, rng, {
-        playerId: defenderPlayer.id,
-      });
+      pushEvent(
+        events,
+        minute,
+        EVENT_TYPES.GOAL_LINE_CLEARANCE,
+        attackingTeam.side,
+        saveContext,
+        rng,
+        {
+          playerId: defenderPlayer.id,
+        },
+      );
     }
   } else if (rng.chance(COMEDY.WHIFF_CHANCE)) {
     // The crowd reacting is always the home crowd — the dominant presence
@@ -748,7 +849,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         EVENT_TYPES.WHIFF_HOME_MISS,
         attackingTeam.side,
         { player: finisher.name, team: attackingTeam.config.name },
-        rng
+        rng,
       );
     } else {
       pushEvent(
@@ -756,8 +857,12 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         minute,
         EVENT_TYPES.WHIFF,
         attackingTeam.side,
-        { player: finisher.name, team: attackingTeam.config.name, crowd: defendingTeam.config.name },
-        rng
+        {
+          player: finisher.name,
+          team: attackingTeam.config.name,
+          crowd: defendingTeam.config.name,
+        },
+        rng,
       );
     }
     stats.whiffs++;
@@ -768,7 +873,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
       EVENT_TYPES.CHANCE_MISSED,
       attackingTeam.side,
       { player: finisher.name, team: attackingTeam.config.name },
-      rng
+      rng,
     );
   }
   return events;
@@ -799,7 +904,16 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
     rng.chance(PENALTY.WRONG_LOCATION_CHANCE * refereeBiasMultiplier(fouledTeam.side))
   ) {
     const finisher = pickFinisher(fouledTeam, rng);
-    return resolvePenalty(fouledTeam, offendingTeam, finisher, minute, score, rng, stats, 'wrongLocation');
+    return resolvePenalty(
+      fouledTeam,
+      offendingTeam,
+      finisher,
+      minute,
+      score,
+      rng,
+      stats,
+      'wrongLocation',
+    );
   }
 
   const shortFuseIntensity = getTraitIntensity(offender, 'shortFuse');
@@ -815,19 +929,20 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       EVENT_TYPES.SCANDALOUS_FOUL,
       offendingTeam.side,
       { player: offender.name, victim: victim.name },
-      rng
+      rng,
     );
     stats.scandalousFouls++;
   } else {
     pushEvent(events, minute, EVENT_TYPES.FOUL, offendingTeam.side, { player: offender.name }, rng);
   }
 
-  const injuryChance = INJURY.SEVERE_INJURY_CHANCE * (isScandalous ? INJURY.SCANDALOUS_INJURY_WEIGHT : 1);
+  const injuryChance =
+    INJURY.SEVERE_INJURY_CHANCE * (isScandalous ? INJURY.SCANDALOUS_INJURY_WEIGHT : 1);
   if (rng.chance(injuryChance)) {
     const injuredPlayer = pickTauntVictim(fouledTeam, rng);
     fouledTeam.injuries.set(
       injuredPlayer.id,
-      Math.max(fouledTeam.injuries.get(injuredPlayer.id) ?? 0, INJURY.INJURED_OVERALL_PENALTY)
+      Math.max(fouledTeam.injuries.get(injuredPlayer.id) ?? 0, INJURY.INJURED_OVERALL_PENALTY),
     );
     pushEvent(
       events,
@@ -836,7 +951,7 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       offendingTeam.side,
       { player: offender.name, victim: injuredPlayer.name },
       rng,
-      { victimId: injuredPlayer.id }
+      { victimId: injuredPlayer.id },
     );
     stats.severeInjuries++;
 
@@ -847,18 +962,29 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
         EVENT_TYPES.NO_CARD_DESPITE_INJURY,
         offendingTeam.side,
         { player: offender.name, victim: injuredPlayer.name },
-        rng
+        rng,
       );
       stats.noCardDespiteInjury++;
       return events;
     }
   }
 
-  if (shortFuseIntensity > 0 && rng.chance(shortFuseIntensity * COMEDY.OFFICIAL_ASSAULT_CHANCE_PER_INTENSITY)) {
-    pushEvent(events, minute, EVENT_TYPES.OFFICIAL_ASSAULTED, offendingTeam.side, { player: offender.name }, rng, {
-      playerId: offender.id,
-      cardType: 'red',
-    });
+  if (
+    shortFuseIntensity > 0 &&
+    rng.chance(shortFuseIntensity * COMEDY.OFFICIAL_ASSAULT_CHANCE_PER_INTENSITY)
+  ) {
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.OFFICIAL_ASSAULTED,
+      offendingTeam.side,
+      { player: offender.name },
+      rng,
+      {
+        playerId: offender.id,
+        cardType: 'red',
+      },
+    );
     events.push(...sendOff(offendingTeam, offender, minute, rng, stats));
     stats.officialsAssaulted++;
     return events;
@@ -870,12 +996,22 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
   // offender, more reluctant to card a home one.
   const cardBias = refereeBiasMultiplier(fouledTeam.side);
   const straightRedChance =
-    CARDS.BASE_STRAIGHT_RED_CHANCE * (1 + gamesmanshipLevel * GAMESMANSHIP.CARD_RISK_PER_LEVEL) * cardBias;
+    CARDS.BASE_STRAIGHT_RED_CHANCE *
+    (1 + gamesmanshipLevel * GAMESMANSHIP.CARD_RISK_PER_LEVEL) *
+    cardBias;
   if (rng.chance(straightRedChance)) {
-    pushEvent(events, minute, EVENT_TYPES.STRAIGHT_RED, offendingTeam.side, { player: offender.name }, rng, {
-      playerId: offender.id,
-      cardType: 'red',
-    });
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.STRAIGHT_RED,
+      offendingTeam.side,
+      { player: offender.name },
+      rng,
+      {
+        playerId: offender.id,
+        cardType: 'red',
+      },
+    );
     events.push(...sendOff(offendingTeam, offender, minute, rng, stats));
     return events;
   }
@@ -900,7 +1036,14 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
   // and straight-red branches above since they already return early with a
   // card of their own.
   if (isScandalous && !cardGiven) {
-    pushEvent(events, minute, EVENT_TYPES.SCANDALOUS_FOUL_IGNORED, offendingTeam.side, { player: offender.name }, rng);
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.SCANDALOUS_FOUL_IGNORED,
+      offendingTeam.side,
+      { player: offender.name },
+      rng,
+    );
   }
 
   let goalkeeperForwardBoost = 1;
@@ -916,13 +1059,15 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       EVENT_TYPES.GOALKEEPER_FORWARD,
       fouledTeam.side,
       { keeper: keeper.name, team: fouledTeam.config.name },
-      rng
+      rng,
     );
     stats.goalkeeperForward++;
     goalkeeperForwardBoost = DESPERATION.GOAL_CHANCE_WEIGHT;
   }
 
-  const specialists = activePlayers(fouledTeam).filter((p) => getTraitIntensity(p, 'freeKickSpecialist') > 0);
+  const specialists = activePlayers(fouledTeam).filter(
+    (p) => getTraitIntensity(p, 'freeKickSpecialist') > 0,
+  );
   if (specialists.length > 0) {
     const specialist = rng.pick(specialists);
     const intensity = getTraitIntensity(specialist, 'freeKickSpecialist');
@@ -936,9 +1081,17 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
       else score.away++;
       const tookTheLead = !wasWinningBefore && scoreSituation(fouledTeam.side, score) === 'winning';
 
-      pushEvent(events, minute, EVENT_TYPES.FREE_KICK_GOAL, fouledTeam.side, { player: specialist.name }, rng, {
-        playerId: specialist.id,
-      });
+      pushEvent(
+        events,
+        minute,
+        EVENT_TYPES.FREE_KICK_GOAL,
+        fouledTeam.side,
+        { player: specialist.name },
+        rng,
+        {
+          playerId: specialist.id,
+        },
+      );
       events.push(...maybeSilenceCrowd(fouledTeam, tookTheLead, specialist, minute, rng, stats));
     }
   }
@@ -984,12 +1137,14 @@ function triggerBrawl(instigatingTeam, opposingTeam, minute, victimName, rng, st
 
 function resolveNutmegTaunt(attackingTeam, defendingTeam, minute, rng, stats) {
   const events = [];
-  const dribblers = activePlayers(attackingTeam).filter((p) => getTraitIntensity(p, 'dribbler') > 0);
+  const dribblers = activePlayers(attackingTeam).filter(
+    (p) => getTraitIntensity(p, 'dribbler') > 0,
+  );
   if (dribblers.length === 0) return events;
 
   const dribbler = rng.pickWeighted(
     dribblers,
-    dribblers.map((p) => getTraitIntensity(p, 'dribbler'))
+    dribblers.map((p) => getTraitIntensity(p, 'dribbler')),
   );
   const victim = pickTauntVictim(defendingTeam, rng);
 
@@ -999,7 +1154,7 @@ function resolveNutmegTaunt(attackingTeam, defendingTeam, minute, rng, stats) {
     EVENT_TYPES.NUTMEG_TAUNT,
     attackingTeam.side,
     { player: dribbler.name, victim: victim.name },
-    rng
+    rng,
   );
   stats.nutmegTaunts++;
 
@@ -1017,7 +1172,7 @@ function resolveShowboating(team, minute, rng, stats) {
 
   const player = rng.pickWeighted(
     dribblers,
-    dribblers.map((p) => getTraitIntensity(p, 'dribbler'))
+    dribblers.map((p) => getTraitIntensity(p, 'dribbler')),
   );
 
   pushEvent(
@@ -1027,7 +1182,7 @@ function resolveShowboating(team, minute, rng, stats) {
     team.side,
     { player: player.name, team: team.config.name },
     rng,
-    { playerId: player.id }
+    { playerId: player.id },
   );
   stats.showboating++;
 
@@ -1056,13 +1211,17 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
     ability.templates,
     { player: player.name, team: team.config.name },
     rng,
-    { playerId: player.id }
+    { playerId: player.id },
   );
   stats.specialAbilities++;
 
   if (!ability.conversionMultiplier) return events;
 
-  const conversionChance = clamp(ATTACK.CONVERSION_CLEAR_CHANCE * ability.conversionMultiplier, 0, 0.95);
+  const conversionChance = clamp(
+    ATTACK.CONVERSION_CLEAR_CHANCE * ability.conversionMultiplier,
+    0,
+    0.95,
+  );
   if (rng.chance(conversionChance)) {
     if (team.side === 'home') score.home++;
     else score.away++;
@@ -1073,7 +1232,7 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
       team.side,
       { player: player.name, team: team.config.name },
       rng,
-      { playerId: player.id }
+      { playerId: player.id },
     );
   } else {
     pushEvent(
@@ -1082,7 +1241,7 @@ function resolveSpecialAbility(team, player, minute, score, rng, stats) {
       EVENT_TYPES.CHANCE_MISSED,
       team.side,
       { player: player.name, team: team.config.name },
-      rng
+      rng,
     );
   }
 
@@ -1094,7 +1253,7 @@ function pickShortFuseInstigator(team, rng) {
   if (instigators.length === 0) return null;
   return rng.pickWeighted(
     instigators,
-    instigators.map((p) => getTraitIntensity(p, 'shortFuse'))
+    instigators.map((p) => getTraitIntensity(p, 'shortFuse')),
   );
 }
 
@@ -1104,7 +1263,14 @@ function resolveTrashTalk(team, opponent, minute, rng, stats) {
   if (!instigator) return events;
 
   const target = pickTauntVictim(opponent, rng);
-  pushEvent(events, minute, EVENT_TYPES.TRASH_TALK, team.side, { player: instigator.name, victim: target.name }, rng);
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.TRASH_TALK,
+    team.side,
+    { player: instigator.name, victim: target.name },
+    rng,
+  );
   stats.trashTalks++;
 
   return events;
@@ -1122,7 +1288,7 @@ function resolveFightCallout(team, opponent, minute, rng, stats) {
     EVENT_TYPES.FIGHT_CALLOUT,
     team.side,
     { player: instigator.name, victim: target.name },
-    rng
+    rng,
   );
   stats.fightCallouts++;
 
@@ -1157,9 +1323,17 @@ function resolveThrowInDelay(team, minute, gamesmanshipLevel, rng, stats) {
   if (active.length === 0) return events;
 
   const player = rng.pick(active);
-  pushEvent(events, minute, EVENT_TYPES.THROW_IN_DELAY, team.side, { player: player.name, team: team.config.name }, rng, {
-    playerId: player.id,
-  });
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.THROW_IN_DELAY,
+    team.side,
+    { player: player.name, team: team.config.name },
+    rng,
+    {
+      playerId: player.id,
+    },
+  );
   stats.throwInDelays++;
 
   if (rng.chance(delayOfGameCardChance(team, player, gamesmanshipLevel))) {
@@ -1172,9 +1346,17 @@ function resolveThrowInDelay(team, minute, gamesmanshipLevel, rng, stats) {
 function resolveGoalKickDelay(team, minute, gamesmanshipLevel, rng, stats) {
   const events = [];
   const keeper = pickGoalkeeper(team, rng);
-  pushEvent(events, minute, EVENT_TYPES.GOAL_KICK_DELAY, team.side, { player: keeper.name, team: team.config.name }, rng, {
-    playerId: keeper.id,
-  });
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.GOAL_KICK_DELAY,
+    team.side,
+    { player: keeper.name, team: team.config.name },
+    rng,
+    {
+      playerId: keeper.id,
+    },
+  );
   stats.goalKickDelays++;
 
   if (rng.chance(delayOfGameCardChance(team, keeper, gamesmanshipLevel))) {
@@ -1192,7 +1374,16 @@ function resolveGoalKickDelay(team, minute, gamesmanshipLevel, rng, stats) {
 // in). Either way it's the same home crowd reacting, just for opposite
 // reasons, so they need their own narration rather than sharing templates
 // that would otherwise mismatch the situation.
-function resolveStoppageAnnouncement(homeTeam, awayTeam, minute, stoppage, range, score, rng, stats) {
+function resolveStoppageAnnouncement(
+  homeTeam,
+  awayTeam,
+  minute,
+  stoppage,
+  range,
+  score,
+  rng,
+  stats,
+) {
   const events = [];
   pushEvent(
     events,
@@ -1200,7 +1391,7 @@ function resolveStoppageAnnouncement(homeTeam, awayTeam, minute, stoppage, range
     EVENT_TYPES.STOPPAGE_TIME_ANNOUNCED,
     null,
     { minutes: stoppage, team: homeTeam.config.name, opponent: awayTeam.config.name },
-    rng
+    rng,
   );
 
   const isLow = stoppage <= (range[0] + range[1]) / 2;
@@ -1212,10 +1403,12 @@ function resolveStoppageAnnouncement(homeTeam, awayTeam, minute, stoppage, range
     pushEvent(
       events,
       minute,
-      boosOverTooLittle ? EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT : EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG,
+      boosOverTooLittle
+        ? EVENT_TYPES.STOPPAGE_TIME_BOOED_SHORT
+        : EVENT_TYPES.STOPPAGE_TIME_BOOED_LONG,
       homeTeam.side,
       { crowd: homeTeam.config.name },
-      rng
+      rng,
     );
     stats.stoppageTimeBooed++;
   }
@@ -1294,7 +1487,10 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
     // only reads as believable once the match is genuinely running out —
     // see GAMESMANSHIP.TIME_WASTING_MIN_MINUTE. The milder delays below
     // stay ungated: a slow throw-in makes sense from kickoff on.
-    if (minute >= GAMESMANSHIP.TIME_WASTING_MIN_MINUTE && rng.chance(level * GAMESMANSHIP.TIME_WASTING_EVENT_CHANCE_PER_LEVEL)) {
+    if (
+      minute >= GAMESMANSHIP.TIME_WASTING_MIN_MINUTE &&
+      rng.chance(level * GAMESMANSHIP.TIME_WASTING_EVENT_CHANCE_PER_LEVEL)
+    ) {
       events.push(...resolveTimeWasting(team, minute, rng));
     }
     if (rng.chance(level * GAMESMANSHIP.THROW_IN_DELAY_CHANCE_PER_LEVEL)) {
@@ -1325,7 +1521,11 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
       // game this is modeled on) once the result is already comfortable, not
       // at any moment in a close match. Abilities with no `minLead` roll
       // every minute regardless of score, same as before this field existed.
-      if (player.specialAbility.minLead && goalMargin(team.side, score) < player.specialAbility.minLead) continue;
+      if (
+        player.specialAbility.minLead &&
+        goalMargin(team.side, score) < player.specialAbility.minLead
+      )
+        continue;
       if (rng.chance(player.specialAbility.chancePerMinute)) {
         events.push(...resolveSpecialAbility(team, player, minute, score, rng, stats));
       }
@@ -1425,8 +1625,8 @@ export function simulateMatch({ home, away, rng }) {
           MATCH.STOPPAGE_FIRST_HALF,
           score,
           rng,
-          stats
-        )
+          stats,
+        ),
       );
     }
 
@@ -1440,8 +1640,8 @@ export function simulateMatch({ home, away, rng }) {
           MATCH.STOPPAGE_SECOND_HALF,
           score,
           rng,
-          stats
-        )
+          stats,
+        ),
       );
     }
 
@@ -1452,7 +1652,7 @@ export function simulateMatch({ home, away, rng }) {
         EVENT_TYPES.HALFTIME,
         null,
         { team: home.name, opponent: away.name, homeGoals: score.home, awayGoals: score.away },
-        rng
+        rng,
       );
     }
   }
@@ -1463,7 +1663,7 @@ export function simulateMatch({ home, away, rng }) {
     EVENT_TYPES.FULLTIME,
     null,
     { team: home.name, opponent: away.name, homeGoals: score.home, awayGoals: score.away },
-    rng
+    rng,
   );
 
   return {
@@ -1577,7 +1777,7 @@ export function resolvePenaltyShootout({
         EVENT_TYPES.PENALTY_MIND_GAMES,
         defendingTeam.side,
         { player: kicker.name, keeper: keeper.name },
-        rng
+        rng,
       );
       mindGamesMultiplier = PENALTY.MIND_GAMES_MISS_WEIGHT;
     }
@@ -1587,7 +1787,9 @@ export function resolvePenaltyShootout({
     // An outfield player standing in for a sent-off goalkeeper (see
     // maybeAssignStandInGoalkeeper) has no idea how to read a penalty —
     // easier for the kicker to convert than against a real keeper.
-    const standInMultiplier = defendingTeam.standInGoalkeeperId ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER : 1;
+    const standInMultiplier = defendingTeam.standInGoalkeeperId
+      ? GOALKEEPER.STAND_IN_PENALTY_MISS_MULTIPLIER
+      : 1;
     const missChance = clamp(
       PENALTY.BASE_MISS_CHANCE *
         (1 + wallIntensity * PENALTY.WALL_MISS_WEIGHT) *
@@ -1595,7 +1797,7 @@ export function resolvePenaltyShootout({
         mindGamesMultiplier *
         standInMultiplier,
       PENALTY.MISS_CHANCE_FLOOR,
-      PENALTY.MISS_CHANCE_CEIL
+      PENALTY.MISS_CHANCE_CEIL,
     );
 
     const context = { player: kicker.name, keeper: keeper.name, team: kickingTeam.config.name };
@@ -1626,7 +1828,14 @@ export function resolvePenaltyShootout({
 
   const winnerSide = score.home > score.away ? 'home' : 'away';
   const winnerTeam = winnerSide === 'home' ? homeTeam : awayTeam;
-  pushEvent(events, minute, EVENT_TYPES.SHOOTOUT_WINNER, winnerSide, { team: winnerTeam.config.name }, rng);
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.SHOOTOUT_WINNER,
+    winnerSide,
+    { team: winnerTeam.config.name },
+    rng,
+  );
 
   return { winnerSide, homeScore: score.home, awayScore: score.away, events };
 }

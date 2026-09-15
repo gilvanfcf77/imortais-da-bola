@@ -97,7 +97,10 @@ function deriveMatchState(events) {
     }
 
     if (event.type === EVENT_TYPES.SHOOTOUT_START) shootoutActive = true;
-    if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED || event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED) {
+    if (
+      event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED ||
+      event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED
+    ) {
       shootoutKickCount++;
       if (event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED) shootoutScore[event.side]++;
     }
@@ -247,7 +250,10 @@ function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
             <span className="w-7 shrink-0 text-[11px] tabular-nums text-slate-500">
               {player.role ?? player.position}
             </span>
-            <span className="flex-1 truncate" title={player.era ? `${player.name} (${player.era})` : player.name}>
+            <span
+              className="flex-1 truncate"
+              title={player.era ? `${player.name} (${player.era})` : player.name}
+            >
               {player.name}
             </span>
             {player.era && (
@@ -270,7 +276,7 @@ function LineupPanel({ side, lineup, badgesByPlayer, sentOffIds }) {
                   </span>
                 ) : (
                   <span key={index} className={`inline-block h-3 w-3 ${BADGE_STYLE[badge.type]}`} />
-                )
+                ),
               )}
             </span>
           </div>
@@ -285,7 +291,10 @@ export default function MatchScreen({ matchData, onFinished }) {
   // The shootout, if any, plays out as more lines in the same log — no
   // separate screen, since the final is a single match (per CLAUDE.md scope)
   // and a draw just continues straight into the shootout.
-  const allEvents = useMemo(() => [...result.events, ...(shootout?.events ?? [])], [result, shootout]);
+  const allEvents = useMemo(
+    () => [...result.events, ...(shootout?.events ?? [])],
+    [result, shootout],
+  );
   // Shootout events reuse the match clock internally just to keep the
   // combined log's pacing math simple (see resolvePenaltyShootout's
   // startMinute doc comment) — the number itself is meaningless in a
@@ -341,7 +350,9 @@ export default function MatchScreen({ matchData, onFinished }) {
 
     allEvents.slice(startIndex).forEach((event, i) => {
       const index = startIndex + i;
-      const isShootoutKick = event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED || event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED;
+      const isShootoutKick =
+        event.type === EVENT_TYPES.SHOOTOUT_KICK_SCORED ||
+        event.type === EVENT_TYPES.SHOOTOUT_KICK_MISSED;
       const gap = isShootoutKick ? shootoutKickGap : minEventGap;
       const minuteBasedDelay = delay + (event.minute - lastMinute) * msPerMinute;
       delay = Math.max(minuteBasedDelay, delay + gap);
@@ -351,7 +362,7 @@ export default function MatchScreen({ matchData, onFinished }) {
         setTimeout(() => {
           visibleCountRef.current = index + 1;
           setVisibleCount(index + 1);
-        }, delay)
+        }, delay),
       );
     });
 
@@ -359,17 +370,17 @@ export default function MatchScreen({ matchData, onFinished }) {
   }, [allEvents, msPerMinute]);
 
   const visibleEvents = useMemo(() => allEvents.slice(0, visibleCount), [allEvents, visibleCount]);
-  const { score, shootoutScore, shootoutActive, shootoutKickCount, badgesByPlayer, sentOffIds } = useMemo(
-    () => deriveMatchState(visibleEvents),
-    [visibleEvents]
-  );
+  const { score, shootoutScore, shootoutActive, shootoutKickCount, badgesByPlayer, sentOffIds } =
+    useMemo(() => deriveMatchState(visibleEvents), [visibleEvents]);
 
   // Pulses whenever a side's derived score goes up — never on the drop back
   // to 0-0 at the start of a new match, since that's a decrease, not a goal.
   const prevScoreRef = useRef({ home: 0, away: 0 });
   useEffect(() => {
-    if (score.home > prevScoreRef.current.home) setPulseKeys((prev) => ({ ...prev, home: prev.home + 1 }));
-    if (score.away > prevScoreRef.current.away) setPulseKeys((prev) => ({ ...prev, away: prev.away + 1 }));
+    if (score.home > prevScoreRef.current.home)
+      setPulseKeys((prev) => ({ ...prev, home: prev.home + 1 }));
+    if (score.away > prevScoreRef.current.away)
+      setPulseKeys((prev) => ({ ...prev, away: prev.away + 1 }));
     prevScoreRef.current = score;
   }, [score]);
 
@@ -384,8 +395,15 @@ export default function MatchScreen({ matchData, onFinished }) {
       <div className="sticky top-0 z-10 shrink-0 border-b border-slate-800 bg-slate-950 px-3 py-3 md:static md:px-4 md:py-4">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 md:gap-4">
           <h2 className="text-lg font-bold md:text-2xl">
-            {homeName} <span key={`home-${pulseKeys.home}`} className="animate-score-pulse">{score.home}</span> x{' '}
-            <span key={`away-${pulseKeys.away}`} className="animate-score-pulse">{score.away}</span> {awayName}
+            {homeName}{' '}
+            <span key={`home-${pulseKeys.home}`} className="animate-score-pulse">
+              {score.home}
+            </span>{' '}
+            x{' '}
+            <span key={`away-${pulseKeys.away}`} className="animate-score-pulse">
+              {score.away}
+            </span>{' '}
+            {awayName}
             {awayEra ? ` (${awayEra})` : ''}
           </h2>
           <label className="text-sm text-slate-400">
@@ -405,7 +423,9 @@ export default function MatchScreen({ matchData, onFinished }) {
         </div>
         {shootoutActive && (
           <div className="mx-auto mt-3 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-lg border border-yellow-600/50 bg-yellow-500/10 px-3 py-2 md:gap-4 md:px-4">
-            <span className="text-sm font-semibold uppercase tracking-wide text-yellow-400">Disputa de pênaltis</span>
+            <span className="text-sm font-semibold uppercase tracking-wide text-yellow-400">
+              Disputa de pênaltis
+            </span>
             <span className="text-xl font-bold tabular-nums">
               {shootoutScore.home} x {shootoutScore.away}
             </span>
@@ -416,13 +436,22 @@ export default function MatchScreen({ matchData, onFinished }) {
 
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-3 px-3 py-3 md:flex-row md:justify-center md:gap-6 md:overflow-hidden md:px-4 md:py-4">
         <div className="hidden md:block">
-          <LineupPanel side="home" lineup={homeLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+          <LineupPanel
+            side="home"
+            lineup={homeLineup}
+            badgesByPlayer={badgesByPlayer}
+            sentOffIds={sentOffIds}
+          />
         </div>
 
         <div className="flex w-full max-w-2xl flex-col gap-4 md:h-full md:overflow-hidden">
           <ol className="flex flex-col gap-2 md:flex-1 md:overflow-y-auto">
             <MobileLineupCard side="home" teamLabel={homeName} lineup={homeLineup} />
-            <MobileLineupCard side="away" teamLabel={awayEra ? `${awayName} (${awayEra})` : awayName} lineup={awayLineup} />
+            <MobileLineupCard
+              side="away"
+              teamLabel={awayEra ? `${awayName} (${awayEra})` : awayName}
+              lineup={awayLineup}
+            />
             {visibleEvents.map((event, index) =>
               DIVIDER_EVENT_TYPES.has(event.type) ? (
                 <li key={index} className="my-1 text-center font-semibold text-slate-400">
@@ -431,11 +460,13 @@ export default function MatchScreen({ matchData, onFinished }) {
                 </li>
               ) : (
                 <li key={index} className={`rounded border px-4 py-2 ${eventRowClass(event)}`}>
-                  {index < shootoutStartIndex && <span className="mr-2 font-mono text-slate-500">{event.minute}'</span>}
+                  {index < shootoutStartIndex && (
+                    <span className="mr-2 font-mono text-slate-500">{event.minute}'</span>
+                  )}
                   {eventEmoji(event)}
                   <span className={eventTextClass(event)}>{event.description}</span>
                 </li>
-              )
+              ),
             )}
             {finished && (
               <li className="flex flex-wrap items-center justify-between gap-2 px-4 py-2">
@@ -453,7 +484,12 @@ export default function MatchScreen({ matchData, onFinished }) {
         </div>
 
         <div className="hidden md:block">
-          <LineupPanel side="away" lineup={awayLineup} badgesByPlayer={badgesByPlayer} sentOffIds={sentOffIds} />
+          <LineupPanel
+            side="away"
+            lineup={awayLineup}
+            badgesByPlayer={badgesByPlayer}
+            sentOffIds={sentOffIds}
+          />
         </div>
       </div>
     </div>

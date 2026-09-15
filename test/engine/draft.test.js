@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createRng, draftEleven, draftBestEleven, draftBestFormationEleven, FORMATIONS } from '../../src/engine/index.js';
+import {
+  createRng,
+  draftEleven,
+  draftBestEleven,
+  draftBestFormationEleven,
+  FORMATIONS,
+} from '../../src/engine/index.js';
 import { makePool, makePlayer } from './fixtures.js';
 
 test('draftEleven respects every formation slot', () => {
@@ -15,7 +21,11 @@ test('draftEleven respects every formation slot', () => {
     }
     for (const [position, expected] of Object.entries(expectedByPosition)) {
       const count = lineup.filter((p) => p.position === position).length;
-      assert.equal(count, expected, `${formation.name}: expected ${expected} ${position}, got ${count}`);
+      assert.equal(
+        count,
+        expected,
+        `${formation.name}: expected ${expected} ${position}, got ${count}`,
+      );
     }
   }
 });
@@ -31,7 +41,7 @@ test('draftEleven is deterministic for a given seed', () => {
   const lineupB = draftEleven(pool, FORMATIONS['4-4-2'], createRng(99));
   assert.deepEqual(
     lineupA.map((p) => p.id),
-    lineupB.map((p) => p.id)
+    lineupB.map((p) => p.id),
   );
 });
 
@@ -71,7 +81,7 @@ test('draftEleven lets a player with cross-position roles fill either kind of sl
   assert.ok(picked, 'the versatile player should have been drafted');
   assert.ok(
     picked.position === 'CB' || picked.position === 'MF',
-    `expected the versatile player's effective position to be CB or MF, got ${picked.position}`
+    `expected the versatile player's effective position to be CB or MF, got ${picked.position}`,
   );
 });
 
@@ -87,7 +97,10 @@ test('draftEleven never drafts the same person twice across era entries', () => 
   for (let seed = 0; seed < 30; seed++) {
     const lineup = draftEleven(poolWithRepeatedPerson, FORMATIONS['4-4-2'], createRng(seed));
     const rivellinoCount = lineup.filter((p) => p.personId === 'rivellino').length;
-    assert.ok(rivellinoCount <= 1, `seed ${seed}: expected at most 1 'rivellino' entry, got ${rivellinoCount}`);
+    assert.ok(
+      rivellinoCount <= 1,
+      `seed ${seed}: expected at most 1 'rivellino' entry, got ${rivellinoCount}`,
+    );
   }
 });
 
@@ -139,7 +152,11 @@ test('draftBestEleven always picks the highest-overall eligible candidate for a 
   for (let seed = 0; seed < 20; seed++) {
     const lineup = draftBestEleven(pool, FORMATIONS['4-4-2'], createRng(seed));
     const gk = lineup.find((p) => p.position === 'GK');
-    assert.equal(gk.id, strong.id, `seed ${seed}: expected the overall-99 goalkeeper, got overall ${gk.overall}`);
+    assert.equal(
+      gk.id,
+      strong.id,
+      `seed ${seed}: expected the overall-99 goalkeeper, got overall ${gk.overall}`,
+    );
   }
 });
 
@@ -168,11 +185,11 @@ test('draftBestEleven is deterministic for a given seed', () => {
   const lineupB = draftBestEleven(pool, FORMATIONS['4-4-2'], createRng(99));
   assert.deepEqual(
     lineupA.map((p) => p.id),
-    lineupB.map((p) => p.id)
+    lineupB.map((p) => p.id),
   );
 });
 
-test('draftBestFormationEleven returns a lineup matching the chosen formation\'s slot count', () => {
+test("draftBestFormationEleven returns a lineup matching the chosen formation's slot count", () => {
   const pool = makePool();
   const { formation, lineup } = draftBestFormationEleven(pool, FORMATIONS, createRng(1));
   assert.ok(Object.values(FORMATIONS).includes(formation));

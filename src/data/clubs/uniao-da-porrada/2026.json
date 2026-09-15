@@ -8,7 +8,8 @@
     {
       "id": "up-gk-1",
       "name": "Cão Danado",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -29,7 +30,8 @@
     {
       "id": "up-gk-2",
       "name": "Facada Ferreira",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -50,7 +52,8 @@
     {
       "id": "up-gk-3",
       "name": "Punho de Ferro",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 99,
       "traits": [
         {
@@ -71,7 +74,8 @@
     {
       "id": "up-cb-1",
       "name": "Dedé Guilhotina",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -92,7 +96,8 @@
     {
       "id": "up-cb-2",
       "name": "Trator Sem Freio",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -113,7 +118,8 @@
     {
       "id": "up-cb-3",
       "name": "Machado Bruno",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -134,7 +140,8 @@
     {
       "id": "up-cb-4",
       "name": "Foice Nogueira",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -155,7 +162,8 @@
     {
       "id": "up-cb-5",
       "name": "Britador Silva",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 99,
       "traits": [
         {
@@ -176,7 +184,8 @@
     {
       "id": "up-fb-1",
       "name": "Chicote Aranha",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 99,
       "traits": [
         {
@@ -197,7 +206,8 @@
     {
       "id": "up-fb-2",
       "name": "Navalha Costa",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 99,
       "traits": [
         {
@@ -218,7 +228,8 @@
     {
       "id": "up-fb-3",
       "name": "Presa Vieira",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 99,
       "traits": [
         {
@@ -239,7 +250,8 @@
     {
       "id": "up-fb-4",
       "name": "Garra Ramalho",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 99,
       "traits": [
         {
@@ -260,7 +272,8 @@
     {
       "id": "up-mf-1",
       "name": "Punhal Moraes",
-      "position": "MF", "roles": ["ME"],
+      "position": "MF",
+      "roles": ["ME"],
       "overall": 99,
       "traits": [
         {
@@ -281,7 +294,8 @@
     {
       "id": "up-mf-2",
       "name": "Marreta Nunes",
-      "position": "MF", "roles": ["MD", "MAT"],
+      "position": "MF",
+      "roles": ["MD", "MAT"],
       "overall": 99,
       "traits": [
         {
@@ -302,7 +316,8 @@
     {
       "id": "up-mf-3",
       "name": "Coronhada Reis",
-      "position": "MF", "roles": ["MAT"],
+      "position": "MF",
+      "roles": ["MAT"],
       "overall": 99,
       "traits": [
         {
@@ -323,7 +338,8 @@
     {
       "id": "up-mf-4",
       "name": "Machadinho Duarte",
-      "position": "MF", "roles": ["VOL"],
+      "position": "MF",
+      "roles": ["VOL"],
       "overall": 99,
       "traits": [
         {
@@ -344,7 +360,8 @@
     {
       "id": "up-mf-5",
       "name": "Chibata Farias",
-      "position": "MF", "roles": ["MC"],
+      "position": "MF",
+      "roles": ["MC"],
       "overall": 99,
       "traits": [
         {
@@ -365,7 +382,8 @@
     {
       "id": "up-mf-6",
       "name": "Estilhaço Prado",
-      "position": "MF", "roles": ["ME", "MD"],
+      "position": "MF",
+      "roles": ["ME", "MD"],
       "overall": 99,
       "traits": [
         {
@@ -386,7 +404,8 @@
     {
       "id": "up-mf-7",
       "name": "Capitão Fúria",
-      "position": "MF", "roles": ["MD"],
+      "position": "MF",
+      "roles": ["MD"],
       "overall": 99,
       "traits": [
         {
@@ -407,7 +426,8 @@
     {
       "id": "up-mf-8",
       "name": "Cutelo Marques",
-      "position": "MF", "roles": ["MAT", "MC"],
+      "position": "MF",
+      "roles": ["MAT", "MC"],
       "overall": 99,
       "traits": [
         {
@@ -428,7 +448,8 @@
     {
       "id": "up-fw-1",
       "name": "Carrasco Lopes",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 99,
       "traits": [
         {
@@ -449,7 +470,8 @@
     {
       "id": "up-fw-2",
       "name": "Guilhotina Jr.",
-      "position": "FW", "roles": ["PE", "PD"],
+      "position": "FW",
+      "roles": ["PE", "PD"],
       "overall": 99,
       "traits": [
         {
@@ -470,7 +492,8 @@
     {
       "id": "up-fw-3",
       "name": "Fera Bragança",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 99,
       "traits": [
         {
@@ -491,7 +514,8 @@
     {
       "id": "up-fw-4",
       "name": "Sangue Frio Teles",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 99,
       "traits": [
         {
@@ -512,7 +536,8 @@
     {
       "id": "up-fw-5",
       "name": "Punição Alves",
-      "position": "FW", "roles": ["PE"],
+      "position": "FW",
+      "roles": ["PE"],
       "overall": 99,
       "traits": [
         {
@@ -533,7 +558,8 @@
     {
       "id": "up-fw-6",
       "name": "Trovão Selvagem",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 99,
       "traits": [
         {

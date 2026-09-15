@@ -55,7 +55,8 @@ export async function completeSquadRandomly(clubSlug, currentSquad, formationNam
   const remainingSlots = [];
   for (const [role, total] of Object.entries(totalByRole)) {
     const remaining = total - (filledByRole[role] ?? 0);
-    for (let i = 0; i < remaining; i++) remainingSlots.push({ role, position: ROLE_TO_POSITION[role] });
+    for (let i = 0; i < remaining; i++)
+      remainingSlots.push({ role, position: ROLE_TO_POSITION[role] });
   }
 
   const rng = createRng(Date.now());
@@ -82,8 +83,14 @@ function maybeResolveShootout(result, home, away, rng) {
   // by forfeit — never send it to penalties, even if the score happened to
   // be level at the moment the referee stopped play.
   if (result.abandoned || result.homeGoals !== result.awayGoals) return null;
-  const shootoutHome = { ...home, lineup: eligibleForShootout(home.lineup, result.homeSentOffIds, result.homeInjuries) };
-  const shootoutAway = { ...away, lineup: eligibleForShootout(away.lineup, result.awaySentOffIds, result.awayInjuries) };
+  const shootoutHome = {
+    ...home,
+    lineup: eligibleForShootout(home.lineup, result.homeSentOffIds, result.homeInjuries),
+  };
+  const shootoutAway = {
+    ...away,
+    lineup: eligibleForShootout(away.lineup, result.awaySentOffIds, result.awayInjuries),
+  };
   const lastMinute = result.events[result.events.length - 1].minute;
   return resolvePenaltyShootout({
     home: shootoutHome,
@@ -155,9 +162,22 @@ function drawSingleEraOpponent(clubEntry, rng) {
 // Plays a single already-determined match — the semifinal or the final,
 // whichever the caller is currently on. Doesn't pick an opponent itself
 // (see startCup for that) so it can be reused for either stage.
-export async function playMatch({ homeName, squad, awayName, awayEra, awayLineup, posture = 'balanced', gamesmanship }) {
+export async function playMatch({
+  homeName,
+  squad,
+  awayName,
+  awayEra,
+  awayLineup,
+  posture = 'balanced',
+  gamesmanship,
+}) {
   const rng = createRng(Date.now());
-  const home = { name: homeName, lineup: squad, posture, gamesmanship: gamesmanship ?? defaultGamesmanship(squad) };
+  const home = {
+    name: homeName,
+    lineup: squad,
+    posture,
+    gamesmanship: gamesmanship ?? defaultGamesmanship(squad),
+  };
   const away = {
     name: awayName,
     lineup: awayLineup,
@@ -266,7 +286,13 @@ function resolveChampionIfEliminatedAt(roundIndex, rounds, rng) {
     }
   }
 
-  return { championName: candidate.name, championEra: candidate.era, runnerUpName: runnerUp.name, runnerUpEra: runnerUp.era, trail };
+  return {
+    championName: candidate.name,
+    championEra: candidate.era,
+    runnerUpName: runnerUp.name,
+    runnerUpEra: runnerUp.era,
+    trail,
+  };
 }
 
 // The sub-tree feeding the player's round-r opponent always has size 2^r
@@ -276,7 +302,11 @@ function resolveChampionIfEliminatedAt(roundIndex, rounds, rng) {
 function buildBracket(opponents, rng) {
   const totalRounds = Math.log2(opponents.length + 1);
   const names = roundNamesFor(totalRounds);
-  const rounds = Array.from({ length: totalRounds }, (_, i) => ({ name: names[i], playerOpponent: null, otherMatches: [] }));
+  const rounds = Array.from({ length: totalRounds }, (_, i) => ({
+    name: names[i],
+    playerOpponent: null,
+    otherMatches: [],
+  }));
 
   let cursor = 0;
   for (let r = 0; r < totalRounds; r++) {
@@ -299,7 +329,7 @@ function buildBracket(opponents, rng) {
 // largestValidOpponentCount allows (never repeats one on both sides of the
 // draw), each with its own single era, then resolves every match that
 // doesn't involve the player.
-export async function startCup(clubSlug, squad) {
+export async function startCup(clubSlug) {
   const manifest = getClubManifest();
   const others = manifest.filter((c) => c.slug !== clubSlug && c.cupEligible);
   const rng = createRng(Date.now());

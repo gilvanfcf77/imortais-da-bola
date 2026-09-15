@@ -31,7 +31,7 @@ function draftWithPicker(pool, formation, rng, pickCandidate) {
     }
     if (candidates.length === 0) {
       throw new Error(
-        `Not enough players for role ${formationSlot.role} (${formationSlot.position}): none available`
+        `Not enough players for role ${formationSlot.role} (${formationSlot.position}): none available`,
       );
     }
     const chosen = pickCandidate(candidates, rng);

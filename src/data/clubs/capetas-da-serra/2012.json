@@ -5,35 +5,246 @@
   "legendary": false,
   "cupEligible": false,
   "pool": [
-    { "id": "us12-gk-1", "name": "Marcão Escudo", "position": "GK", "roles": ["GOL"], "overall": 73, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-gk-2", "name": "Digo Pulo", "position": "GK", "roles": ["GOL"], "overall": 65, "traits": [{ "slug": "wall", "intensity": 1 }], "specialAbility": null },
-    { "id": "us12-gk-3", "name": "Serjão Reflexo", "position": "GK", "roles": ["GOL"], "overall": 59, "traits": [], "specialAbility": null },
+    {
+      "id": "us12-gk-1",
+      "name": "Marcão Escudo",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 73,
+      "traits": [{ "slug": "wall", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-gk-2",
+      "name": "Digo Pulo",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 65,
+      "traits": [{ "slug": "wall", "intensity": 1 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-gk-3",
+      "name": "Serjão Reflexo",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 59,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "us12-cb-1", "name": "Kleiton Bunker", "position": "CB", "roles": ["ZAG"], "overall": 76, "traits": [{ "slug": "wall", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-cb-2", "name": "Diego Concreto", "position": "CB", "roles": ["ZAG"], "overall": 71, "traits": [{ "slug": "cynicalFouler", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-cb-3", "name": "Vagner Prumo", "position": "CB", "roles": ["ZAG"], "overall": 67, "traits": [], "specialAbility": null },
-    { "id": "us12-cb-4", "name": "Elton Firmeza", "position": "CB", "roles": ["ZAG"], "overall": 63, "traits": [], "specialAbility": null },
-    { "id": "us12-cb-5", "name": "Robson Sombra", "position": "CB", "roles": ["ZAG"], "overall": 58, "traits": [{ "slug": "shortFuse", "intensity": 1 }], "specialAbility": null },
+    {
+      "id": "us12-cb-1",
+      "name": "Kleiton Bunker",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 76,
+      "traits": [{ "slug": "wall", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-cb-2",
+      "name": "Diego Concreto",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 71,
+      "traits": [{ "slug": "cynicalFouler", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-cb-3",
+      "name": "Vagner Prumo",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 67,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-cb-4",
+      "name": "Elton Firmeza",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 63,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-cb-5",
+      "name": "Robson Sombra",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 58,
+      "traits": [{ "slug": "shortFuse", "intensity": 1 }],
+      "specialAbility": null
+    },
 
-    { "id": "us12-fb-1", "name": "Ceará Foguete", "position": "FB", "roles": ["LE"], "overall": 74, "traits": [{ "slug": "dribbler", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-fb-2", "name": "Wesley Linha", "position": "FB", "roles": ["LD"], "overall": 69, "traits": [], "specialAbility": null },
-    { "id": "us12-fb-3", "name": "Ladinho Xis", "position": "FB", "roles": ["LE", "LD"], "overall": 64, "traits": [], "specialAbility": null },
-    { "id": "us12-fb-4", "name": "Marinho Rocha", "position": "FB", "roles": ["LD"], "overall": 59, "traits": [], "specialAbility": null },
+    {
+      "id": "us12-fb-1",
+      "name": "Ceará Foguete",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 74,
+      "traits": [{ "slug": "dribbler", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fb-2",
+      "name": "Wesley Linha",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 69,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fb-3",
+      "name": "Ladinho Xis",
+      "position": "FB",
+      "roles": ["LE", "LD"],
+      "overall": 64,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fb-4",
+      "name": "Marinho Rocha",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 59,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "us12-mf-1", "name": "Nélio Régua", "position": "MF", "roles": ["ME"], "overall": 83, "traits": [{ "slug": "leader", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-mf-2", "name": "Osmar Chapéu", "position": "MF", "roles": ["VOL"], "overall": 87, "traits": [{ "slug": "dribbler", "intensity": 3 }, { "slug": "shortFuse", "intensity": 1 }], "specialAbility": null },
-    { "id": "us12-mf-3", "name": "Paulinho Cruz", "position": "MF", "roles": ["MC"], "overall": 75, "traits": [{ "slug": "playmaker", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-mf-4", "name": "Quinho Firme", "position": "MF", "roles": ["MC"], "overall": 70, "traits": [{ "slug": "freeKickSpecialist", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-mf-5", "name": "Robertinho Punho", "position": "MF", "roles": ["VOL"], "overall": 68, "traits": [{ "slug": "shortFuse", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-mf-6", "name": "Silvinho Costura", "position": "MF", "roles": ["ME"], "overall": 64, "traits": [], "specialAbility": null },
-    { "id": "us12-mf-7", "name": "Tonhão Alçapão", "position": "MF", "roles": ["MD", "MC"], "overall": 61, "traits": [], "specialAbility": null },
-    { "id": "us12-mf-8", "name": "Uriel Sereno", "position": "MF", "roles": ["MAT", "ME"], "overall": 57, "traits": [], "specialAbility": null },
+    {
+      "id": "us12-mf-1",
+      "name": "Nélio Régua",
+      "position": "MF",
+      "roles": ["ME"],
+      "overall": 83,
+      "traits": [{ "slug": "leader", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-2",
+      "name": "Osmar Chapéu",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 87,
+      "traits": [
+        { "slug": "dribbler", "intensity": 3 },
+        { "slug": "shortFuse", "intensity": 1 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-3",
+      "name": "Paulinho Cruz",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 75,
+      "traits": [{ "slug": "playmaker", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-4",
+      "name": "Quinho Firme",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 70,
+      "traits": [{ "slug": "freeKickSpecialist", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-5",
+      "name": "Robertinho Punho",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 68,
+      "traits": [{ "slug": "shortFuse", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-6",
+      "name": "Silvinho Costura",
+      "position": "MF",
+      "roles": ["ME"],
+      "overall": 64,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-7",
+      "name": "Tonhão Alçapão",
+      "position": "MF",
+      "roles": ["MD", "MC"],
+      "overall": 61,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-mf-8",
+      "name": "Uriel Sereno",
+      "position": "MF",
+      "roles": ["MAT", "ME"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "us12-fw-1", "name": "Vantoyz Artilheiro", "position": "FW", "roles": ["CA"], "overall": 89, "traits": [{ "slug": "sharpshooter", "intensity": 2 }], "specialAbility": null },
-    { "id": "us12-fw-2", "name": "Wagner Faro", "position": "FW", "roles": ["PE"], "overall": 77, "traits": [], "specialAbility": null },
-    { "id": "us12-fw-3", "name": "Xandinho Ponta", "position": "FW", "roles": ["CA"], "overall": 70, "traits": [{ "slug": "sharpshooter", "intensity": 1 }], "specialAbility": null },
-    { "id": "us12-fw-4", "name": "Ygor Foguete", "position": "FW", "roles": ["PD", "CA"], "overall": 66, "traits": [{ "slug": "dribbler", "intensity": 1 }], "specialAbility": null },
-    { "id": "us12-fw-5", "name": "Zeco Retranca", "position": "FW", "roles": ["PE", "CA"], "overall": 60, "traits": [], "specialAbility": null },
-    { "id": "us12-fw-6", "name": "Amaral Bode", "position": "FW", "roles": ["PD"], "overall": 57, "traits": [], "specialAbility": null }
+    {
+      "id": "us12-fw-1",
+      "name": "Vantoyz Artilheiro",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 89,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fw-2",
+      "name": "Wagner Faro",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 77,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fw-3",
+      "name": "Xandinho Ponta",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 70,
+      "traits": [{ "slug": "sharpshooter", "intensity": 1 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fw-4",
+      "name": "Ygor Foguete",
+      "position": "FW",
+      "roles": ["PD", "CA"],
+      "overall": 66,
+      "traits": [{ "slug": "dribbler", "intensity": 1 }],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fw-5",
+      "name": "Zeco Retranca",
+      "position": "FW",
+      "roles": ["PE", "CA"],
+      "overall": 60,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "us12-fw-6",
+      "name": "Amaral Bode",
+      "position": "FW",
+      "roles": ["PD"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    }
   ]
 }

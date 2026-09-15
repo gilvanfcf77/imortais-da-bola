@@ -288,9 +288,7 @@ const TEMPLATES = {
     'Cartão amarelo para {player}.',
     'O árbitro adverte {player} com o amarelo.',
   ],
-  [EVENT_TYPES.SECOND_YELLOW_RED]: [
-    'Segundo amarelo para {player} — e está expulso!',
-  ],
+  [EVENT_TYPES.SECOND_YELLOW_RED]: ['Segundo amarelo para {player} — e está expulso!'],
   [EVENT_TYPES.STRAIGHT_RED]: [
     'Vermelho direto para {player}! Entrada duríssima.',
     '{player} recebe cartão vermelho direto e deixa o time com um a menos.',

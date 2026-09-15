@@ -7,14 +7,15 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRng, FORMATIONS, draftEleven, simulateMatch, EVENT_TYPES, GOAL_EVENT_TYPES } from '../src/engine/index.js';
 import {
-  SAMANGOS_DO_VALE,
-  CAPETAS_DA_SERRA,
-  FERROLHO_DO_SERTAO,
-  OUSADIA_E_ALEGRIA,
-  getClubEras,
-} from '../src/data/clubs/index.js';
+  createRng,
+  FORMATIONS,
+  draftEleven,
+  simulateMatch,
+  EVENT_TYPES,
+  GOAL_EVENT_TYPES,
+} from '../src/engine/index.js';
+import { FERROLHO_DO_SERTAO, OUSADIA_E_ALEGRIA, getClubEras } from '../src/data/clubs/index.js';
 
 const lines = [];
 function log(line = '') {
@@ -59,11 +60,21 @@ function playOneMatch(seed) {
   const homeLineup = draftEleven(CORINTHIANS_1977.pool, FORMATION, rng);
   const awayLineup = draftEleven(SAO_PAULO_2008.pool, FORMATION, rng);
 
-  const home = { name: 'Corinthians (1977)', lineup: homeLineup, posture: 'balanced', gamesmanship: 3 };
-  const away = { name: 'São Paulo (2008)', lineup: awayLineup, posture: 'attacking', gamesmanship: 0 };
+  const home = {
+    name: 'Corinthians (1977)',
+    lineup: homeLineup,
+    posture: 'balanced',
+    gamesmanship: 3,
+  };
+  const away = {
+    name: 'São Paulo (2008)',
+    lineup: awayLineup,
+    posture: 'attacking',
+    gamesmanship: 0,
+  };
 
   const goalkeeperIds = new Set(
-    [...homeLineup, ...awayLineup].filter((p) => p.position === 'GK').map((p) => p.id)
+    [...homeLineup, ...awayLineup].filter((p) => p.position === 'GK').map((p) => p.id),
   );
 
   return { result: simulateMatch({ home, away, rng }), goalkeeperIds };
@@ -74,7 +85,8 @@ function playOneMatch(seed) {
 // is the one credited with the goal (join-the-attack situations, a
 // free-kick specialist trait on a keeper, etc. — see GOALKEEPER_FORWARD).
 function countGoalkeeperGoals(result, goalkeeperIds) {
-  return result.events.filter((e) => GOAL_EVENT_TYPES.has(e.type) && goalkeeperIds.has(e.playerId)).length;
+  return result.events.filter((e) => GOAL_EVENT_TYPES.has(e.type) && goalkeeperIds.has(e.playerId))
+    .length;
 }
 
 function average(total) {
@@ -207,46 +219,80 @@ for (let i = 0; i < MATCH_COUNT; i++) {
 }
 
 log(`Calibragem — ${MATCH_COUNT} partidas simuladas (seed base ${BASE_SEED})`);
-log(`Corinthians (1977, casa, equilibrado, catimba 3) x São Paulo (2008, fora, ofensivo, catimba 0), formação ${FORMATION.name}`);
 log(
-  `Overall médio do elenco: casa ${averageOverall(CORINTHIANS_1977.pool)} / fora ${averageOverall(SAO_PAULO_2008.pool)}`
+  `Corinthians (1977, casa, equilibrado, catimba 3) x São Paulo (2008, fora, ofensivo, catimba 0), formação ${FORMATION.name}`,
+);
+log(
+  `Overall médio do elenco: casa ${averageOverall(CORINTHIANS_1977.pool)} / fora ${averageOverall(SAO_PAULO_2008.pool)}`,
 );
 log('');
 log(
-  `Vitórias casa: ${homeWins} (${((homeWins / MATCH_COUNT) * 100).toFixed(1)}%) | Vitórias fora: ${awayWins} (${((awayWins / MATCH_COUNT) * 100).toFixed(1)}%) | Empates: ${draws} (${((draws / MATCH_COUNT) * 100).toFixed(1)}%)`
+  `Vitórias casa: ${homeWins} (${((homeWins / MATCH_COUNT) * 100).toFixed(1)}%) | Vitórias fora: ${awayWins} (${((awayWins / MATCH_COUNT) * 100).toFixed(1)}%) | Empates: ${draws} (${((draws / MATCH_COUNT) * 100).toFixed(1)}%)`,
 );
 log('');
 log(`Gols por partida (total):      ${average(totals.goals)}`);
 log(`  - time da casa:              ${average(totals.homeGoals)}`);
 log(`  - time visitante:            ${average(totals.awayGoals)}`);
 const totalShots = totals.shots.home + totals.shots.away;
-const homePossessionPct = totalShots > 0 ? ((totals.shots.home / totalShots) * 100).toFixed(1) : '50.0';
-const awayPossessionPct = totalShots > 0 ? ((totals.shots.away / totalShots) * 100).toFixed(1) : '50.0';
-log(`Finalizações por partida:      ${average(totalShots)} (casa ${average(totals.shots.home)} / fora ${average(totals.shots.away)})`);
-log(`Posse de bola (aprox., ver ResultScreen.jsx): casa ${homePossessionPct}% / fora ${awayPossessionPct}%`);
+const homePossessionPct =
+  totalShots > 0 ? ((totals.shots.home / totalShots) * 100).toFixed(1) : '50.0';
+const awayPossessionPct =
+  totalShots > 0 ? ((totals.shots.away / totalShots) * 100).toFixed(1) : '50.0';
+log(
+  `Finalizações por partida:      ${average(totalShots)} (casa ${average(totals.shots.home)} / fora ${average(totals.shots.away)})`,
+);
+log(
+  `Posse de bola (aprox., ver ResultScreen.jsx): casa ${homePossessionPct}% / fora ${awayPossessionPct}%`,
+);
 log(`Faltas por partida:            ${average(totals.fouls)}`);
 log(`Cartões amarelos por partida:  ${average(totals.yellowCards)}`);
 log(`Cartões vermelhos por partida: ${average(totals.redCards)}`);
-log(`  - partidas com expulsão:     ${matchesWithRedCard} (${((matchesWithRedCard / MATCH_COUNT) * 100).toFixed(1)}%)`);
+log(
+  `  - partidas com expulsão:     ${matchesWithRedCard} (${((matchesWithRedCard / MATCH_COUNT) * 100).toFixed(1)}%)`,
+);
 const avgMarginSentOff =
   oneSidedRedCardMatches > 0 ? (marginForSentOffSide / oneSidedRedCardMatches).toFixed(2) : 'n/a';
 log(
-  `  - saldo médio de quem fica com 10 (só partidas com vermelho de 1 lado): ${avgMarginSentOff} (${oneSidedRedCardMatches} partidas)`
+  `  - saldo médio de quem fica com 10 (só partidas com vermelho de 1 lado): ${avgMarginSentOff} (${oneSidedRedCardMatches} partidas)`,
 );
 log('');
 log('Eventos cômicos (checagem de frequência, ver CLAUDE.md "Tom dos eventos"):');
-log(`  - chapéus com provocação:    ${totals.nutmegTaunts} (${(totals.nutmegTaunts / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - confusões generalizadas:   ${totals.brawls} (${(totals.brawls / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - faltas escandalosas:       ${totals.scandalousFouls} (${(totals.scandalousFouls / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - gols anulados por erro:    ${totals.disallowedGoals} (${(totals.disallowedGoals / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - agressão a árbitro/bandeirinha (durante falta ou após anulação): ${totals.officialsAssaulted} (${(totals.officialsAssaulted / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - mão na bola em cima da linha: ${totals.handballsOnTheLine} (${(totals.handballsOnTheLine / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - lesões graves:             ${totals.severeInjuries} (${(totals.severeInjuries / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - sem cartão apesar da lesão:${totals.noCardDespiteInjury} (${(totals.noCardDespiteInjury / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - provocações (fala/gesto):  ${totals.trashTalks} (${(totals.trashTalks / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - chamadas pra briga:        ${totals.fightCallouts} (${(totals.fightCallouts / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - furadas com vaia:          ${totals.whiffs} (${(totals.whiffs / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - partidas com algum cômico: ${matchesWithComedy} (${((matchesWithComedy / MATCH_COUNT) * 100).toFixed(1)}%)`);
+log(
+  `  - chapéus com provocação:    ${totals.nutmegTaunts} (${(totals.nutmegTaunts / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - confusões generalizadas:   ${totals.brawls} (${(totals.brawls / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - faltas escandalosas:       ${totals.scandalousFouls} (${(totals.scandalousFouls / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - gols anulados por erro:    ${totals.disallowedGoals} (${(totals.disallowedGoals / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - agressão a árbitro/bandeirinha (durante falta ou após anulação): ${totals.officialsAssaulted} (${(totals.officialsAssaulted / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - mão na bola em cima da linha: ${totals.handballsOnTheLine} (${(totals.handballsOnTheLine / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - lesões graves:             ${totals.severeInjuries} (${(totals.severeInjuries / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - sem cartão apesar da lesão:${totals.noCardDespiteInjury} (${(totals.noCardDespiteInjury / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - provocações (fala/gesto):  ${totals.trashTalks} (${(totals.trashTalks / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - chamadas pra briga:        ${totals.fightCallouts} (${(totals.fightCallouts / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - furadas com vaia:          ${totals.whiffs} (${(totals.whiffs / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - partidas com algum cômico: ${matchesWithComedy} (${((matchesWithComedy / MATCH_COUNT) * 100).toFixed(1)}%)`,
+);
 log('');
 log('Como os gols de bola rolando aconteceram (fora gol de falta, que é à parte):');
 const totalOpenPlayGoals = Object.values(totals.goalStyles).reduce((sum, count) => sum + count, 0);
@@ -267,25 +313,58 @@ for (const [style, label] of Object.entries(GOAL_STYLE_LABELS)) {
 }
 log('');
 log('Pênaltis (situação, não só o gol):');
-log(`  - dados de verdade:          ${totals.penaltiesAwarded} (${(totals.penaltiesAwarded / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - claros e não marcados:     ${totals.penaltiesNotGiven} (${(totals.penaltiesNotGiven / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - fantasmas (não existiram): ${totals.penaltiesPhantom} (${(totals.penaltiesPhantom / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - falta fora da área, erro do juiz: ${totals.penaltiesWrongLocation} (${(totals.penaltiesWrongLocation / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - com pressão do goleiro:    ${totals.penaltyMindGames} (${(totals.penaltyMindGames / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`  - perdidos na cobrança:      ${totals.penaltiesMissed} (${(totals.penaltiesMissed / MATCH_COUNT).toFixed(3)} por partida)`);
+log(
+  `  - dados de verdade:          ${totals.penaltiesAwarded} (${(totals.penaltiesAwarded / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - claros e não marcados:     ${totals.penaltiesNotGiven} (${(totals.penaltiesNotGiven / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - fantasmas (não existiram): ${totals.penaltiesPhantom} (${(totals.penaltiesPhantom / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - falta fora da área, erro do juiz: ${totals.penaltiesWrongLocation} (${(totals.penaltiesWrongLocation / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - com pressão do goleiro:    ${totals.penaltyMindGames} (${(totals.penaltyMindGames / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `  - perdidos na cobrança:      ${totals.penaltiesMissed} (${(totals.penaltiesMissed / MATCH_COUNT).toFixed(3)} por partida)`,
+);
 const totalPenaltiesTaken = totals.penaltiesMissed + totals.goalStyles.penalty;
-const penaltyConversionPct = totalPenaltiesTaken > 0 ? ((totals.goalStyles.penalty / totalPenaltiesTaken) * 100).toFixed(1) : '0.0';
+const penaltyConversionPct =
+  totalPenaltiesTaken > 0
+    ? ((totals.goalStyles.penalty / totalPenaltiesTaken) * 100).toFixed(1)
+    : '0.0';
 log(`  - conversão na cobrança:     ${penaltyConversionPct}% (referência real: ~75-80%)`);
 log('');
-log(`Goleiro-linha (desespero em bola parada, atrás no placar, minuto >= 82): ${totals.goalkeeperForward} (${(totals.goalkeeperForward / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Torcida calada (visitante vira o jogo e provoca a torcida da casa): ${totals.crowdSilenced} (${(totals.crowdSilenced / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Embaixadinhas (2º tempo, vencendo por 2+ gols): ${totals.showboating} (${(totals.showboating / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Gol com desvio no juiz: ${totals.refereeDeflectionGoals} (${(totals.refereeDeflectionGoals / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Eventos especiais de jogador (specialAbility): ${totals.specialAbilities} (${(totals.specialAbilities / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Torcida vaia o acréscimo: ${totals.stoppageTimeBooed} (${(totals.stoppageTimeBooed / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Demora no lateral: ${totals.throwInDelays} (${(totals.throwInDelays / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Demora no tiro de meta: ${totals.goalKickDelays} (${(totals.goalKickDelays / MATCH_COUNT).toFixed(3)} por partida)`);
-log(`Gols marcados por goleiro: ${totals.goalkeeperGoals} (${(totals.goalkeeperGoals / MATCH_COUNT).toFixed(3)} por partida)`);
+log(
+  `Goleiro-linha (desespero em bola parada, atrás no placar, minuto >= 82): ${totals.goalkeeperForward} (${(totals.goalkeeperForward / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Torcida calada (visitante vira o jogo e provoca a torcida da casa): ${totals.crowdSilenced} (${(totals.crowdSilenced / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Embaixadinhas (2º tempo, vencendo por 2+ gols): ${totals.showboating} (${(totals.showboating / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Gol com desvio no juiz: ${totals.refereeDeflectionGoals} (${(totals.refereeDeflectionGoals / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Eventos especiais de jogador (specialAbility): ${totals.specialAbilities} (${(totals.specialAbilities / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Torcida vaia o acréscimo: ${totals.stoppageTimeBooed} (${(totals.stoppageTimeBooed / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Demora no lateral: ${totals.throwInDelays} (${(totals.throwInDelays / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Demora no tiro de meta: ${totals.goalKickDelays} (${(totals.goalKickDelays / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Gols marcados por goleiro: ${totals.goalkeeperGoals} (${(totals.goalkeeperGoals / MATCH_COUNT).toFixed(3)} por partida)`,
+);
 
 // Hypothesis check for the PENDENCIAS.md item "posse de bola deve
 // correlacionar com força do time": Ferrolho do Sertão (overall médio ~60.5)
@@ -296,7 +375,7 @@ log(`Gols marcados por goleiro: ${totals.goalkeeperGoals} (${(totals.goalkeeperG
 log('');
 log('Teste de hipótese — posse de bola deve cair com a força do time:');
 log(
-  `Ferrolho do Sertão (casa, overall médio ${averageOverall(FERROLHO_DO_SERTAO.pool)}) x Ousadia e Alegria (fora, overall médio ${averageOverall(OUSADIA_E_ALEGRIA.pool)})`
+  `Ferrolho do Sertão (casa, overall médio ${averageOverall(FERROLHO_DO_SERTAO.pool)}) x Ousadia e Alegria (fora, overall médio ${averageOverall(OUSADIA_E_ALEGRIA.pool)})`,
 );
 const MISMATCH_SEED = BASE_SEED + 1_000_000;
 const mismatchTotals = { homeGoals: 0, awayGoals: 0, shots: { home: 0, away: 0 } };
@@ -304,8 +383,18 @@ for (let i = 0; i < MATCH_COUNT; i++) {
   const rng = createRng(MISMATCH_SEED + i);
   const homeLineup = draftEleven(FERROLHO_DO_SERTAO.pool, FORMATION, rng);
   const awayLineup = draftEleven(OUSADIA_E_ALEGRIA.pool, FORMATION, rng);
-  const home = { name: FERROLHO_DO_SERTAO.name, lineup: homeLineup, posture: 'balanced', gamesmanship: 1 };
-  const away = { name: OUSADIA_E_ALEGRIA.name, lineup: awayLineup, posture: 'balanced', gamesmanship: 1 };
+  const home = {
+    name: FERROLHO_DO_SERTAO.name,
+    lineup: homeLineup,
+    posture: 'balanced',
+    gamesmanship: 1,
+  };
+  const away = {
+    name: OUSADIA_E_ALEGRIA.name,
+    lineup: awayLineup,
+    posture: 'balanced',
+    gamesmanship: 1,
+  };
   const result = simulateMatch({ home, away, rng });
 
   mismatchTotals.homeGoals += result.homeGoals;
@@ -316,16 +405,22 @@ for (let i = 0; i < MATCH_COUNT; i++) {
 }
 const mismatchTotalShots = mismatchTotals.shots.home + mismatchTotals.shots.away;
 const mismatchHomePossessionPct =
-  mismatchTotalShots > 0 ? ((mismatchTotals.shots.home / mismatchTotalShots) * 100).toFixed(1) : '50.0';
+  mismatchTotalShots > 0
+    ? ((mismatchTotals.shots.home / mismatchTotalShots) * 100).toFixed(1)
+    : '50.0';
 const mismatchAwayPossessionPct =
-  mismatchTotalShots > 0 ? ((mismatchTotals.shots.away / mismatchTotalShots) * 100).toFixed(1) : '50.0';
+  mismatchTotalShots > 0
+    ? ((mismatchTotals.shots.away / mismatchTotalShots) * 100).toFixed(1)
+    : '50.0';
 log(
-  `  - gols por partida: casa (fraco) ${average(mismatchTotals.homeGoals)} / fora (forte) ${average(mismatchTotals.awayGoals)}`
+  `  - gols por partida: casa (fraco) ${average(mismatchTotals.homeGoals)} / fora (forte) ${average(mismatchTotals.awayGoals)}`,
 );
 log(
-  `  - finalizações por partida: casa (fraco) ${average(mismatchTotals.shots.home)} / fora (forte) ${average(mismatchTotals.shots.away)}`
+  `  - finalizações por partida: casa (fraco) ${average(mismatchTotals.shots.home)} / fora (forte) ${average(mismatchTotals.shots.away)}`,
 );
-log(`  - posse de bola: casa (fraco) ${mismatchHomePossessionPct}% / fora (forte) ${mismatchAwayPossessionPct}%`);
+log(
+  `  - posse de bola: casa (fraco) ${mismatchHomePossessionPct}% / fora (forte) ${mismatchAwayPossessionPct}%`,
+);
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 const logsDir = join(projectRoot, 'logs');

@@ -98,23 +98,55 @@ npm run dev   # -> http://localhost:3000, Ctrl-C to stop
 npm test
 ```
 
-Node's built-in test runner (`node --test`) over `test/engine/*.test.js`
-— pure engine unit tests, no browser involved. 47 tests passing as of
-this skill's creation. Separate from this skill's driver, which
-exercises the actual rendered UI.
+Node's built-in test runner (`node --test`) over `test/**/*.test.js`
+(recursive — covers `test/engine/` and `test/app/`), pure unit tests,
+no browser involved. 51 tests passing as of this update. Separate from
+this skill's driver, which exercises the actual rendered UI.
+
+## Lint
+
+```bash
+npm run lint
+```
+
+Plain `eslint .` (flat config, `eslint.config.mjs` at repo root) —
+`next/core-web-vitals` for the React/Next parts of the app, layered on
+top of `js.configs.recommended` for everything else (`src/engine/`,
+`scripts/`, `test/`, which are plain Node, not React). Both layers
+matter: `next/core-web-vitals` alone does not catch general JS bugs
+(confirmed by hand — a throwaway file with `var`, unreachable code,
+and unused vars passed silently under it by itself) on the large
+non-React part of this codebase.
+
+## Format
+
+```bash
+npm run format         # rewrites files in place
+npm run format:check   # CI-style check, no writes
+```
+
+Prettier (`.prettierrc.json`) handles indentation/line-length/wrapping
+— deliberately NOT an ESLint job (`eslint-config-prettier` is loaded
+last in `eslint.config.mjs` specifically to turn off any stylistic
+rule that might otherwise fight Prettier). `.prettierignore` covers
+`*.md` (hand-authored prose, not code) but club roster JSON under
+`src/data/clubs/` IS formatted — those files get edited often and in
+small pieces (one trait, one specialAbility template at a time), and
+Prettier's one-key-per-line JSON output makes those edits show up as
+clean single-line diffs instead of rewriting one giant packed line.
 
 ---
 
 ## Gotchas
 
 - **`browserType.launch: Executable doesn't exist at
-  .../chrome-headless-shell.exe`** even right after running `npx
-  playwright install chromium` — this happened mid-session here. The
+.../chrome-headless-shell.exe`** even right after running `npx
+playwright install chromium` — this happened mid-session here. The
   install command had resolved against a stale/global Playwright
   install, not the version actually pinned in `package.json` after
   `npm install` picked up the new `devDependencies` entry. Fix: run
   `npm install` first (so `node_modules/playwright`'s version matches
-  `package.json`), *then* `npx playwright install chromium` — running
+  `package.json`), _then_ `npx playwright install chromium` — running
   the install command alone, before `npm install` has settled, can
   silently target the wrong version and report success without
   actually fetching the binary the local `node_modules/playwright`

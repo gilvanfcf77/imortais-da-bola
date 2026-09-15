@@ -5,40 +5,272 @@
   "legendary": true,
   "cupEligible": true,
   "pool": [
-    { "id": "cor00-gk-1", "personId": "dida-h4mq", "name": "Dida", "position": "GK", "roles": ["GOL"], "overall": 87, "traits": [{ "slug": "wall", "intensity": 3 }], "specialAbility": null },
-    { "id": "cor00-gk-2", "personId": "rubinho-t2wf", "name": "Rubinho", "position": "GK", "roles": ["GOL"], "overall": 66, "traits": [], "specialAbility": null },
+    {
+      "id": "cor00-gk-1",
+      "personId": "dida-h4mq",
+      "name": "Dida",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 87,
+      "traits": [{ "slug": "wall", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-gk-2",
+      "personId": "rubinho-t2wf",
+      "name": "Rubinho",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 66,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor00-cb-1", "personId": "fabio-luciano-k8bn", "name": "Fábio Luciano", "position": "CB", "roles": ["ZAG"], "overall": 76, "traits": [], "specialAbility": null },
-    { "id": "cor00-cb-2", "personId": "adilson-batista-p3xr", "name": "Adílson", "position": "CB", "roles": ["ZAG", "VOL"], "overall": 74, "traits": [], "specialAbility": null },
-    { "id": "cor00-cb-3", "personId": "marcio-costa-w7dl", "name": "Márcio Costa", "position": "CB", "roles": ["ZAG"], "overall": 67, "traits": [], "specialAbility": null },
-    { "id": "cor00-cb-4", "personId": "fernando-avalos-n1qz", "name": "Fernando Ávalos", "position": "CB", "roles": ["ZAG"], "overall": 61, "traits": [], "specialAbility": null },
-    { "id": "cor00-cb-5", "personId": "nene-defensor-c9yv", "name": "Nenê", "position": "CB", "roles": ["ZAG"], "overall": 58, "traits": [], "specialAbility": null },
+    {
+      "id": "cor00-cb-1",
+      "personId": "fabio-luciano-k8bn",
+      "name": "Fábio Luciano",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 76,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-cb-2",
+      "personId": "adilson-batista-p3xr",
+      "name": "Adílson",
+      "position": "CB",
+      "roles": ["ZAG", "VOL"],
+      "overall": 74,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-cb-3",
+      "personId": "marcio-costa-w7dl",
+      "name": "Márcio Costa",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 67,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-cb-4",
+      "personId": "fernando-avalos-n1qz",
+      "name": "Fernando Ávalos",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 61,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-cb-5",
+      "personId": "nene-defensor-c9yv",
+      "name": "Nenê",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 58,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor00-fb-1", "personId": "indio-x6ts", "name": "Índio", "position": "FB", "roles": ["LD"], "overall": 75, "traits": [], "specialAbility": null },
-    { "id": "cor00-fb-2", "personId": "kleber-corinthians-m4ju", "name": "Kléber", "position": "FB", "roles": ["LE"], "overall": 73, "traits": [], "specialAbility": null },
-    { "id": "cor00-fb-3", "personId": "angelo-r8fh", "name": "Ângelo", "position": "FB", "roles": ["LD"], "overall": 59, "traits": [], "specialAbility": null },
-    { "id": "cor00-fb-4", "personId": "edson-canhao-b2ov", "name": "Edson Canhão", "position": "FB", "roles": ["LE"], "overall": 57, "traits": [], "specialAbility": null },
+    {
+      "id": "cor00-fb-1",
+      "personId": "indio-x6ts",
+      "name": "Índio",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 75,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fb-2",
+      "personId": "kleber-corinthians-m4ju",
+      "name": "Kléber",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 73,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fb-3",
+      "personId": "angelo-r8fh",
+      "name": "Ângelo",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 59,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fb-4",
+      "personId": "edson-canhao-b2ov",
+      "name": "Edson Canhão",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor00-mf-1", "personId": "vampeta-y5ke", "name": "Vampeta", "position": "MF", "roles": ["VOL"], "overall": 81, "traits": [{ "slug": "shortFuse", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor00-mf-2", "personId": "rincon-a9lp", "name": "Rincón", "position": "MF", "roles": ["MC", "VOL"], "overall": 85, "traits": [{ "slug": "leader", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor00-mf-3", "personId": "marcelinho-carioca-f3wc", "name": "Marcelinho Carioca", "position": "MF", "roles": ["ME", "MAT"], "overall": 90, "traits": [{ "slug": "freeKickSpecialist", "intensity": 3 }, { "slug": "playmaker", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor00-mf-4", "personId": "ricardinho-corinthians-d7zq", "name": "Ricardinho", "position": "MF", "roles": ["MAT", "MD"], "overall": 86, "traits": [{ "slug": "playmaker", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor00-mf-5", "personId": "edu-gaspar-l0hx", "name": "Edu Gaspar", "position": "MF", "roles": ["VOL"], "overall": 68, "traits": [], "specialAbility": null },
-    { "id": "cor00-mf-6", "personId": "marcos-senna-corinthians-s5vi", "name": "Marcos Senna", "position": "MF", "roles": ["VOL"], "overall": 64, "traits": [], "specialAbility": null },
-    { "id": "cor00-mf-7", "personId": "pingo-e1ug", "name": "Pingo", "position": "MF", "roles": ["VOL"], "overall": 56, "traits": [], "specialAbility": null },
+    {
+      "id": "cor00-mf-1",
+      "personId": "vampeta-y5ke",
+      "name": "Vampeta",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 81,
+      "traits": [{ "slug": "shortFuse", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-2",
+      "personId": "rincon-a9lp",
+      "name": "Rincón",
+      "position": "MF",
+      "roles": ["MC", "VOL"],
+      "overall": 85,
+      "traits": [{ "slug": "leader", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-3",
+      "personId": "marcelinho-carioca-f3wc",
+      "name": "Marcelinho Carioca",
+      "position": "MF",
+      "roles": ["ME", "MAT"],
+      "overall": 90,
+      "traits": [
+        { "slug": "freeKickSpecialist", "intensity": 3 },
+        { "slug": "playmaker", "intensity": 2 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-4",
+      "personId": "ricardinho-corinthians-d7zq",
+      "name": "Ricardinho",
+      "position": "MF",
+      "roles": ["MAT", "MD"],
+      "overall": 86,
+      "traits": [{ "slug": "playmaker", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-5",
+      "personId": "edu-gaspar-l0hx",
+      "name": "Edu Gaspar",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 68,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-6",
+      "personId": "marcos-senna-corinthians-s5vi",
+      "name": "Marcos Senna",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 64,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-mf-7",
+      "personId": "pingo-e1ug",
+      "name": "Pingo",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 56,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "cor00-fw-1", "personId": "edilson-corinthians-t6nb", "name": "Edílson", "position": "FW", "roles": ["CA", "PD"], "overall": 89, "traits": [{ "slug": "dribbler", "intensity": 3 }], "specialAbility": { "minLead": 3, "chancePerMinute": 0.05, "templates": [
-      "Já com {team} com muita vantagem, {player} resolve fazer embaixadinhas.",
-      "Enquanto {team} administra a vantagem, {player} resolve se divertir: embaixadinha vai, embaixadinha vem...",
-      "Com o {team} na folga do placar, {player} ergue a bola e engrena uma sequência de embaixadinhas!",
-      "É puro deboche! {player} para a jogada, e começa a fazer embaixadinhas, garantindo a festa do {team}!",
-      "Vantagem tranquila do {team}, e o {player} resolve descontrair: embaixadinhas usando os pés, os joelhos e o peito!"
-    ] } },
-    { "id": "cor00-fw-2", "personId": "luizao-corinthians-j4my", "name": "Luizão", "position": "FW", "roles": ["CA"], "overall": 84, "traits": [{ "slug": "sharpshooter", "intensity": 2 }], "specialAbility": null },
-    { "id": "cor00-fw-3", "personId": "andrezinho-corinthians-q8ck", "name": "Andrezinho", "position": "FW", "roles": ["PD"], "overall": 63, "traits": [], "specialAbility": null },
-    { "id": "cor00-fw-4", "personId": "fernando-baiano-corinthians-v2rz", "name": "Fernando Baiano", "position": "FW", "roles": ["CA"], "overall": 61, "traits": [], "specialAbility": null },
-    { "id": "cor00-fw-5", "personId": "gil-corinthians-u9wo", "name": "Gil", "position": "FW", "roles": ["PE"], "overall": 58, "traits": [], "specialAbility": null },
-    { "id": "cor00-fw-6", "personId": "luciano-bebe-o3ht", "name": "Luciano Bebê", "position": "FW", "roles": ["PE"], "overall": 57, "traits": [], "specialAbility": null },
-    { "id": "cor00-fw-7", "personId": "luis-marcio-i7pd", "name": "Luis Márcio", "position": "FW", "roles": ["CA", "PD"], "overall": 55, "traits": [], "specialAbility": null }
+    {
+      "id": "cor00-fw-1",
+      "personId": "edilson-corinthians-t6nb",
+      "name": "Edílson",
+      "position": "FW",
+      "roles": ["CA", "PD"],
+      "overall": 89,
+      "traits": [{ "slug": "dribbler", "intensity": 3 }],
+      "specialAbility": {
+        "minLead": 3,
+        "chancePerMinute": 0.05,
+        "templates": [
+          "Já com {team} com muita vantagem, {player} resolve fazer embaixadinhas.",
+          "Enquanto {team} administra a vantagem, {player} resolve se divertir: embaixadinha vai, embaixadinha vem...",
+          "Com o {team} na folga do placar, {player} ergue a bola e engrena uma sequência de embaixadinhas!",
+          "É puro deboche! {player} para a jogada, e começa a fazer embaixadinhas, garantindo a festa do {team}!",
+          "Vantagem tranquila do {team}, e o {player} resolve descontrair: embaixadinhas usando os pés, os joelhos e o peito!"
+        ]
+      }
+    },
+    {
+      "id": "cor00-fw-2",
+      "personId": "luizao-corinthians-j4my",
+      "name": "Luizão",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 84,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fw-3",
+      "personId": "andrezinho-corinthians-q8ck",
+      "name": "Andrezinho",
+      "position": "FW",
+      "roles": ["PD"],
+      "overall": 63,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fw-4",
+      "personId": "fernando-baiano-corinthians-v2rz",
+      "name": "Fernando Baiano",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 61,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fw-5",
+      "personId": "gil-corinthians-u9wo",
+      "name": "Gil",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 58,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fw-6",
+      "personId": "luciano-bebe-o3ht",
+      "name": "Luciano Bebê",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 57,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "cor00-fw-7",
+      "personId": "luis-marcio-i7pd",
+      "name": "Luis Márcio",
+      "position": "FW",
+      "roles": ["CA", "PD"],
+      "overall": 55,
+      "traits": [],
+      "specialAbility": null
+    }
   ]
 }

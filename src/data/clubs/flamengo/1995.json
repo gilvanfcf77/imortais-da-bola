@@ -5,27 +5,189 @@
   "legendary": false,
   "cupEligible": true,
   "pool": [
-    { "id": "fla95-gk-1", "personId": "emerson-ferretti-q7lb", "name": "Emerson", "position": "GK", "roles": ["GOL"], "overall": 76, "traits": [], "specialAbility": null },
-    { "id": "fla95-gk-2", "personId": "paulo-cesar-fla-m2ws", "name": "Paulo César", "position": "GK", "roles": ["GOL"], "overall": 60, "traits": [], "specialAbility": null },
-    { "id": "fla95-gk-3", "personId": "roger-fla-t8jm", "name": "Roger", "position": "GK", "roles": ["GOL"], "overall": 55, "traits": [], "specialAbility": null },
+    {
+      "id": "fla95-gk-1",
+      "personId": "emerson-ferretti-q7lb",
+      "name": "Emerson",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 76,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-gk-2",
+      "personId": "paulo-cesar-fla-m2ws",
+      "name": "Paulo César",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 60,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-gk-3",
+      "personId": "roger-fla-t8jm",
+      "name": "Roger",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 55,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "fla95-cb-1", "personId": "agnaldo-fla-t4nk", "name": "Agnaldo", "position": "CB", "roles": ["ZAG"], "overall": 76, "traits": [], "specialAbility": null },
-    { "id": "fla95-cb-2", "personId": "jorge-luis-fla-x9cp", "name": "Jorge Luís", "position": "CB", "roles": ["ZAG"], "overall": 73, "traits": [], "specialAbility": null },
-    { "id": "fla95-cb-3", "personId": "marcio-costa-fla-k5ur", "name": "Márcio Costa", "position": "CB", "roles": ["ZAG", "LD"], "overall": 65, "traits": [], "specialAbility": null },
+    {
+      "id": "fla95-cb-1",
+      "personId": "agnaldo-fla-t4nk",
+      "name": "Agnaldo",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 76,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-cb-2",
+      "personId": "jorge-luis-fla-x9cp",
+      "name": "Jorge Luís",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 73,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-cb-3",
+      "personId": "marcio-costa-fla-k5ur",
+      "name": "Márcio Costa",
+      "position": "CB",
+      "roles": ["ZAG", "LD"],
+      "overall": 65,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "fla95-fb-1", "personId": "branco-w8ez", "name": "Branco", "position": "FB", "roles": ["LE"], "overall": 88, "traits": [{ "slug": "leader", "intensity": 2 }], "specialAbility": null },
-    { "id": "fla95-fb-2", "personId": "charles-guerreiro-y2fm", "name": "Charles Guerreiro", "position": "FB", "roles": ["LD", "VOL"], "overall": 79, "traits": [], "specialAbility": null },
+    {
+      "id": "fla95-fb-1",
+      "personId": "branco-w8ez",
+      "name": "Branco",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 88,
+      "traits": [{ "slug": "leader", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-fb-2",
+      "personId": "charles-guerreiro-y2fm",
+      "name": "Charles Guerreiro",
+      "position": "FB",
+      "roles": ["LD", "VOL"],
+      "overall": 79,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "fla95-mf-1", "personId": "fabinho-fla-p3jt", "name": "Fabinho", "position": "MF", "roles": ["VOL", "LE"], "overall": 76, "traits": [], "specialAbility": null },
-    { "id": "fla95-mf-2", "personId": "marquinhos-fla-a7lz", "name": "Marquinhos", "position": "MF", "roles": ["MC"], "overall": 79, "traits": [], "specialAbility": null },
-    { "id": "fla95-mf-3", "personId": "valber-d6yg", "name": "Válber", "position": "MF", "roles": ["VOL", "LE"], "overall": 63, "traits": [], "specialAbility": null },
-    { "id": "fla95-mf-4", "personId": "william-fla-r6qx", "name": "William", "position": "MF", "roles": ["MD"], "overall": 71, "traits": [], "specialAbility": null },
-    { "id": "fla95-mf-5", "personId": "mazinho-oliveira-u1kg", "name": "Mazinho Oliveira", "position": "MF", "roles": ["MAT", "ME"], "overall": 83, "traits": [], "specialAbility": null },
-    { "id": "fla95-mf-6", "personId": "ueslei-fla-b3np", "name": "Uéslei", "position": "MF", "roles": ["ME", "MAT"], "overall": 62, "traits": [], "specialAbility": null },
+    {
+      "id": "fla95-mf-1",
+      "personId": "fabinho-fla-p3jt",
+      "name": "Fabinho",
+      "position": "MF",
+      "roles": ["VOL", "LE"],
+      "overall": 76,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-mf-2",
+      "personId": "marquinhos-fla-a7lz",
+      "name": "Marquinhos",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 79,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-mf-3",
+      "personId": "valber-d6yg",
+      "name": "Válber",
+      "position": "MF",
+      "roles": ["VOL", "LE"],
+      "overall": 63,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-mf-4",
+      "personId": "william-fla-r6qx",
+      "name": "William",
+      "position": "MF",
+      "roles": ["MD"],
+      "overall": 71,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-mf-5",
+      "personId": "mazinho-oliveira-u1kg",
+      "name": "Mazinho Oliveira",
+      "position": "MF",
+      "roles": ["MAT", "ME"],
+      "overall": 83,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-mf-6",
+      "personId": "ueslei-fla-b3np",
+      "name": "Uéslei",
+      "position": "MF",
+      "roles": ["ME", "MAT"],
+      "overall": 62,
+      "traits": [],
+      "specialAbility": null
+    },
 
-    { "id": "fla95-fw-1", "personId": "romario-z3oc", "name": "Romário", "position": "FW", "roles": ["CA"], "overall": 96, "traits": [{ "slug": "sharpshooter", "intensity": 3 }], "specialAbility": null },
-    { "id": "fla95-fw-2", "personId": "edmundo-f9yl", "name": "Edmundo", "position": "FW", "roles": ["CA"], "overall": 87, "traits": [{ "slug": "dribbler", "intensity": 2 }], "specialAbility": null },
-    { "id": "fla95-fw-3", "personId": "savio-n2xa", "name": "Sávio", "position": "FW", "roles": ["PE", "PD"], "overall": 84, "traits": [{ "slug": "dribbler", "intensity": 3 }], "specialAbility": null },
-    { "id": "fla95-fw-4", "personId": "nelio-d8vt", "name": "Nélio", "position": "FW", "roles": ["PE"], "overall": 64, "traits": [], "specialAbility": null }
+    {
+      "id": "fla95-fw-1",
+      "personId": "romario-z3oc",
+      "name": "Romário",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 96,
+      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-fw-2",
+      "personId": "edmundo-f9yl",
+      "name": "Edmundo",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 87,
+      "traits": [{ "slug": "dribbler", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-fw-3",
+      "personId": "savio-n2xa",
+      "name": "Sávio",
+      "position": "FW",
+      "roles": ["PE", "PD"],
+      "overall": 84,
+      "traits": [{ "slug": "dribbler", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "fla95-fw-4",
+      "personId": "nelio-d8vt",
+      "name": "Nélio",
+      "position": "FW",
+      "roles": ["PE"],
+      "overall": 64,
+      "traits": [],
+      "specialAbility": null
+    }
   ]
 }

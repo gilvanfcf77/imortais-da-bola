@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Scoreboard pulse, retriggered by remounting the element (see MatchScreen.jsx pulseKeys). */
 @keyframes score-pulse {

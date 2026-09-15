@@ -8,7 +8,8 @@
     {
       "id": "us-gk-1",
       "name": "Barreto Escudo",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 78,
       "traits": [],
       "specialAbility": null
@@ -16,7 +17,8 @@
     {
       "id": "us-gk-2",
       "name": "Chico Pulo",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 70,
       "traits": [
         {
@@ -29,7 +31,8 @@
     {
       "id": "us-gk-3",
       "name": "Davi Reflexo",
-      "position": "GK", "roles": ["GOL"],
+      "position": "GK",
+      "roles": ["GOL"],
       "overall": 65,
       "traits": [],
       "specialAbility": null
@@ -37,7 +40,8 @@
     {
       "id": "us-cb-1",
       "name": "Erasmo Bunker",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 81,
       "traits": [
         {
@@ -50,7 +54,8 @@
     {
       "id": "us-cb-2",
       "name": "Fausto Concreto",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 75,
       "traits": [
         {
@@ -63,7 +68,8 @@
     {
       "id": "us-cb-3",
       "name": "Gustavo Prumo",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 71,
       "traits": [],
       "specialAbility": null
@@ -71,7 +77,8 @@
     {
       "id": "us-cb-4",
       "name": "Hélio Firmeza",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 67,
       "traits": [],
       "specialAbility": null
@@ -79,7 +86,8 @@
     {
       "id": "us-cb-5",
       "name": "Igor Sombra",
-      "position": "CB", "roles": ["ZAG"],
+      "position": "CB",
+      "roles": ["ZAG"],
       "overall": 64,
       "traits": [
         {
@@ -92,7 +100,8 @@
     {
       "id": "us-fb-1",
       "name": "Jorginho Foguete",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 77,
       "traits": [
         {
@@ -105,7 +114,8 @@
     {
       "id": "us-fb-2",
       "name": "Kleber Linha",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 72,
       "traits": [],
       "specialAbility": null
@@ -113,7 +123,8 @@
     {
       "id": "us-fb-3",
       "name": "Ladislau Xis",
-      "position": "FB", "roles": ["LE"],
+      "position": "FB",
+      "roles": ["LE"],
       "overall": 68,
       "traits": [],
       "specialAbility": null
@@ -121,7 +132,8 @@
     {
       "id": "us-fb-4",
       "name": "Marinho Costa",
-      "position": "FB", "roles": ["LD"],
+      "position": "FB",
+      "roles": ["LD"],
       "overall": 63,
       "traits": [],
       "specialAbility": null
@@ -129,7 +141,8 @@
     {
       "id": "us-mf-1",
       "name": "Nelsão Régua",
-      "position": "MF", "roles": ["ME", "MAT"],
+      "position": "MF",
+      "roles": ["ME", "MAT"],
       "overall": 85,
       "traits": [
         {
@@ -142,7 +155,8 @@
     {
       "id": "us-mf-2",
       "name": "Osvaldo Chapéu",
-      "position": "MF", "roles": ["MD"],
+      "position": "MF",
+      "roles": ["MD"],
       "overall": 89,
       "traits": [
         {
@@ -159,7 +173,8 @@
     {
       "id": "us-mf-3",
       "name": "Paulinho Cruzado",
-      "position": "MF", "roles": ["MAT", "MD"],
+      "position": "MF",
+      "roles": ["MAT", "MD"],
       "overall": 76,
       "traits": [
         {
@@ -172,7 +187,8 @@
     {
       "id": "us-mf-4",
       "name": "Quintino Firme",
-      "position": "MF", "roles": ["VOL", "MD"],
+      "position": "MF",
+      "roles": ["VOL", "MD"],
       "overall": 74,
       "traits": [
         {
@@ -185,7 +201,8 @@
     {
       "id": "us-mf-5",
       "name": "Robertão Punho",
-      "position": "MF", "roles": ["MC"],
+      "position": "MF",
+      "roles": ["MC"],
       "overall": 73,
       "traits": [
         {
@@ -198,7 +215,8 @@
     {
       "id": "us-mf-6",
       "name": "Silas Costura",
-      "position": "MF", "roles": ["ME"],
+      "position": "MF",
+      "roles": ["ME"],
       "overall": 69,
       "traits": [],
       "specialAbility": null
@@ -206,7 +224,8 @@
     {
       "id": "us-mf-7",
       "name": "Tonho Alçapão",
-      "position": "MF", "roles": ["MD"],
+      "position": "MF",
+      "roles": ["MD"],
       "overall": 66,
       "traits": [],
       "specialAbility": null
@@ -214,7 +233,8 @@
     {
       "id": "us-mf-8",
       "name": "Urias Sereno",
-      "position": "MF", "roles": ["MAT"],
+      "position": "MF",
+      "roles": ["MAT"],
       "overall": 62,
       "traits": [],
       "specialAbility": null
@@ -222,7 +242,8 @@
     {
       "id": "us-fw-1",
       "name": "Vantuil Artilheiro",
-      "position": "FW", "roles": ["CA"],
+      "position": "FW",
+      "roles": ["CA"],
       "overall": 90,
       "traits": [
         {
@@ -235,7 +256,8 @@
     {
       "id": "us-fw-2",
       "name": "Wagninho Faro",
-      "position": "FW", "roles": ["PE", "PD"],
+      "position": "FW",
+      "roles": ["PE", "PD"],
       "overall": 79,
       "traits": [],
       "specialAbility": null
@@ -243,7 +265,8 @@
     {
       "id": "us-fw-3",
       "name": "Xisto Ponta",
-      "position": "FW", "roles": ["PD"],
+      "position": "FW",
+      "roles": ["PD"],
       "overall": 73,
       "traits": [
         {
@@ -256,7 +279,8 @@
     {
       "id": "us-fw-4",
       "name": "Yago Foguete",
-      "position": "FW", "roles": ["CA", "PD"],
+      "position": "FW",
+      "roles": ["CA", "PD"],
       "overall": 70,
       "traits": [
         {
@@ -269,7 +293,8 @@
     {
       "id": "us-fw-5",
       "name": "Zico Retranca",
-      "position": "FW", "roles": ["PE", "CA"],
+      "position": "FW",
+      "roles": ["PE", "CA"],
       "overall": 67,
       "traits": [],
       "specialAbility": null
@@ -277,7 +302,8 @@
     {
       "id": "us-fw-6",
       "name": "Amaro Bode",
-      "position": "FW", "roles": ["PD", "CA"],
+      "position": "FW",
+      "roles": ["PD", "CA"],
       "overall": 61,
       "traits": [],
       "specialAbility": null

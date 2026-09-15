@@ -12,7 +12,10 @@ test('every event type except PLAYER_SPECIAL has at least one narration template
   const rng = createRng(1);
   for (const [name, type] of Object.entries(EVENT_TYPES)) {
     if (name === 'PLAYER_SPECIAL') continue; // bespoke per-player templates, not in the shared pool — see narration.js
-    assert.doesNotThrow(() => narrate(type, {}, rng), `missing narration template for EVENT_TYPES.${name}`);
+    assert.doesNotThrow(
+      () => narrate(type, {}, rng),
+      `missing narration template for EVENT_TYPES.${name}`,
+    );
   }
 });
 
