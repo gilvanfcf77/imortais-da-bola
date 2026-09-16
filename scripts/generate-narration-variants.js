@@ -11,13 +11,14 @@
 //
 // This script NEVER writes into src/engine/narration/ or a club JSON file —
 // it only prints candidates for a human to review and paste in by hand,
-// same as every other piece of narration text in this project. Two rules
+// same as every other piece of narration text in this project. Three rules
 // baked into the prompt come from real mistakes caught while piloting this
 // by hand before this script existed (see the memory files
-// narration-crowd-is-home-only and narration-must-sound-spoken-not-written):
-// don't invent an unqualified crowd reaction, and reject anything that
-// reads like written prose instead of something a commentator would say
-// out loud.
+// narration-crowd-is-home-only, narration-must-sound-spoken-not-written, and
+// narration-name-before-action): don't invent an unqualified crowd
+// reaction, reject anything that reads like written prose instead of
+// something a commentator would say out loud, and put {player}'s name
+// before the action they perform, not tacked on after it.
 //
 // Usage:
 //   node scripts/generate-narration-variants.js event GOAL 5
@@ -113,6 +114,7 @@ function buildPrompt({ existingTemplates, placeholders, count, subject }) {
 5. Às vezes pode ser engraçado/exagerado (ver CLAUDE.md "Tom dos eventos"), mas a maioria deve ser séria/plausível — não exagere na piada a ponto de virar bobagem repetida.
 6. Não repita nenhuma das frases já existentes, nem uma reformulação óbvia delas.
 7. Frases curtas o bastante para caber numa tela de celular — não escreva parágrafos.
+8. Quando {player} for quem pratica a ação central da frase, o nome deve vir ANTES da ação, não depois — "{player} chegou com força demais" soa natural, "Chegou com força demais, {player}" soa como um apêndice colado depois (ver memória narration-name-before-action). Isso não se aplica quando a vírgula introduz uma oração adverbial legítima em que {player} já é sujeito da oração seguinte ("Sozinho, {player} rabiscou o marcador" está correto) — só evite o padrão "verbo com sujeito implícito, nome encaixado depois como um apêndice".
 
 Responda SOMENTE com um array JSON de strings, nada mais — sem markdown, sem comentário, só o array.`;
 
