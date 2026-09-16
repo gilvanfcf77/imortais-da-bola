@@ -54,6 +54,7 @@ export const EVENT_TYPES = {
   TIME_WASTING: 'timeWasting',
   THROW_IN_DELAY: 'throwInDelay',
   GOAL_KICK_DELAY: 'goalKickDelay',
+  GOAL_CELEBRATION_STALL: 'goalCelebrationStall',
   SHOWBOATING: 'showboating',
   SHOOTOUT_START: 'shootoutStart',
   SHOOTOUT_KICK_SCORED: 'shootoutKickScored',

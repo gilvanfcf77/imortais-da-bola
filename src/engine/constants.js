@@ -163,6 +163,18 @@ export const GAMESMANSHIP = {
   // slow to take it, without making it impossible for a midfielder or
   // forward chasing the ball out of play to be the one who ends up with it.
   THROW_IN_TAKER_FB_WEIGHT: 4,
+  // Rolled once right after a team scores, not per minute like the delays
+  // above — a much higher base chance makes sense since it's a single shot
+  // at the mechanic per goal, not a repeated per-minute risk. Requires an
+  // actual cynicalFouler on the pitch (see the cynicalIntensity check at the
+  // call site) — a goal alone doesn't buy stalling, same rule as everywhere
+  // else gamesmanship shows up.
+  GOAL_CELEBRATION_STALL_CHANCE_PER_LEVEL: 0.12,
+  // Milking a goal celebration for time only reads as cynical once the
+  // match is far enough along to matter; a team doing this after an early
+  // goal would just look like a normal celebration, so it's gated the same
+  // way TIME_WASTING is (see TIME_WASTING_MIN_MINUTE above).
+  GOAL_CELEBRATION_STALL_MIN_MINUTE: 60,
   // TIME_WASTING's flavor (gandulas hiding every ball, a fake medical
   // timeout) only reads as believable once the match is genuinely running
   // out — a team doing that in the 20th minute would look bizarre, not

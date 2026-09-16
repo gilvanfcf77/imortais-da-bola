@@ -23,6 +23,14 @@ export const TEMPLATES = {
     'Olha o relógio do árbitro! {player} tá gastando um tempo precioso ali.',
     'Com muita paciência, {player} demora horrores para soltar a bola.',
   ],
+  [EVENT_TYPES.GOAL_CELEBRATION_STALL]: [
+    'O {team} inteiro sai correndo para comemorar longe do campo, e ninguém volta com pressa.',
+    'Depois do gol, o time {teamOf} vai em bloco festejar na lateral — o árbitro já reclama da demora pra voltar.',
+    'A comemoração {teamOf} vira uma festa coletiva fora de campo, e o juiz tem que ir chamar um por um de volta.',
+    'Todo mundo {teamOf} corre pro abraço perto da torcida, e a bola demora a voltar a rolar.',
+    'O {team} se amontoa pra comemorar longe do círculo central, catimbando o tempo antes de reiniciar o jogo.',
+    'Abraço coletivo {teamOf} se estende bem mais do que devia — o árbitro já olha pro relógio, impaciente.',
+  ],
   [EVENT_TYPES.GOAL_KICK_DELAY]: [
     '{player} demora uma eternidade pra bater o tiro de meta.',
     'O goleiro {player} segura a bola e não tem pressa nenhuma pra sair jogando.',

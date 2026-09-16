@@ -348,6 +348,19 @@ const GOAL_STYLE_EVENT_TYPE = {
   goalkeeperBlunder: EVENT_TYPES.GOAL_GOALKEEPER_BLUNDER,
 };
 
+// Every event type that means a goal actually went in — used to spot, from
+// this minute's event list, whether a team just scored and might celebrate
+// its way into a GOAL_CELEBRATION_STALL. DISALLOWED_GOAL is deliberately
+// left out: it means the goal didn't count.
+const GOAL_SCORED_EVENT_TYPES = new Set([
+  ...Object.values(GOAL_STYLE_EVENT_TYPE),
+  EVENT_TYPES.GOAL_ANOTHER,
+  EVENT_TYPES.GOAL_REFEREE_DEFLECTION,
+  EVENT_TYPES.GOAL_HANDBALL,
+  EVENT_TYPES.GOAL_PENALTY,
+  EVENT_TYPES.FREE_KICK_GOAL,
+]);
+
 // `opponentHasStandInGoalkeeper`: the attacking side deliberately shoots
 // from distance more often against an outfield player standing in as
 // goalkeeper (see maybeAssignStandInGoalkeeper) — a tactical choice by the
@@ -1406,6 +1419,35 @@ function resolveGoalKickDelay(team, minute, gamesmanshipLevel, rng, stats) {
   return events;
 }
 
+// Milking the celebration itself to burn the clock — real Law 12 territory
+// (delaying the restart of play is cardable), so it reuses the same
+// delay-of-game card risk as a slow throw-in or goal kick. Any outfield
+// player can be the one still celebrating, so no position weighting like
+// resolveThrowInDelay's fullback bias.
+function resolveGoalCelebrationStall(team, minute, gamesmanshipLevel, rng, stats) {
+  const events = [];
+  const active = activePlayers(team);
+  if (active.length === 0) return events;
+
+  const player = rng.pick(active);
+  pushEvent(
+    events,
+    minute,
+    EVENT_TYPES.GOAL_CELEBRATION_STALL,
+    team.side,
+    { player: player.name, team: team.config },
+    rng,
+    { playerId: player.id },
+  );
+  stats.goalCelebrationStalls++;
+
+  if (rng.chance(delayOfGameCardChance(team, player, gamesmanshipLevel))) {
+    events.push(...issueYellowCard(team, player, minute, rng, stats));
+  }
+
+  return events;
+}
+
 // Announces the stoppage time for a half, then — reusing the "home crowd is
 // the dominant presence" rule from the WHIFF crowd fix above — checks
 // whether the home crowd is unhappy with the call: too little added time
@@ -1541,6 +1583,31 @@ function simulateMinute(minute, home, away, score, rng, stats, isSecondHalf) {
     }
   }
 
+  // A team that just scored this minute may milk the celebration for time —
+  // gated on minute and on having a cynicalFouler on the pitch, same as
+  // every other catimba payoff (CLAUDE.md: "eficácia depende de ter
+  // catimbeiros em campo"). Checked after the score-affecting resolvers
+  // above/before it in this tick, so `score` and `events` already reflect
+  // any goal scored this minute.
+  if (minute >= GAMESMANSHIP.GOAL_CELEBRATION_STALL_MIN_MINUTE) {
+    for (const [team, opponent] of [
+      [home, away],
+      [away, home],
+    ]) {
+      const scoredThisMinute = events.some(
+        (event) => event.side === team.side && GOAL_SCORED_EVENT_TYPES.has(event.type),
+      );
+      if (!scoredThisMinute) continue;
+      if (sumTraitIntensity(activePlayers(team), 'cynicalFouler') === 0) continue;
+
+      const level = effectiveGamesmanship(team, opponent, minute, score);
+      if (level === 0) continue;
+      if (rng.chance(level * GAMESMANSHIP.GOAL_CELEBRATION_STALL_CHANCE_PER_LEVEL)) {
+        events.push(...resolveGoalCelebrationStall(team, minute, level, rng, stats));
+      }
+    }
+  }
+
   if (isSecondHalf) {
     for (const team of [home, away]) {
       if (goalMargin(team.side, score) < 2) continue;
@@ -1626,6 +1693,7 @@ export function simulateMatch({ home, away, rng }) {
     stoppageTimeBooed: 0,
     throwInDelays: 0,
     goalKickDelays: 0,
+    goalCelebrationStalls: 0,
     officialsAssaulted: 0,
     handballsOnTheLine: 0,
     matchAbandoned: false,
@@ -1758,6 +1826,7 @@ export function simulateMatch({ home, away, rng }) {
       stoppageTimeBooed: stats.stoppageTimeBooed,
       throwInDelays: stats.throwInDelays,
       goalKickDelays: stats.goalKickDelays,
+      goalCelebrationStalls: stats.goalCelebrationStalls,
       officialsAssaulted: stats.officialsAssaulted,
       handballsOnTheLine: stats.handballsOnTheLine,
       matchAbandoned: stats.matchAbandoned,

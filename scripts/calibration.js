@@ -138,6 +138,7 @@ const totals = {
   stoppageTimeBooed: 0,
   throwInDelays: 0,
   goalKickDelays: 0,
+  goalCelebrationStalls: 0,
   goalkeeperGoals: 0,
   officialsAssaulted: 0,
   handballsOnTheLine: 0,
@@ -201,6 +202,7 @@ for (let i = 0; i < MATCH_COUNT; i++) {
   totals.stoppageTimeBooed += result.stats.stoppageTimeBooed;
   totals.throwInDelays += result.stats.throwInDelays;
   totals.goalKickDelays += result.stats.goalKickDelays;
+  totals.goalCelebrationStalls += result.stats.goalCelebrationStalls;
 
   if (result.stats.redCards > 0) matchesWithRedCard++;
   const redHome = result.stats.redCardsBySide.home > 0;
@@ -366,6 +368,9 @@ log(
 );
 log(
   `Demora no tiro de meta: ${totals.goalKickDelays} (${(totals.goalKickDelays / MATCH_COUNT).toFixed(3)} por partida)`,
+);
+log(
+  `Comemoração de gol prolongada: ${totals.goalCelebrationStalls} (${(totals.goalCelebrationStalls / MATCH_COUNT).toFixed(3)} por partida)`,
 );
 log(
   `Gols marcados por goleiro: ${totals.goalkeeperGoals} (${(totals.goalkeeperGoals / MATCH_COUNT).toFixed(3)} por partida)`,

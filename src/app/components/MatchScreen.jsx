@@ -174,6 +174,7 @@ const EVENT_CATEGORY_CLASS = {
   [EVENT_TYPES.TIME_WASTING]: 'text-slate-500 text-sm',
   [EVENT_TYPES.THROW_IN_DELAY]: 'text-slate-500 text-sm',
   [EVENT_TYPES.GOAL_KICK_DELAY]: 'text-slate-500 text-sm',
+  [EVENT_TYPES.GOAL_CELEBRATION_STALL]: 'text-slate-500 text-sm',
 };
 
 function eventTextClass(event) {
