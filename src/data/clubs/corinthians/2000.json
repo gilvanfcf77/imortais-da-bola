@@ -151,7 +151,7 @@
       "number": 7,
       "traits": [
         { "slug": "freeKickSpecialist", "intensity": 3 },
-        { "slug": "playmaker", "intensity": 2 }
+        { "slug": "playmaker", "intensity": 3 }
       ],
       "specialAbility": null
     },

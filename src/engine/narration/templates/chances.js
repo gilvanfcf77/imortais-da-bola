@@ -14,7 +14,7 @@ export const TEMPLATES = {
     'Que perna torta! {player} chuta torto e nem assusta o goleiro.',
     'Inacreditável! {player} perde um gol feito de frente para a rede.',
     '{player} ganha a disputa, chuta forte, mas explode a bola na trave.',
-    'Tinha tudo para fazer o gol, mas {player} isola a cobrança.',
+    'Tinha tudo para fazer o gol, mas {player} isola a bola.',
   ],
   [EVENT_TYPES.WHIFF]: [
     '{player} vai para o chute, erra a bola feio e cai sentado — a torcida {crowdOf} vaia sem dó.',
