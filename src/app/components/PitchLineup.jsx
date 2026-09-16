@@ -32,12 +32,15 @@ function initialsFor(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-// The shirt number a real player actually wore that season, when curated
-// into the club's data (`number` on the pool entry — optional, since
-// Brazilian squad numbers before the mid-1990s followed a fixed
-// per-position convention re-assigned match to match, not a number owned by
-// a player all season, and fictional/stress-test clubs have no real-world
-// number to curate at all). Falls back to initials when absent.
+// The shirt number curated for a real player (`number` on the pool entry).
+// Every real, curated club (Corinthians, São Paulo, Flamengo) has this
+// filled in for every player — a best-effort pick (classic Brazilian
+// per-position numbering, or a documented-but-not-fully-certain number,
+// e.g. one used in only one of several matches that season) when no single
+// confidently-sourced number exists, since the user decided a plausible
+// guess reads better in the UI than initials; see DECISOES.md decision 57.
+// Still optional in the schema because fictional/stress-test clubs have no
+// real-world number to curate at all, so they fall back to initials.
 function dotLabelFor(player) {
   return player.number != null ? String(player.number) : initialsFor(player.name);
 }

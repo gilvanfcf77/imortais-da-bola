@@ -24,6 +24,7 @@
       "position": "GK",
       "roles": ["GOL"],
       "overall": 66,
+      "number": 12,
       "traits": [],
       "specialAbility": null
     },
@@ -57,6 +58,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 67,
+      "number": 4,
       "traits": [],
       "specialAbility": null
     },
@@ -67,6 +69,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 61,
+      "number": 4,
       "traits": [],
       "specialAbility": null
     },
@@ -77,6 +80,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 58,
+      "number": 3,
       "traits": [],
       "specialAbility": null
     },
@@ -110,6 +114,7 @@
       "position": "FB",
       "roles": ["LD"],
       "overall": 59,
+      "number": 2,
       "traits": [],
       "specialAbility": null
     },
@@ -120,6 +125,7 @@
       "position": "FB",
       "roles": ["LE"],
       "overall": 57,
+      "number": 6,
       "traits": [],
       "specialAbility": null
     },
@@ -189,6 +195,7 @@
       "position": "MF",
       "roles": ["VOL"],
       "overall": 64,
+      "number": 21,
       "traits": [],
       "specialAbility": null
     },
@@ -199,6 +206,7 @@
       "position": "MF",
       "roles": ["VOL"],
       "overall": 56,
+      "number": 5,
       "traits": [],
       "specialAbility": null
     },
@@ -242,6 +250,7 @@
       "position": "FW",
       "roles": ["PD"],
       "overall": 63,
+      "number": 7,
       "traits": [],
       "specialAbility": null
     },
@@ -263,6 +272,7 @@
       "position": "FW",
       "roles": ["PE"],
       "overall": 58,
+      "number": 17,
       "traits": [],
       "specialAbility": null
     },
@@ -273,6 +283,7 @@
       "position": "FW",
       "roles": ["PE"],
       "overall": 57,
+      "number": 11,
       "traits": [],
       "specialAbility": null
     },
@@ -283,6 +294,7 @@
       "position": "FW",
       "roles": ["CA", "PD"],
       "overall": 55,
+      "number": 9,
       "traits": [],
       "specialAbility": null
     }

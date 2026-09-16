@@ -24,6 +24,7 @@
       "position": "GK",
       "roles": ["GOL"],
       "overall": 74,
+      "number": 12,
       "traits": [],
       "specialAbility": null
     },
@@ -46,6 +47,7 @@
       "position": "CB",
       "roles": ["ZAG"],
       "overall": 77,
+      "number": 4,
       "traits": [],
       "specialAbility": null
     },
@@ -67,6 +69,7 @@
       "position": "CB",
       "roles": ["ZAG", "LD"],
       "overall": 65,
+      "number": 3,
       "traits": [],
       "specialAbility": null
     },
@@ -77,6 +80,7 @@
       "position": "CB",
       "roles": ["ZAG", "VOL"],
       "overall": 57,
+      "number": 5,
       "traits": [],
       "specialAbility": null
     },
@@ -110,6 +114,7 @@
       "position": "FB",
       "roles": ["LE", "LD"],
       "overall": 70,
+      "number": 2,
       "traits": [],
       "specialAbility": null
     },
@@ -120,6 +125,7 @@
       "position": "FB",
       "roles": ["LD"],
       "overall": 59,
+      "number": 2,
       "traits": [],
       "specialAbility": null
     },
@@ -142,6 +148,7 @@
       "position": "MF",
       "roles": ["VOL"],
       "overall": 72,
+      "number": 5,
       "traits": [],
       "specialAbility": null
     },
@@ -152,6 +159,7 @@
       "position": "MF",
       "roles": ["MC", "MAT"],
       "overall": 83,
+      "number": 8,
       "traits": [],
       "specialAbility": null
     },
@@ -162,6 +170,7 @@
       "position": "MF",
       "roles": ["MC", "MD"],
       "overall": 69,
+      "number": 8,
       "traits": [],
       "specialAbility": null
     },
@@ -184,6 +193,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 90,
+      "number": 9,
       "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
       "specialAbility": null
     },
@@ -216,6 +226,7 @@
       "position": "FW",
       "roles": ["PE"],
       "overall": 78,
+      "number": 11,
       "traits": [],
       "specialAbility": null
     },
@@ -226,6 +237,7 @@
       "position": "FW",
       "roles": ["PE"],
       "overall": 77,
+      "number": 11,
       "traits": [],
       "specialAbility": null
     },
@@ -236,6 +248,7 @@
       "position": "FW",
       "roles": ["CA", "PD"],
       "overall": 55,
+      "number": 9,
       "traits": [],
       "specialAbility": null
     },
@@ -246,6 +259,7 @@
       "position": "FW",
       "roles": ["CA"],
       "overall": 58,
+      "number": 9,
       "traits": [],
       "specialAbility": null
     },
@@ -256,6 +270,7 @@
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 73,
+      "number": 9,
       "traits": [],
       "specialAbility": null
     },
@@ -266,6 +281,7 @@
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 57,
+      "number": 9,
       "traits": [],
       "specialAbility": null
     }
