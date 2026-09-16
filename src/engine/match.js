@@ -984,12 +984,20 @@ function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats) {
     );
     stats.scandalousFouls++;
   } else {
+    // Not every FOUL template needs a victim (most just narrate the tackle
+    // itself), but some do ("agarrou a camisa" needs to say whose shirt) —
+    // picking one here and always passing it through is cheaper and safer
+    // than threading a second pushEvent variant just for those templates.
+    // Reuses pickTauntVictim's same defender-leaning pick as
+    // SCANDALOUS_FOUL above, for the same reason (a fouled outfield player
+    // is usually a defender contesting the ball).
+    const victim = pickTauntVictim(fouledTeam, rng);
     pushEvent(
       events,
       minute,
       EVENT_TYPES.FOUL,
       offendingTeam.side,
-      { player: offender.name, opponent: fouledTeam.config },
+      { player: offender.name, victim: victim.name, opponent: fouledTeam.config },
       rng,
     );
   }

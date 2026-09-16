@@ -20,7 +20,7 @@ export const TEMPLATES = {
     'O árbitro chama a atenção de {player}, que enrola para cobrar o lateral.',
     '{player} segura a redonda com a mão e finge que não é com ele.',
     'Passam os segundos e {player} continua paradão na linha lateral.',
-    'Olha o relógio do árbitro! {player} tá gastando um tempo precioso ali.',
+    'O juiz confere o relógio, impaciente, enquanto {player} não tem pressa nenhuma pra cobrar o lateral.',
     'Com muita paciência, {player} demora horrores para soltar a bola.',
   ],
   [EVENT_TYPES.GOAL_CELEBRATION_STALL]: [

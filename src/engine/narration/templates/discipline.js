@@ -18,10 +18,10 @@ export const TEMPLATES = {
     'Falta de {player}, marcada {opponentFor}.',
     '{player} para a jogada com uma falta {opponentFor}.',
     'O árbitro marca falta de {player} {opponentFor}.',
-    'Entrou atrasado, {player}, o juiz marca a falta {opponentFor}.',
-    'Chegou com força demais, {player}, e o juiz não perdoa: falta marcada {opponentFor}.',
-    'Parou o contra-ataque na base da falta, {player} — tiro livre {opponentFor}.',
-    '{player} agarrou a camisa e o árbitro paralisa o lance: falta {opponentFor}.',
+    '{player} entrou atrasado, o juiz marca a falta {opponentFor}.',
+    '{player} chegou com força demais, e o juiz não perdoa: falta marcada {opponentFor}.',
+    '{player} parou o contra-ataque na base da falta — tiro livre {opponentFor}.',
+    '{player} agarrou a camisa de {victim} e o árbitro paralisa o lance: falta {opponentFor}.',
   ],
   [EVENT_TYPES.SCANDALOUS_FOUL]: [
     '{player} puxa a camisa de {victim} até rasgar. O juiz marcou falta {opponentFor} na hora.',
@@ -74,7 +74,7 @@ export const TEMPLATES = {
   [EVENT_TYPES.SECOND_YELLOW_RED]: [
     'Segundo amarelo para {player} — e está expulso!',
     'O árbitro puxa o amarelo e depois o vermelho! {player} vai para o chuveiro mais cedo!',
-    'Não podia fazer essa falta, {player}! Recebe o segundo amarelo e ganha o cartão vermelho!',
+    '{player} não podia fazer essa falta! Recebe o segundo amarelo e ganha o cartão vermelho!',
     'Vacilou feio! {player} toma o segundo amarelo e é expulso da partida!',
     'O juiz não pensa duas vezes, mostra o segundo amarelo e {player} está fora do jogo!',
     'Cartão vermelho direto para {player}, que já tinha amarelo e acaba de ser expulso!',
