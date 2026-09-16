@@ -1,5 +1,19 @@
 @import 'tailwindcss';
 
+/* Browsers don't give <button> the hand cursor the way they do <a href> —
+   it defaults to the plain arrow, which reads as "not really clickable"
+   even though every button in this app (player cards/rows, pitch dots,
+   the mute toggle, ...) is. Applies everywhere at once instead of adding
+   cursor-pointer to each one by hand; :disabled keeps the "not-allowed"
+   cursor so a genuinely unclickable button (e.g. an already-taken player
+   card) still reads as such. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
 /* Scoreboard pulse, retriggered by remounting the element (see MatchScreen.jsx pulseKeys). */
 @keyframes score-pulse {
   0% {
