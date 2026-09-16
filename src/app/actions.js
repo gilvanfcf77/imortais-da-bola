@@ -152,19 +152,24 @@ function toTeamConfig(participant) {
 // button in SquadScreen.jsx fills with a genuinely random draftEleven draw
 // under whatever formation the player picked (see completeSquadRandomly
 // below) so the player's side doesn't end up artificially stacked either.
-// `excludedEras` (a Set of era values, or undefined) keeps the opponent
-// from being drawn from an era the player's own squad already used — only
-// meaningful when clubEntry is the player's own club (see startCup), which
-// can now appear as its own opponent as long as it's a different era (e.g.
-// Corinthians 2000 facing Corinthians 1977). Falls back to ignoring the
-// exclusion if it would leave zero eras to draw from (e.g. the player's
-// squad already mixes every era that club has, via getClubPool's combined
-// multi-era draw) — an already-used era is an accepted rough edge (see
-// startCup's own doc comment), better than dropping the club from the
-// draw entirely.
+// `excludedEras` (a Set of era values) keeps the opponent from being drawn
+// from an era already spoken for elsewhere in this same bracket (see
+// startCup's `usedErasByClub`), so two independent slots landing on the
+// same club (now possible — see startCup) don't also land on the same era
+// and produce a literal mirror match. Deliberately NOT used to keep an NPC
+// opponent away from an era the player's own squad happens to use — the
+// player's squad is a mix of players drafted from wherever, never literally
+// "that club's 1977 squad" itself, so a Corinthians player using 1977
+// players facing a Corinthians 1977 NPC is a real, intended matchup, not a
+// self-mirror (the user confirmed this explicitly after the first version
+// of this exclusion wrongly blocked it). Falls back to ignoring the
+// exclusion if it would leave zero eras to draw from (e.g. a club with only
+// one curated era, like Flamengo, getting picked for a second slot) — an
+// already-used era is an accepted rough edge in that rare case, better than
+// dropping the club from the draw entirely.
 function drawSingleEraOpponent(clubEntry, rng, excludedEras) {
   const allEras = getClubEras(clubEntry.slug);
-  const eras = excludedEras ? allEras.filter((e) => !excludedEras.has(e.era)) : allEras;
+  const eras = allEras.filter((e) => !excludedEras.has(e.era));
   const pool = eras.length > 0 ? eras : allEras;
   const legendaryEras = pool.filter((e) => e.legendary);
   const era = rng.pick(legendaryEras.length > 0 ? legendaryEras : pool);
@@ -348,30 +353,60 @@ function buildBracket(opponents, rng) {
   return rounds;
 }
 
-// Draws the whole bracket at once: as many distinct clubs as
-// largestValidOpponentCount allows (never repeats one on both sides of the
-// draw), each with its own single era, then resolves every match that
-// doesn't involve the player. The player's own club is now a valid
-// opponent too (it used to be excluded outright) — a different era of the
-// same club, e.g. Corinthians 2000 facing Corinthians 1977, is exactly the
-// kind of nostalgic matchup this game is about; only the era(s) the
-// player's own squad was actually drawn from are off-limits for it (see
-// drawSingleEraOpponent), never the whole club. A real player showing up
-// on both sides at once (if the opponent's own best-XI draft happens to
-// also grab someone the player already has) is an accepted rough edge, not
+// Draws the whole bracket at once: largestValidOpponentCount opponent slots,
+// each drawn independently (with replacement across clubs) from every
+// cupEligible club, then resolves every match that doesn't involve the
+// player. Clubs can repeat across slots — including the same club facing
+// itself in an "other match" the player never plays, and including facing
+// the player's own club at an era the player's own squad also uses (the
+// player's squad is a mix of players drafted from wherever, never literally
+// "that club's 1977 squad" itself, so this is a real, intended matchup, not
+// a self-mirror) — since there's nothing actually wrong with that: it's the
+// same nostalgic-mixing pitch as any other matchup, and with few clubs
+// curated so far it's the only way a bracket gets any real size at all.
+// What's NOT allowed is the exact same era of the exact same club showing
+// up twice AS AN NPC OPPONENT — that's a literal mirror match (the same
+// best-XI facing itself), not a nostalgic what-if. `usedErasByClub` tracks,
+// per club, every era already drawn earlier in this same bracket, and each
+// slot's candidate pool is filtered down to clubs that still have at least
+// one era not in there before picking, rather than picking a club first and
+// hoping it still has room — that filter is what makes the no-exact-
+// duplicate rule an actual guarantee instead of a best-effort exclusion
+// that quietly degrades into a duplicate the moment one club (e.g.
+// Flamengo, curated with only one era so far) gets picked twice. Only
+// falls back to every club, accepting a possible exact-era repeat, if
+// literally none have room left — i.e. more opponent slots than total
+// curated eras across every cupEligible club combined, which needs the
+// bracket to outgrow the whole roster's era variety at once. A real player
+// showing up on both sides at once (if two independent best-XI draws
+// happen to want the same person, or the opponent's own draft grabs
+// someone the player already has) is a separate, accepted rough edge, not
 // blocked for — the same id ties both appearances to one running tally in
-// the cup leaderboard rather than double-counting them as different people.
-export async function startCup(clubSlug, squad) {
+// the cup leaderboard rather than double-counting them as different
+// people.
+export async function startCup() {
   const manifest = getClubManifest();
   const others = manifest.filter((c) => c.cupEligible);
   const rng = createRng(Date.now());
 
-  const ownEras = new Set(squad.map((p) => p.era).filter((era) => era != null));
+  const usedErasByClub = new Map();
+
+  function hasUnusedEra(clubEntry) {
+    const used = usedErasByClub.get(clubEntry.slug) ?? new Set();
+    return getClubEras(clubEntry.slug).some((e) => !used.has(e.era));
+  }
+
   const opponentCount = largestValidOpponentCount(others.length);
-  const opponentClubs = rng.shuffle(others).slice(0, opponentCount);
-  const opponents = opponentClubs.map((clubEntry) =>
-    drawSingleEraOpponent(clubEntry, rng, clubEntry.slug === clubSlug ? ownEras : undefined),
-  );
+  const opponents = Array.from({ length: opponentCount }, () => {
+    const withRoom = others.filter(hasUnusedEra);
+    const clubEntry = rng.pick(withRoom.length > 0 ? withRoom : others);
+    const excluded = usedErasByClub.get(clubEntry.slug) ?? new Set();
+
+    const opponent = drawSingleEraOpponent(clubEntry, rng, excluded);
+    if (!usedErasByClub.has(clubEntry.slug)) usedErasByClub.set(clubEntry.slug, new Set());
+    usedErasByClub.get(clubEntry.slug).add(opponent.era);
+    return opponent;
+  });
 
   return { rounds: buildBracket(opponents, rng) };
 }
