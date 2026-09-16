@@ -20,6 +20,12 @@ function Leaderboard({ title, entries, playerClubName }) {
   // matches it is a co-leader and gets the same 🥇 treatment, not just
   // whichever one happened to sort first among ties.
   const topCount = entries[0].count;
+  // Two independent things can be true of a row, so they get two
+  // independent signals instead of fighting over the same text color: who's
+  // actually leading is the row's own background tint (green) plus the 🥇,
+  // and whose club is the player's own is the name's text color (blue) —
+  // previously both used green/bold on the name itself, which read as
+  // ambiguous when a row wasn't sure which one it was announcing.
   return (
     <div className="w-full rounded-lg border border-slate-800 bg-slate-900 px-6 py-4">
       <p className="mb-2 text-center text-xs uppercase tracking-wide text-slate-500">{title}</p>
@@ -30,11 +36,9 @@ function Leaderboard({ title, entries, playerClubName }) {
           return (
             <li
               key={entry.id}
-              className={
-                isTopTied
-                  ? 'flex items-center justify-between rounded bg-emerald-500/10 px-2 py-1 text-base font-bold text-emerald-400'
-                  : 'flex items-center justify-between px-2 py-1 text-sm text-slate-300'
-              }
+              className={`flex items-center justify-between rounded px-2 py-1 text-sm ${
+                isTopTied ? 'bg-emerald-500/15 font-semibold' : ''
+              }`}
             >
               <span className="truncate">
                 {isTopTied ? '🥇' : `${i + 1}.`}{' '}
@@ -43,7 +47,7 @@ function Leaderboard({ title, entries, playerClubName }) {
                     {clubTag(entry.club)}
                   </span>
                 )}{' '}
-                <span className={isPlayerClub ? 'font-semibold text-sky-400' : undefined}>
+                <span className={isPlayerClub ? 'font-semibold text-sky-400' : 'text-slate-300'}>
                   {entry.name}
                 </span>
               </span>
@@ -129,14 +133,13 @@ export default function CupOutcomeScreen({
         <h2 className="text-4xl font-bold">{title}</h2>
         <p className="mt-2 text-lg text-slate-300">
           {homeName} {result.homeGoals} x {result.awayGoals} {awayName}
-          {shootout && (
-            <span className="text-slate-400">
-              {' '}
-              (pên. {shootout.homeScore}-{shootout.awayScore})
-            </span>
-          )}
           {result.abandoned && <span className="text-slate-400"> (WO)</span>}
         </p>
+        {shootout && (
+          <p className="text-sm text-slate-400">
+            Pênaltis: {shootout.homeScore}-{shootout.awayScore}
+          </p>
+        )}
         {titleOutcome && (
           <p className="mt-3 text-sm text-slate-400">
             Campeão: {titleOutcome.championName}

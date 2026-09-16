@@ -22,9 +22,9 @@ export default function CupScreen({
 
   useEffect(() => {
     if (!bracket) {
-      startCup(club.slug).then(onBracketReady);
+      startCup(club.slug, squad).then(onBracketReady);
     }
-  }, [bracket, club.slug, onBracketReady]);
+  }, [bracket, club.slug, squad, onBracketReady]);
 
   const round = bracket?.rounds[roundIndex];
   const opponent = round?.playerOpponent;

@@ -152,10 +152,22 @@ function toTeamConfig(participant) {
 // button in SquadScreen.jsx fills with a genuinely random draftEleven draw
 // under whatever formation the player picked (see completeSquadRandomly
 // below) so the player's side doesn't end up artificially stacked either.
-function drawSingleEraOpponent(clubEntry, rng) {
-  const eras = getClubEras(clubEntry.slug);
-  const legendaryEras = eras.filter((e) => e.legendary);
-  const era = rng.pick(legendaryEras.length > 0 ? legendaryEras : eras);
+// `excludedEras` (a Set of era values, or undefined) keeps the opponent
+// from being drawn from an era the player's own squad already used — only
+// meaningful when clubEntry is the player's own club (see startCup), which
+// can now appear as its own opponent as long as it's a different era (e.g.
+// Corinthians 2000 facing Corinthians 1977). Falls back to ignoring the
+// exclusion if it would leave zero eras to draw from (e.g. the player's
+// squad already mixes every era that club has, via getClubPool's combined
+// multi-era draw) — an already-used era is an accepted rough edge (see
+// startCup's own doc comment), better than dropping the club from the
+// draw entirely.
+function drawSingleEraOpponent(clubEntry, rng, excludedEras) {
+  const allEras = getClubEras(clubEntry.slug);
+  const eras = excludedEras ? allEras.filter((e) => !excludedEras.has(e.era)) : allEras;
+  const pool = eras.length > 0 ? eras : allEras;
+  const legendaryEras = pool.filter((e) => e.legendary);
+  const era = rng.pick(legendaryEras.length > 0 ? legendaryEras : pool);
   const { formation, lineup } = draftBestFormationEleven(era.pool, FORMATIONS, rng);
   return {
     name: clubEntry.name,
@@ -339,15 +351,27 @@ function buildBracket(opponents, rng) {
 // Draws the whole bracket at once: as many distinct clubs as
 // largestValidOpponentCount allows (never repeats one on both sides of the
 // draw), each with its own single era, then resolves every match that
-// doesn't involve the player.
-export async function startCup(clubSlug) {
+// doesn't involve the player. The player's own club is now a valid
+// opponent too (it used to be excluded outright) — a different era of the
+// same club, e.g. Corinthians 2000 facing Corinthians 1977, is exactly the
+// kind of nostalgic matchup this game is about; only the era(s) the
+// player's own squad was actually drawn from are off-limits for it (see
+// drawSingleEraOpponent), never the whole club. A real player showing up
+// on both sides at once (if the opponent's own best-XI draft happens to
+// also grab someone the player already has) is an accepted rough edge, not
+// blocked for — the same id ties both appearances to one running tally in
+// the cup leaderboard rather than double-counting them as different people.
+export async function startCup(clubSlug, squad) {
   const manifest = getClubManifest();
-  const others = manifest.filter((c) => c.slug !== clubSlug && c.cupEligible);
+  const others = manifest.filter((c) => c.cupEligible);
   const rng = createRng(Date.now());
 
+  const ownEras = new Set(squad.map((p) => p.era).filter((era) => era != null));
   const opponentCount = largestValidOpponentCount(others.length);
   const opponentClubs = rng.shuffle(others).slice(0, opponentCount);
-  const opponents = opponentClubs.map((clubEntry) => drawSingleEraOpponent(clubEntry, rng));
+  const opponents = opponentClubs.map((clubEntry) =>
+    drawSingleEraOpponent(clubEntry, rng, clubEntry.slug === clubSlug ? ownEras : undefined),
+  );
 
   return { rounds: buildBracket(opponents, rng) };
 }
