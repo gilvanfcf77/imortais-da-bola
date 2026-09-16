@@ -7,7 +7,11 @@
 // "venceu" without the exact score, since page.js doesn't keep a full match
 // history across rounds, only the latest one. `lastRoundOutcome` (optional:
 // 'won' | 'lost') labels the last shown round instead of leaving it blank,
-// for the post-tournament recap on CupOutcomeScreen.
+// for the post-tournament recap on CupOutcomeScreen. `lastRoundScoreLabel`
+// (optional) overrides that label with the actual scoreline of the match
+// just played — CupOutcomeScreen passes it because, unlike earlier rounds,
+// it still has the full result in hand, so the generic "venceu"/"perdeu"
+// would just be a thinner repeat of the score shown right above this table.
 function opponentLabel(opponent) {
   return opponent.era ? `${opponent.name} (${opponent.era})` : opponent.name;
 }
@@ -17,6 +21,7 @@ export default function BracketTable({
   upToRoundIndex,
   playerClubName,
   lastRoundOutcome = null,
+  lastRoundScoreLabel = null,
 }) {
   const visibleRounds = rounds.slice(0, upToRoundIndex + 1);
 
@@ -26,11 +31,13 @@ export default function BracketTable({
         const isLastShown = i === upToRoundIndex;
         const playerStatus = !isLastShown
           ? 'venceu'
-          : lastRoundOutcome === 'won'
-            ? 'venceu'
-            : lastRoundOutcome === 'lost'
-              ? 'perdeu'
-              : null;
+          : isLastShown && lastRoundScoreLabel
+            ? lastRoundScoreLabel
+            : lastRoundOutcome === 'won'
+              ? 'venceu'
+              : lastRoundOutcome === 'lost'
+                ? 'perdeu'
+                : null;
 
         return (
           <div key={i} className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-3">

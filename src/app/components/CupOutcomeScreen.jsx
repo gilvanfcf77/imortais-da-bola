@@ -114,6 +114,11 @@ export default function CupOutcomeScreen({
       ? '🏆 Campeão!'
       : '🥈 Vice-campeão';
   const titleOutcome = eliminated ? bracket.rounds[roundIndex].ifEliminatedHere : null;
+  const lastRoundScoreLabel = shootout
+    ? `${result.homeGoals}x${result.awayGoals} (pên. ${shootout.homeScore}-${shootout.awayScore})`
+    : result.abandoned
+      ? 'WO'
+      : `${result.homeGoals}x${result.awayGoals}`;
 
   return (
     <div className="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-8 px-4 py-8">
@@ -148,6 +153,7 @@ export default function CupOutcomeScreen({
         upToRoundIndex={roundIndex}
         playerClubName={homeName}
         lastRoundOutcome={won ? 'won' : 'lost'}
+        lastRoundScoreLabel={lastRoundScoreLabel}
       />
 
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
