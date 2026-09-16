@@ -74,18 +74,6 @@
       "specialAbility": null
     },
     {
-      "id": "cor77-cb-5",
-      "personId": "wagner-basilio-u86y",
-      "name": "Wagner Basílio",
-      "position": "CB",
-      "roles": ["ZAG", "VOL"],
-      "overall": 57,
-      "number": 5,
-      "traits": [],
-      "specialAbility": null
-    },
-
-    {
       "id": "cor77-fb-1",
       "personId": "ze-maria-wfsc",
       "name": "Zé Maria",
@@ -270,17 +258,6 @@
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 73,
-      "number": 9,
-      "traits": [],
-      "specialAbility": null
-    },
-    {
-      "id": "cor77-fw-9",
-      "personId": "toninho-metralha-anes",
-      "name": "Toninho Metralha",
-      "position": "FW",
-      "roles": ["CA", "PE"],
-      "overall": 57,
       "number": 9,
       "traits": [],
       "specialAbility": null

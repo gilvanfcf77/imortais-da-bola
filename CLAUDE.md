@@ -57,6 +57,25 @@ que só foi pro São Paulo de verdade em 2021, não em 2008). Ver decisão 51
 em `info/DECISOES.md` para o caso completo, incluindo como os 3 nomes foram
 substituídos por jogadores reais daquele elenco.
 
+**Critério de corte: por ano civil, não por título/torneio específico.** Um
+jogador entra no elenco de uma época se jogou **pelo menos uma partida
+oficial** naquele ano pelo clube — mesmo que não tenha feito parte do time
+que disputou um título específico dentro do ano (ex.: um jogador que
+disputou o Campeonato Paulista mas não foi inscrito pro Mundial de
+Clubes do mesmo ano ainda conta pra passagem daquele ano). Só fica de fora
+quando não há nenhuma partida confirmada naquele ano civil — última
+passagem em 1999, mesmo que a transferência só tenha sido anunciada
+oficialmente em janeiro de 2000, não conta pra 2000. Ver decisão 68 em
+`info/DECISOES.md`.
+
+**Na dúvida, de fora.** Se a pesquisa não encontra nada que confirme
+diretamente que um jogador atuou naquele ano específico, o mais seguro é
+presumir que ele não jogou (ou teve papel irrelevante) e deixá-lo fora do
+elenco daquela época — mesmo sabendo que isso pode, às vezes, excluir por
+engano alguém que de fato jogou. Colocar um jogador na época errada é um
+erro pior do que deixar um jogador real de fora por falta de confirmação.
+Ver decisão 69 em `info/DECISOES.md`.
+
 ## Traços (características)
 
 Traços dão personalidade ao time sorteado — dois times de overall parecido

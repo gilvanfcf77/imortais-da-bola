@@ -19,11 +19,11 @@
     },
     {
       "id": "cor00-gk-2",
-      "personId": "rubinho-t2wf",
-      "name": "Rubinho",
+      "personId": "mauricio-corinthians-h4pq",
+      "name": "Maurício",
       "position": "GK",
       "roles": ["GOL"],
-      "overall": 66,
+      "overall": 62,
       "number": 12,
       "traits": [],
       "specialAbility": null
@@ -70,17 +70,6 @@
       "roles": ["ZAG"],
       "overall": 61,
       "number": 4,
-      "traits": [],
-      "specialAbility": null
-    },
-    {
-      "id": "cor00-cb-5",
-      "personId": "nene-defensor-c9yv",
-      "name": "Nenê",
-      "position": "CB",
-      "roles": ["ZAG"],
-      "overall": 58,
-      "number": 3,
       "traits": [],
       "specialAbility": null
     },
