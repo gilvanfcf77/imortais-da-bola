@@ -5,7 +5,7 @@ import { EVENT_TYPES } from '../event-types.js';
 
 export const TEMPLATES = {
   [EVENT_TYPES.NUTMEG_TAUNT]: [
-    '{player} dá um chapéu em {victim} e ainda manda um beijo! A torcida vai à loucura.',
+    '{player} dá um chapéu em {victim} e ainda manda um beijo! Que provocação!',
     'Depois de humilhar {victim} com um chapéu, {player} manda um beijo para ele. Isso não vai ficar barato.',
     '{player} enfia uma caneta em {victim} e sai gargalhando — que vexame!',
     'Depois da caneta em {victim}, {player} aponta pro próprio nome na camisa.',
