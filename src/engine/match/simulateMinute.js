@@ -10,7 +10,7 @@ import { sumTraitIntensity } from '../traits.js';
 import { clamp, teamPower, activePlayers, goalMargin } from './teamState.js';
 import { rhythmBreakReduction, effectiveGamesmanship } from './traitEffects.js';
 import { resolveAttack } from './attack.js';
-import { resolveFoul, resolveNutmegTaunt, resolveShowboating } from './foul.js';
+import { resolveFoul, resolveFoulPhantom, resolveNutmegTaunt, resolveShowboating } from './foul.js';
 import {
   resolveTrashTalk,
   resolveFightCallout,
@@ -71,6 +71,17 @@ export function simulateMinute(minute, home, away, score, rng, stats, isSecondHa
     if (dribblerIntensity === 0) continue;
     if (rng.chance(dribblerIntensity * COMEDY.NUTMEG_TAUNT_CHANCE_PER_INTENSITY)) {
       events.push(...resolveNutmegTaunt(team, opponent, minute, rng, stats));
+    }
+  }
+
+  for (const [team, opponent] of [
+    [home, away],
+    [away, home],
+  ]) {
+    const flopperIntensity = sumTraitIntensity(activePlayers(team), 'flopper');
+    if (flopperIntensity === 0) continue;
+    if (rng.chance(flopperIntensity * COMEDY.FOUL_PHANTOM_CHANCE_PER_FLOPPER_INTENSITY)) {
+      events.push(...resolveFoulPhantom(team, opponent, minute, score, rng, stats));
     }
   }
 

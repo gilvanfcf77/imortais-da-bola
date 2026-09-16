@@ -78,6 +78,21 @@ export const FOUL = {
   // above, which is a real dribbler's incidental side effect of beating
   // defenders. Not yet calibrated.
   FLOPPER_OPPONENT_FOUL_WEIGHT: 0.08,
+  // Out of ordinary (non-scandalous) fouls, chance the referee stops play
+  // for a fairly routine foul instead of letting the advantage law apply —
+  // denying the fouled side what would have been a promising, possibly
+  // decisive attack. A real foul still happened (unlike PENALTY_PHANTOM,
+  // where none did), it's just badly timed officiating. Not yet calibrated.
+  ADVANTAGE_IGNORED_CHANCE: 0.0015,
+  // How a flopper's dive attempt (see COMEDY.FOUL_PHANTOM_CHANCE_PER_
+  // FLOPPER_INTENSITY, which decides IF one is attempted this minute)
+  // actually resolves: these two are read as a 3-way split against each
+  // other (see resolveFoulPhantom's own doc comment) — caught and carded
+  // for simulation, caught with just a talking-to (no card, no foul), or
+  // the dive fools the referee and FOUL_PHANTOM goes through as before.
+  // Not yet calibrated.
+  DIVE_CAUGHT_CARDED_CHANCE: 0.1,
+  DIVE_CAUGHT_CHANCE: 0.3,
 };
 
 export const CARDS = {
@@ -432,6 +447,11 @@ export const COMEDY = {
   // bring the average — and the odds of a 3-taunt match — down. Re-run
   // landed at ~0.36/match.
   NUTMEG_TAUNT_CHANCE_PER_INTENSITY: 0.0007,
+  // Per-minute chance a flopper fools the referee into a foul that never
+  // happened (FOUL_PHANTOM — distinct from the real fouls FOUL.
+  // FLOPPER_OPPONENT_FOUL_WEIGHT already generates more of), scaled by the
+  // team's total flopper intensity. Not yet calibrated.
+  FOUL_PHANTOM_CHANCE_PER_FLOPPER_INTENSITY: 0.001,
   // Chance a taunt escalates into a brawl with multiple cards. Calibrated so
   // brawls land in roughly 1 out of every 4-5 matches, not nearly every one.
   BRAWL_CHANCE_AFTER_TAUNT: 0.2,

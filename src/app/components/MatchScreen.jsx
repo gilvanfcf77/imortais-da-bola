@@ -32,7 +32,9 @@ const BADGE_STYLE = {
 // dedicated whistle character in Unicode, so this uses 📣 as a stand-in.
 const WHISTLE_EVENT_TYPES = new Set([
   EVENT_TYPES.FOUL,
+  EVENT_TYPES.FOUL_PHANTOM,
   EVENT_TYPES.SCANDALOUS_FOUL,
+  EVENT_TYPES.ADVANTAGE_IGNORED,
   EVENT_TYPES.KICKOFF,
   EVENT_TYPES.HALFTIME,
   EVENT_TYPES.FULLTIME,
@@ -150,12 +152,20 @@ const EVENT_CATEGORY_CLASS = {
   [EVENT_TYPES.FIGHT_CALLOUT]: 'text-purple-400 italic',
   [EVENT_TYPES.SHOWBOATING]: 'text-purple-400 italic',
   [EVENT_TYPES.SCANDALOUS_FOUL]: 'text-amber-400 italic font-semibold',
+  // Unlike FOUL_PHANTOM/ADVANTAGE_IGNORED above (an injustice against a
+  // team, styled red), these two are the opposite — the diver gets caught,
+  // justice served — so they get the same dramatic-but-not-unjust amber as
+  // SCANDALOUS_FOUL rather than red.
+  [EVENT_TYPES.DIVE_CAUGHT]: 'text-amber-400 italic font-semibold',
+  [EVENT_TYPES.DIVE_CAUGHT_CARDED]: 'text-amber-400 italic font-semibold',
   [EVENT_TYPES.GOALKEEPER_FORWARD]: 'text-amber-400 italic font-semibold',
   [EVENT_TYPES.HANDBALL_ON_THE_LINE]: 'text-amber-400 italic font-semibold',
   [EVENT_TYPES.DISALLOWED_GOAL]: 'text-red-400 font-bold',
   [EVENT_TYPES.PENALTY_NOT_GIVEN]: 'text-red-400 font-bold',
   [EVENT_TYPES.PENALTY_PHANTOM]: 'text-red-400 font-bold',
+  [EVENT_TYPES.FOUL_PHANTOM]: 'text-red-400 font-bold',
   [EVENT_TYPES.PENALTY_WRONG_LOCATION]: 'text-red-400 font-bold',
+  [EVENT_TYPES.ADVANTAGE_IGNORED]: 'text-red-400 font-bold',
   [EVENT_TYPES.SEVERE_INJURY]: 'text-red-300',
   [EVENT_TYPES.NO_CARD_DESPITE_INJURY]: 'text-red-400 italic font-bold',
   [EVENT_TYPES.SCANDALOUS_FOUL_IGNORED]: 'text-red-400 italic font-bold',
@@ -196,7 +206,11 @@ const opposite = { home: 'away', away: 'home' };
 // inversion, "falta marcada pro Flamengo" (decision 49's text) could render
 // with the Corinthians-colored stripe, contradicting its own text.
 function favoredSide(event) {
-  if (event.type === EVENT_TYPES.FOUL || event.type === EVENT_TYPES.SCANDALOUS_FOUL) {
+  if (
+    event.type === EVENT_TYPES.FOUL ||
+    event.type === EVENT_TYPES.SCANDALOUS_FOUL ||
+    event.type === EVENT_TYPES.ADVANTAGE_IGNORED
+  ) {
     return opposite[event.side];
   }
   return event.side;

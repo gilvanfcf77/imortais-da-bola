@@ -12,6 +12,7 @@ import {
   GAMESMANSHIP,
   DESPERATION,
   TRAIT_WEIGHTS,
+  FOUL,
 } from '../constants.js';
 import { getTraitIntensity } from '../traits.js';
 import { EVENT_TYPES } from '../narration/index.js';
@@ -24,6 +25,7 @@ import {
   pickFouledPlayer,
   pickGoalkeeper,
   pickFreeKickTaker,
+  pickFlopper,
 } from './playerPicking.js';
 import {
   sendOff,
@@ -165,6 +167,13 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
   const isScandalous =
     shortFuseIntensity > 0 &&
     rng.chance(shortFuseIntensity * COMEDY.SCANDALOUS_FOUL_CHANCE_PER_SHORT_FUSE_INTENSITY);
+  // A real foul, but the referee stops play for it instead of letting the
+  // advantage law run — unlike PENALTY_PHANTOM/PENALTY_WRONG_LOCATION
+  // above, nothing was actually called wrong, just badly timed, denying the
+  // fouled side whatever promising attack `victim` was about to make.
+  // Mutually exclusive with isScandalous — a scandalous foul is dramatic
+  // enough on its own without also being an advantage-law blunder.
+  const isAdvantageIgnored = !isScandalous && rng.chance(FOUL.ADVANTAGE_IGNORED_CHANCE);
 
   if (isScandalous) {
     const victim = pickFouledPlayer(fouledTeam, rng);
@@ -177,6 +186,17 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
       rng,
     );
     stats.scandalousFouls++;
+  } else if (isAdvantageIgnored) {
+    const victim = pickFouledPlayer(fouledTeam, rng);
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.ADVANTAGE_IGNORED,
+      offendingTeam.side,
+      { player: offender.name, victim: victim.name, opponent: fouledTeam.config },
+      rng,
+    );
+    stats.advantageIgnored++;
   } else {
     // Not every FOUL template needs a victim (most just narrate the tackle
     // itself), but some do ("agarrou a camisa" needs to say whose shirt) —
@@ -306,6 +326,25 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     );
   }
 
+  events.push(...attemptFreeKick(fouledTeam, minute, score, rng, stats));
+
+  return events;
+}
+
+// The direct free kick itself, shared by a real foul (resolveFoul above)
+// and a phantom one the referee was fooled into awarding
+// (resolveFoulPhantom below) — once a free kick has been given, converting
+// it works exactly the same either way. Any team can attempt one — this
+// used to require at least one freeKickSpecialist on the pitch, making it
+// literally impossible otherwise (0% across 1000 simulated matches).
+// pickFreeKickTaker always returns someone, weighted toward sharpshooter/
+// freeKickSpecialist when present, so the attempt itself is never gated on
+// having a specialist — only the conversion chance is, and steeply: an
+// ordinary player taking a hopeful free kick should score one only rarely
+// (FREE_KICK_GOAL_CHANCE_NO_SPECIALIST), while a real specialist converts
+// at a much higher, intensity-scaled rate (FREE_KICK_GOAL_CHANCE).
+function attemptFreeKick(fouledTeam, minute, score, rng, stats) {
+  const events = [];
   let goalkeeperForwardBoost = 1;
   if (
     minute >= DESPERATION.LATE_GAME_MINUTE &&
@@ -325,15 +364,6 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     goalkeeperForwardBoost = DESPERATION.GOAL_CHANCE_WEIGHT;
   }
 
-  // Any team can attempt a direct free kick — this used to require at least
-  // one freeKickSpecialist on the pitch, making it literally impossible
-  // otherwise (0% across 1000 simulated matches). pickFreeKickTaker always
-  // returns someone, weighted toward sharpshooter/freeKickSpecialist when
-  // present, so the attempt itself is never gated on having a specialist —
-  // only the conversion chance is, and steeply: an ordinary player taking a
-  // hopeful free kick should score one only rarely
-  // (FREE_KICK_GOAL_CHANCE_NO_SPECIALIST), while a real specialist converts
-  // at a much higher, intensity-scaled rate (FREE_KICK_GOAL_CHANCE).
   const taker = pickFreeKickTaker(fouledTeam, rng);
   const intensity = getTraitIntensity(taker, 'freeKickSpecialist');
   const goalChance =
@@ -362,5 +392,56 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     events.push(...maybeSilenceCrowd(fouledTeam, tookTheLead, taker, minute, rng, stats));
   }
 
+  return events;
+}
+
+// A `flopper` occasionally goes further than just drawing real fouls more
+// often (pickFouledPlayer's weighting, plus FOUL.FLOPPER_OPPONENT_FOUL_WEIGHT
+// raising the team's whole foul rate) — sometimes there was no contact at
+// all, and the diver is trying to fool the referee outright. Three ways
+// this can go, read as a 3-way split (FOUL.DIVE_CAUGHT_CARDED_CHANCE,
+// FOUL.DIVE_CAUGHT_CHANCE, and whatever's left over for success):
+// 1. Caught AND carded for simulation — the dive fails AND costs a yellow.
+// 2. Caught, but let off with just a talking-to — no foul, no card either.
+// 3. It works: FOUL_PHANTOM goes through exactly like before, a real free
+//    kick from a foul that never happened. Unlike a real foul, nobody on
+//    `opposingTeam` did anything wrong in any of these three outcomes, so
+//    this never runs the injury/official-assault checks a real foul does —
+//    those are about punishing the offender's real conduct, and there's no
+//    real offender here, just a diver who may or may not get away with it.
+export function resolveFoulPhantom(diveTeam, opposingTeam, minute, score, rng, stats) {
+  const events = [];
+  const diver = pickFlopper(diveTeam, rng);
+  const context = { player: diver.name, team: diveTeam.config, opponent: opposingTeam.config };
+
+  const outcome = rng.pickWeighted(
+    ['carded', 'caught', 'succeeded'],
+    [
+      FOUL.DIVE_CAUGHT_CARDED_CHANCE,
+      FOUL.DIVE_CAUGHT_CHANCE,
+      1 - FOUL.DIVE_CAUGHT_CARDED_CHANCE - FOUL.DIVE_CAUGHT_CHANCE,
+    ],
+  );
+
+  if (outcome === 'carded') {
+    pushEvent(events, minute, EVENT_TYPES.DIVE_CAUGHT_CARDED, diveTeam.side, context, rng, {
+      playerId: diver.id,
+    });
+    stats.divesCaughtCarded++;
+    events.push(...issueYellowCard(diveTeam, diver, minute, rng, stats));
+    return events;
+  }
+
+  if (outcome === 'caught') {
+    pushEvent(events, minute, EVENT_TYPES.DIVE_CAUGHT, diveTeam.side, context, rng, {
+      playerId: diver.id,
+    });
+    stats.divesCaught++;
+    return events;
+  }
+
+  pushEvent(events, minute, EVENT_TYPES.FOUL_PHANTOM, diveTeam.side, context, rng);
+  stats.foulsPhantom++;
+  events.push(...attemptFreeKick(diveTeam, minute, score, rng, stats));
   return events;
 }

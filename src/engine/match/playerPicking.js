@@ -132,3 +132,16 @@ export function pickShortFuseInstigator(team, rng) {
     instigators.map((p) => getTraitIntensity(p, 'shortFuse')),
   );
 }
+
+// The diver behind a FOUL_PHANTOM (foul.js's resolveFoulPhantom) — only
+// ever called once the caller already confirmed the team has at least one
+// flopper (see simulateMinute.js's flopperIntensity check before rolling
+// whether this fires at all), so unlike pickShortFuseInstigator above this
+// never needs to return null.
+export function pickFlopper(team, rng) {
+  const floppers = activePlayers(team).filter((p) => getTraitIntensity(p, 'flopper') > 0);
+  return rng.pickWeighted(
+    floppers,
+    floppers.map((p) => getTraitIntensity(p, 'flopper')),
+  );
+}
