@@ -13,5 +13,5 @@ export {
   defaultGamesmanship,
 } from './traits.js';
 export { draftEleven, draftBestEleven, draftBestFormationEleven } from './draft.js';
-export { simulateMatch, resolvePenaltyShootout } from './match.js';
+export { simulateMatch, resolvePenaltyShootout } from './match/index.js';
 export { EVENT_TYPES, GOAL_EVENT_TYPES, narrate, templatesFor } from './narration/index.js';
