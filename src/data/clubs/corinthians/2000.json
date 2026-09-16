@@ -238,9 +238,9 @@
       "name": "Luizão",
       "position": "FW",
       "roles": ["CA"],
-      "overall": 84,
+      "overall": 86,
       "number": 9,
-      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
       "specialAbility": null
     },
     {

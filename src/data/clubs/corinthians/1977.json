@@ -203,9 +203,9 @@
       "name": "Geraldão",
       "position": "FW",
       "roles": ["CA"],
-      "overall": 85,
+      "overall": 82,
       "number": 9,
-      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
+      "traits": [{ "slug": "sharpshooter", "intensity": 1 }],
       "specialAbility": null
     },
     {
