@@ -45,10 +45,20 @@ function buildDisplaySlots(formation, squad) {
 // react to a click: a still-open slot lights up as a valid target when its
 // role is in `selection.eligible` (whether that's a fresh pick from the
 // pool or an already-placed player being repositioned — `onSlotClick`
-// handles both the same way, see SquadScreen's handleSlotClick), and an
+// handles both the same way, see SquadScreen's handleSlotClick), an
+// occupied row lights up as a swap target when it's in `swapTargets`
+// (only possible during a reposition, never a fresh pick), and any
 // already-filled row stays clickable on its own to let the player start
 // (or cancel) a reposition, regardless of whether a selection is active.
-function LineupPanel({ clubName, formation, squad, selection, onSlotClick, onPlacedPlayerClick }) {
+function LineupPanel({
+  clubName,
+  formation,
+  squad,
+  selection,
+  swapTargets,
+  onSlotClick,
+  onPlacedPlayerClick,
+}) {
   const rows = buildDisplaySlots(formation, squad);
   const averageOverall = squad.length
     ? (squad.reduce((sum, p) => sum + p.overall, 0) / squad.length).toFixed(1)
@@ -59,6 +69,7 @@ function LineupPanel({ clubName, formation, squad, selection, onSlotClick, onPla
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-1">
         {rows.map((row, index) => {
           const isTarget = !row.player && Boolean(selection?.eligible.includes(row.role));
+          const isSwapTarget = Boolean(row.player) && Boolean(swapTargets?.has(row.player));
           const isSelected = Boolean(row.player) && row.player === selection?.player;
           const dimmed = Boolean(selection) && !row.player && !isTarget;
           const label = row.player
@@ -103,7 +114,9 @@ function LineupPanel({ clubName, formation, squad, selection, onSlotClick, onPla
                 className={`${baseClass} ${
                   isSelected
                     ? 'border-sky-400 bg-sky-500/10 text-sky-200'
-                    : 'border-emerald-500 hover:bg-slate-800/60'
+                    : isSwapTarget
+                      ? 'animate-pulse border-amber-400 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20'
+                      : 'border-emerald-500 hover:bg-slate-800/60'
                 }`}
               >
                 {rowContent}
@@ -185,10 +198,42 @@ export default function SquadScreen({ club, onComplete }) {
   // are still open; once the ZAG slots fill up, they'd only offer VOL.
   // `excludeRole` drops the player's own current role from the list when
   // repositioning an already-placed player (moving them "to" where they
-  // already are isn't a real choice — see handlePlacedPlayerClick).
+  // already are isn't a real choice — see handlePlacedPlayerClick). Used
+  // for a fresh pick from the drawn pool (handlePick), which can only ever
+  // land on an empty slot — see allRolesFor below for the broader version
+  // used once a player is already on the squad, where swapping into an
+  // occupied slot is also on the table.
   function eligibleRolesFor(player, excludeRole = null) {
     return (player.roles ?? [player.position]).filter(
       (role) => role !== excludeRole && openSlotsFor(role) > 0,
+    );
+  }
+
+  // Same idea as eligibleRolesFor, but without the open-slot filter — every
+  // role the player could play, full or not, since an already-placed player
+  // being repositioned can now land on an occupied slot too (by swapping
+  // with whoever's there) as well as an empty one.
+  function allRolesFor(player, excludeRole = null) {
+    return (player.roles ?? [player.position]).filter((role) => role !== excludeRole);
+  }
+
+  // Other squad members `player` could trade places with: someone in a role
+  // `player` is eligible for, who is themselves eligible for `player`'s
+  // current role (`fromRole`) — a swap only makes sense if it's a legal
+  // placement in both directions at once. Deliberately does NOT exclude
+  // `fromRole` from the candidate roles (unlike allRolesFor, used for the
+  // empty-slot case) — a same-role swap between two ZAG entries is exactly
+  // the main case this exists for, and a player whose only role is ZAG
+  // would otherwise never be considered eligible for "another ZAG slot"
+  // at all. A ZAG/VOL swapping into a pure VOL slot only works if that
+  // VOL player also happens to cover ZAG.
+  function swapTargetsFor(player, fromRole) {
+    const candidateRoles = new Set(player.roles ?? [player.position]);
+    return squad.filter(
+      (other) =>
+        other !== player &&
+        candidateRoles.has(other.role) &&
+        (other.roles ?? [other.position]).includes(fromRole),
     );
   }
 
@@ -231,6 +276,34 @@ export default function SquadScreen({ club, onComplete }) {
     setSelection(null);
   }
 
+  // Trades two already-placed players' slots — e.g. the two ZAG entries, or
+  // a ZAG moving into an occupied LE/LD spot while its occupant takes the
+  // vacated ZAG spot. Only ever called with a pair swapTargetsFor already
+  // vetted as mutually legal, so no further validation needed here.
+  //
+  // Also swaps their positions WITHIN the squad array, not just their
+  // `role` field — necessary for two players who already share the exact
+  // same role (e.g. two ZAG): buildDisplaySlots/buildPitchSlots assign a
+  // repeated role's multiple coordinates/rows in squad-array order (first
+  // ZAG-tagged entry gets the left dot, second gets the right one — see
+  // pitchCoordinates.js), so swapping only the (identical, in that case)
+  // role string would be a no-op and nothing would visibly move. Swapping
+  // array position too makes "swap the two ZAGs" actually swap left/right,
+  // while staying a no-op-safe operation when the roles do differ (their
+  // relative order among same-role peers no longer matters once they've
+  // swapped away from that role entirely).
+  function swapInSquad(playerA, playerB) {
+    const roleA = playerA.role;
+    const roleB = playerB.role;
+    const indexA = squad.indexOf(playerA);
+    const indexB = squad.indexOf(playerB);
+    const newSquad = [...squad];
+    newSquad[indexA] = { ...playerB, role: roleA, position: ROLE_TO_POSITION[roleA] };
+    newSquad[indexB] = { ...playerA, role: roleB, position: ROLE_TO_POSITION[roleB] };
+    setSquad(newSquad);
+    setSelection(null);
+  }
+
   function handlePick(player) {
     if (selection?.player === player) {
       setSelection(null);
@@ -247,18 +320,33 @@ export default function SquadScreen({ club, onComplete }) {
   }
 
   // Clicking an already-placed player starts (or, clicked a second time,
-  // cancels) a reposition: every other role they're also eligible for and
-  // still open lights up in the LineupPanel for the next click to land on.
-  // A player with nowhere else to go (their only eligible role, or every
-  // other eligible slot already full) just does nothing — same "no real
-  // choice" shortcut a single-role fresh pick already gets in handlePick.
+  // cancels) a reposition: every other role they're also eligible for lights
+  // up in the LineupPanel/PitchLineup for the next click to land on — an
+  // open slot places them directly, an occupied one (if its occupant can
+  // reciprocally take this player's current role) swaps the two. If a
+  // reposition is already active and the newly-clicked player is a valid
+  // swap partner for it, swap immediately instead of restarting the
+  // selection on them. A player with nowhere else to go at all (no open
+  // slot and no swap partner) just does nothing — same "no real choice"
+  // shortcut a single-role fresh pick already gets in handlePick.
   function handlePlacedPlayerClick(player) {
     if (selection?.player === player) {
       setSelection(null);
       return;
     }
-    const eligible = eligibleRolesFor(player, player.role);
-    if (eligible.length === 0) return;
+    if (
+      selection?.fromRole &&
+      swapTargetsFor(selection.player, selection.fromRole).includes(player)
+    ) {
+      swapInSquad(selection.player, player);
+      return;
+    }
+    const eligible = allRolesFor(player, player.role);
+    // A single-role player (e.g. roles: ['ZAG']) has no OTHER role to list
+    // here, but can still have somewhere to go: a same-role swap with
+    // another ZAG. Only bail out when there's truly neither an empty-slot
+    // role nor a swap partner available.
+    if (eligible.length === 0 && swapTargetsFor(player, player.role).length === 0) return;
     setSelection({ player, eligible, fromRole: player.role });
   }
 
@@ -281,6 +369,13 @@ export default function SquadScreen({ club, onComplete }) {
     onComplete(squad, posture, gamesmanship);
   }
 
+  // For LineupPanel/PitchLineup to highlight which occupied slots the
+  // active reposition selection could swap into, alongside the open ones
+  // `selection.eligible` already covers.
+  const swapTargets = selection?.fromRole
+    ? new Set(swapTargetsFor(selection.player, selection.fromRole))
+    : null;
+
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <LineupPanel
@@ -288,6 +383,7 @@ export default function SquadScreen({ club, onComplete }) {
         formation={formation}
         squad={squad}
         selection={selection}
+        swapTargets={swapTargets}
         onSlotClick={handleSlotClick}
         onPlacedPlayerClick={handlePlacedPlayerClick}
       />
@@ -317,6 +413,7 @@ export default function SquadScreen({ club, onComplete }) {
           formationName={formationName}
           squad={squad}
           selection={selection}
+          swapTargets={swapTargets}
           onSlotClick={handleSlotClick}
           onPlacedPlayerClick={handlePlacedPlayerClick}
         />
@@ -392,7 +489,8 @@ export default function SquadScreen({ club, onComplete }) {
             {selection.fromRole ? (
               <>
                 Movendo <span className="font-semibold">{selection.player.name}</span> — clique numa
-                vaga destacada ao lado, ou clique nele de novo para cancelar.
+                vaga vazia destacada em verde, num jogador destacado em amarelo pra trocar de lugar
+                com ele, ou nele de novo para cancelar.
               </>
             ) : (
               <>

@@ -54,6 +54,7 @@ export default function PitchLineup({
   formationName,
   squad,
   selection,
+  swapTargets,
   onSlotClick,
   onPlacedPlayerClick,
 }) {
@@ -141,6 +142,7 @@ export default function PitchLineup({
 
         {slots.map((slot) => {
           const isTarget = !slot.player && Boolean(selection?.eligible.includes(slot.role));
+          const isSwapTarget = Boolean(slot.player) && Boolean(swapTargets?.has(slot.player));
           const isSelected = Boolean(slot.player) && slot.player === selection?.player;
           const clickable = isTarget || Boolean(slot.player);
 
@@ -163,7 +165,9 @@ export default function PitchLineup({
                   slot.player
                     ? isSelected
                       ? 'border-sky-400 bg-sky-500/20 text-sky-100'
-                      : 'border-emerald-300 bg-slate-900/90 text-slate-100'
+                      : isSwapTarget
+                        ? 'animate-pulse border-amber-400 bg-amber-500/20 text-amber-100'
+                        : 'border-emerald-300 bg-slate-900/90 text-slate-100'
                     : isTarget
                       ? 'animate-pulse border-dashed border-emerald-300 bg-emerald-400/20 text-emerald-100'
                       : 'border-dashed border-white/40 bg-white/5 text-white/50'
