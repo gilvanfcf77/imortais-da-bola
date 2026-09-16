@@ -331,7 +331,14 @@ export default function SquadScreen({ club, onComplete }) {
           </button>
           <button
             onClick={handleCompleteRandomly}
-            disabled={loading || complete}
+            // Locks only while a drawn pool (drawnEra) is sitting on screen
+            // undecided — that's the window where clicking this would let
+            // the player discard a "Sortear" pool they didn't like for a
+            // completely fresh random one instead of actually committing to
+            // it. Once they've picked from that pool (addToSquad resets
+            // drawnEra to null), it unlocks again — squad.length > 0 alone
+            // doesn't keep it locked, since picking IS committing.
+            disabled={loading || complete || drawnEra !== null}
             className="rounded-lg border border-slate-700 px-6 py-3 font-semibold text-slate-300 transition hover:border-slate-500 hover:text-white disabled:opacity-50"
           >
             Completar aleatoriamente
