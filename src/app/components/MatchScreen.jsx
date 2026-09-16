@@ -182,6 +182,25 @@ function eventTextClass(event) {
   return EVENT_CATEGORY_CLASS[event.type] ?? '';
 }
 
+const opposite = { home: 'away', away: 'home' };
+
+// event.side is "which team this happened to" in the engine, which for
+// FOUL/SCANDALOUS_FOUL means the team that COMMITTED the foul (see
+// resolveFoul in match.js — pushed with offendingTeam.side, and stats.fouls
+// tallies by that same side). Visually though, the color is meant to read
+// as "which team this favors" — a goal favors the scorer, a penalty favors
+// the team awarded it (already pushed with the attacking/awarded team's
+// side, so no inversion needed there) — and a foul favors whoever gets the
+// free kick, i.e. the opposite side from whoever committed it. Without this
+// inversion, "falta marcada pro Flamengo" (decision 49's text) could render
+// with the Corinthians-colored stripe, contradicting its own text.
+function favoredSide(event) {
+  if (event.type === EVENT_TYPES.FOUL || event.type === EVENT_TYPES.SCANDALOUS_FOUL) {
+    return opposite[event.side];
+  }
+  return event.side;
+}
+
 // Same side colors as the lineup panels below (sky for home, orange for
 // away), so a goal's highlight reads as "which side scored" at a glance.
 // PLAYER_SPECIAL gets its own gold treatment instead — gold isn't used by
@@ -201,10 +220,11 @@ function eventRowClass(event) {
   if (event.type === EVENT_TYPES.PLAYER_SPECIAL) {
     return 'border-yellow-500 bg-yellow-500/10 font-bold';
   }
-  if (event.side === 'home') {
+  const side = favoredSide(event);
+  if (side === 'home') {
     return 'border-slate-800 border-l-4 border-l-sky-600 bg-slate-900';
   }
-  if (event.side === 'away') {
+  if (side === 'away') {
     return 'border-slate-800 border-l-4 border-l-orange-600 bg-slate-900';
   }
   return 'border-slate-800 bg-slate-900';
