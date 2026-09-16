@@ -4,20 +4,22 @@ import { PITCH_COORDINATES } from './pitchCoordinates.js';
 // Same idea as SquadScreen's own buildDisplaySlots (see LineupPanel there),
 // but paired with this formation's hand-placed pitch coordinates instead of
 // list order — see pitchCoordinates.js for why those aren't derived
-// generically. `remaining` and the per-role coordinate arrays are both
-// consumed left-to-right in formation.slots order, so two ZAG slots line up
-// with ZAG's two coordinate entries in the same order.
+// generically. Each formation slot carries its own (role, roleSlot) pair
+// (see formations.js's withRoleSlots) — roleSlot indexes directly into
+// PITCH_COORDINATES's per-role coordinate array (its own entries are
+// authored left-to-right in the same order), and the matching squad player
+// is whoever shares that exact (role, roleSlot) pair, not just "the next
+// player with this role" — which is what makes moving a single ZAG
+// occupant into the OTHER, still-open ZAG slot actually visible: the two
+// slots are addressable individually now, not interchangeable.
 function buildPitchSlots(formation, squad, formationName) {
-  const remaining = [...squad];
-  const coordsByRole = {};
-  for (const [role, coords] of Object.entries(PITCH_COORDINATES[formationName] ?? {})) {
-    coordsByRole[role] = [...coords];
-  }
   return formation.slots.map((slot, index) => {
-    const coord = coordsByRole[slot.role]?.shift() ?? { x: 50, y: 50 };
-    const playerIndex = remaining.findIndex((p) => p.role === slot.role);
-    const player = playerIndex === -1 ? null : remaining.splice(playerIndex, 1)[0];
-    return { key: index, role: slot.role, player, x: coord.x, y: coord.y };
+    const coord = PITCH_COORDINATES[formationName]?.[slot.role]?.[slot.roleSlot] ?? {
+      x: 50,
+      y: 50,
+    };
+    const player = squad.find((p) => p.role === slot.role && p.roleSlot === slot.roleSlot) ?? null;
+    return { key: index, role: slot.role, roleSlot: slot.roleSlot, player, x: coord.x, y: coord.y };
   });
 }
 
@@ -153,7 +155,7 @@ export default function PitchLineup({
               disabled={!clickable}
               onClick={() => {
                 if (slot.player) onPlacedPlayerClick(slot.player);
-                else if (isTarget) onSlotClick(slot.role);
+                else if (isTarget) onSlotClick(slot.role, slot.roleSlot);
               }}
               style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               className={`absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 ${

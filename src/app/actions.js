@@ -9,7 +9,6 @@
 import {
   createRng,
   FORMATIONS,
-  ROLE_TO_POSITION,
   draftEleven,
   draftBestFormationEleven,
   simulateMatch,
@@ -37,12 +36,10 @@ export async function drawEraSquad(clubSlug) {
 // "Completar aleatoriamente" shortcut: keeps whatever the player already
 // picked and drafts random players for the remaining open slots only, from
 // the club's full multi-era pool (so the random fill can still mix eras
-// across positions, same as scripts/sample-match.js does). Builds a
-// synthetic formation with just the still-open roles (by count, since a
-// formation can list the same role more than once — e.g. two ZAG slots)
-// and reuses draftEleven as-is — no engine change needed. `currentSquad`
-// entries are tagged with `.role` (see SquadScreen.jsx and draftEleven),
-// which is what lets this tell an open ZAG slot apart from an open VOL one.
+// across positions, same as scripts/sample-match.js does). Filters the
+// formation's own (role, roleSlot)-tagged slot list down to just the ones
+// `currentSquad` hasn't filled yet, and reuses draftEleven as-is — no
+// engine change needed.
 export async function completeSquadRandomly(clubSlug, currentSquad, formationName = '4-4-2') {
   // Compares by personId (falling back to id), not just id, so a real
   // person already on the squad from one era can't also be drafted from a
@@ -50,20 +47,17 @@ export async function completeSquadRandomly(clubSlug, currentSquad, formationNam
   const pickedPersonIds = new Set(currentSquad.map((p) => p.personId ?? p.id));
   const pool = getClubPool(clubSlug).filter((p) => !pickedPersonIds.has(p.personId ?? p.id));
 
-  const filledByRole = currentSquad.reduce((acc, p) => {
-    acc[p.role] = (acc[p.role] ?? 0) + 1;
-    return acc;
-  }, {});
-  const totalByRole = FORMATIONS[formationName].slots.reduce((acc, slot) => {
-    acc[slot.role] = (acc[slot.role] ?? 0) + 1;
-    return acc;
-  }, {});
-  const remainingSlots = [];
-  for (const [role, total] of Object.entries(totalByRole)) {
-    const remaining = total - (filledByRole[role] ?? 0);
-    for (let i = 0; i < remaining; i++)
-      remainingSlots.push({ role, position: ROLE_TO_POSITION[role] });
-  }
+  // Which exact slot instances (role + roleSlot, e.g. "the second ZAG
+  // slot") are already taken — not just how many of each role, since two
+  // slots of the same role are otherwise indistinguishable (see
+  // formations.js's withRoleSlots doc comment). Filtering the formation's
+  // own slot list down to the ones not in this set is what lets a
+  // still-open second ZAG slot get filled as its own addressable slot
+  // instead of an anonymous "one more ZAG somewhere."
+  const filledRoleSlots = new Set(currentSquad.map((p) => `${p.role}:${p.roleSlot}`));
+  const remainingSlots = FORMATIONS[formationName].slots.filter(
+    (slot) => !filledRoleSlots.has(`${slot.role}:${slot.roleSlot}`),
+  );
 
   const rng = createRng(Date.now());
   const additions = draftEleven(pool, { slots: remainingSlots }, rng);

@@ -27,7 +27,30 @@ function slot(role) {
   return { role, position: ROLE_TO_POSITION[role] };
 }
 
-export const FORMATIONS = {
+// Two slots of the same role (e.g. two ZAG) are otherwise indistinguishable
+// — nothing about a player placed there says which specific one they
+// occupy, only that their `role` is "ZAG". That's fine for counting (how
+// many ZAG slots total/filled/open), but not for addressing a SPECIFIC
+// slot: a player can't be told apart from "whoever's in the other ZAG
+// slot" without it, which breaks moving into that other slot when it's
+// empty (there's nothing to swap array order with — see DECISOES.md
+// decisions 58/59/60 for the bug this caused) or picking a specific one
+// out of several open ones of the same role. `roleSlot` is a 0-based
+// index scoped to slots sharing the same role within one formation (the
+// first ZAG slot listed above is roleSlot 0, the second is 1) — stamped
+// once here so every consumer (the draft engine, SquadScreen's manual
+// picks/reposition/swap, PitchLineup's coordinate lookup) shares the same
+// stable numbering instead of each inventing its own.
+function withRoleSlots(slots) {
+  const counts = {};
+  return slots.map((s) => {
+    const roleSlot = counts[s.role] ?? 0;
+    counts[s.role] = roleSlot + 1;
+    return { ...s, roleSlot };
+  });
+}
+
+const RAW_FORMATIONS = {
   '4-4-2': {
     name: '4-4-2',
     slots: [
@@ -157,6 +180,13 @@ export const FORMATIONS = {
     ],
   },
 };
+
+export const FORMATIONS = Object.fromEntries(
+  Object.entries(RAW_FORMATIONS).map(([name, formation]) => [
+    name,
+    { ...formation, slots: withRoleSlots(formation.slots) },
+  ]),
+);
 
 export function totalPlayers(formation) {
   return formation.slots.length;

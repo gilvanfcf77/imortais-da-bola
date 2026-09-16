@@ -35,7 +35,12 @@ function draftWithPicker(pool, formation, rng, pickCandidate) {
       );
     }
     const chosen = pickCandidate(candidates, rng);
-    lineup.push({ ...chosen, role: formationSlot.role, position: formationSlot.position });
+    lineup.push({
+      ...chosen,
+      role: formationSlot.role,
+      roleSlot: formationSlot.roleSlot,
+      position: formationSlot.position,
+    });
     // Compares by personId, not id, so the same real person can't be drafted
     // twice from two different era entries (id is per-passage; personId is
     // per-person — see CLAUDE.md/PROGRESSO.md on multi-era pools). Falls

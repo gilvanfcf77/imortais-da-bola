@@ -27,17 +27,19 @@ const TRAIT_LABELS = {
 
 // One row per slot in formation order (GOL, ZAG, ZAG, LE, LD, ...) — picks
 // can happen in any order, so display order and pick order are decoupled on
-// purpose. `squad` entries are tagged with the specific `role` they were
-// picked to fill (see handlePick/completeSquadRandomly/draftEleven), which
-// is what lets two identically-labeled slots (e.g. two ZAG) each show their
-// own occupant instead of both showing whoever was picked first.
+// purpose. Matches each formation slot to a squad entry by its exact
+// (role, roleSlot) pair — see formations.js's withRoleSlots — rather than
+// just consuming "the next player with this role" in array order: the
+// latter made the two ZAG slots indistinguishable from each other (there
+// was nothing to tell "the first ZAG slot" apart from "the second" beyond
+// which one happened to be scanned first), which is what broke moving a
+// single ZAG occupant into the OTHER, still-open ZAG slot — nothing about
+// the data actually changed, so nothing visibly moved (see DECISOES.md
+// decision 60).
 function buildDisplaySlots(formation, squad) {
-  const remaining = [...squad];
   return formation.slots.map((slot) => {
-    const index = remaining.findIndex((p) => p.role === slot.role);
-    if (index === -1) return { role: slot.role, player: null };
-    const [player] = remaining.splice(index, 1);
-    return { role: slot.role, player };
+    const player = squad.find((p) => p.role === slot.role && p.roleSlot === slot.roleSlot) ?? null;
+    return { role: slot.role, roleSlot: slot.roleSlot, player };
   });
 }
 
@@ -99,7 +101,7 @@ function LineupPanel({
             return (
               <button
                 key={index}
-                onClick={() => onSlotClick(row.role)}
+                onClick={() => onSlotClick(row.role, row.roleSlot)}
                 className={`${baseClass} animate-pulse border-emerald-400 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
               >
                 {rowContent}
@@ -193,40 +195,30 @@ export default function SquadScreen({ club, onComplete }) {
     return (totalByRole[role] ?? 0) - (filledByRole[role] ?? 0);
   }
 
-  // Every role this specific player could still move into right now — a
-  // player with roles ['ZAG', 'VOL'] only offers both if both kinds of slot
-  // are still open; once the ZAG slots fill up, they'd only offer VOL.
-  // `excludeRole` drops the player's own current role from the list when
-  // repositioning an already-placed player (moving them "to" where they
-  // already are isn't a real choice — see handlePlacedPlayerClick). Used
-  // for a fresh pick from the drawn pool (handlePick), which can only ever
-  // land on an empty slot — see allRolesFor below for the broader version
-  // used once a player is already on the squad, where swapping into an
-  // occupied slot is also on the table.
-  function eligibleRolesFor(player, excludeRole = null) {
-    return (player.roles ?? [player.position]).filter(
-      (role) => role !== excludeRole && openSlotsFor(role) > 0,
-    );
-  }
-
-  // Same idea as eligibleRolesFor, but without the open-slot filter — every
-  // role the player could play, full or not, since an already-placed player
-  // being repositioned can now land on an occupied slot too (by swapping
-  // with whoever's there) as well as an empty one.
-  function allRolesFor(player, excludeRole = null) {
-    return (player.roles ?? [player.position]).filter((role) => role !== excludeRole);
+  // Every role this specific player could still move into via an EMPTY
+  // slot right now — a player with roles ['ZAG', 'VOL'] only offers both if
+  // both kinds of slot are still open; once the ZAG slots fill up, they'd
+  // only offer VOL. Deliberately does NOT exclude the player's own current
+  // role: when a role has more than one slot (e.g. two ZAG) and only one is
+  // filled, an already-placed player in that role still needs to see the
+  // OTHER open slot of the same role as a valid move — only the `!row.player`
+  // check in LineupPanel/PitchLineup's isTarget stops them from ever being
+  // offered their own (occupied) slot back. Used both for a fresh pick from
+  // the drawn pool (handlePick) and for repositioning an already-placed one
+  // (handlePlacedPlayerClick) — swapping into an OCCUPIED slot instead is a
+  // separate concern, see swapTargetsFor below.
+  function eligibleRolesFor(player) {
+    return (player.roles ?? [player.position]).filter((role) => openSlotsFor(role) > 0);
   }
 
   // Other squad members `player` could trade places with: someone in a role
   // `player` is eligible for, who is themselves eligible for `player`'s
   // current role (`fromRole`) — a swap only makes sense if it's a legal
-  // placement in both directions at once. Deliberately does NOT exclude
-  // `fromRole` from the candidate roles (unlike allRolesFor, used for the
-  // empty-slot case) — a same-role swap between two ZAG entries is exactly
-  // the main case this exists for, and a player whose only role is ZAG
-  // would otherwise never be considered eligible for "another ZAG slot"
-  // at all. A ZAG/VOL swapping into a pure VOL slot only works if that
-  // VOL player also happens to cover ZAG.
+  // placement in both directions at once. Same reasoning as
+  // eligibleRolesFor above applies to not excluding `fromRole` from the
+  // candidate roles — a same-role swap between two ZAG entries is exactly
+  // the main case this exists for. A ZAG/VOL swapping into a pure VOL slot
+  // only works if that VOL player also happens to cover ZAG.
   function swapTargetsFor(player, fromRole) {
     const candidateRoles = new Set(player.roles ?? [player.position]);
     return squad.filter(
@@ -256,8 +248,12 @@ export default function SquadScreen({ club, onComplete }) {
   // whatever the player's data file lists as their default) — same rule
   // draftEleven follows, so a ZAG picked into a VOL slot counts as MF for
   // the rest of the game exactly like one drafted that way automatically.
-  function addToSquad(player, role) {
-    setSquad([...squad, { ...player, role, position: ROLE_TO_POSITION[role] }]);
+  // `roleSlot` addresses the exact slot instance within that role (see
+  // formations.js's withRoleSlots) — required so buildDisplaySlots/
+  // buildPitchSlots can tell this player's slot apart from any other one
+  // sharing the same role.
+  function addToSquad(player, role, roleSlot) {
+    setSquad([...squad, { ...player, role, roleSlot, position: ROLE_TO_POSITION[role] }]);
     setDrawnEra(null);
     setSelection(null);
   }
@@ -269,9 +265,11 @@ export default function SquadScreen({ club, onComplete }) {
   // object handed back from LineupPanel's own squad array (see
   // handlePlacedPlayerClick), so this can't accidentally touch a different
   // era-entry for the same real person.
-  function repositionInSquad(player, role) {
+  function repositionInSquad(player, role, roleSlot) {
     setSquad(
-      squad.map((p) => (p === player ? { ...p, role, position: ROLE_TO_POSITION[role] } : p)),
+      squad.map((p) =>
+        p === player ? { ...p, role, roleSlot, position: ROLE_TO_POSITION[role] } : p,
+      ),
     );
     setSelection(null);
   }
@@ -279,31 +277,35 @@ export default function SquadScreen({ club, onComplete }) {
   // Trades two already-placed players' slots — e.g. the two ZAG entries, or
   // a ZAG moving into an occupied LE/LD spot while its occupant takes the
   // vacated ZAG spot. Only ever called with a pair swapTargetsFor already
-  // vetted as mutually legal, so no further validation needed here.
-  //
-  // Also swaps their positions WITHIN the squad array, not just their
-  // `role` field — necessary for two players who already share the exact
-  // same role (e.g. two ZAG): buildDisplaySlots/buildPitchSlots assign a
-  // repeated role's multiple coordinates/rows in squad-array order (first
-  // ZAG-tagged entry gets the left dot, second gets the right one — see
-  // pitchCoordinates.js), so swapping only the (identical, in that case)
-  // role string would be a no-op and nothing would visibly move. Swapping
-  // array position too makes "swap the two ZAGs" actually swap left/right,
-  // while staying a no-op-safe operation when the roles do differ (their
-  // relative order among same-role peers no longer matters once they've
-  // swapped away from that role entirely).
+  // vetted as mutually legal, so no further validation needed here. Swaps
+  // the full (role, roleSlot) pair each player carries — not just `role` —
+  // since two players who already share the exact same role (e.g. two ZAG)
+  // would otherwise swap identical role strings and go nowhere; roleSlot is
+  // what actually addresses "which ZAG slot," so swapping it is what makes
+  // the two visibly trade places (left dot vs. right dot — see
+  // pitchCoordinates.js and formations.js's withRoleSlots).
   function swapInSquad(playerA, playerB) {
-    const roleA = playerA.role;
-    const roleB = playerB.role;
-    const indexA = squad.indexOf(playerA);
-    const indexB = squad.indexOf(playerB);
-    const newSquad = [...squad];
-    newSquad[indexA] = { ...playerB, role: roleA, position: ROLE_TO_POSITION[roleA] };
-    newSquad[indexB] = { ...playerA, role: roleB, position: ROLE_TO_POSITION[roleB] };
-    setSquad(newSquad);
+    const { role: roleA, roleSlot: roleSlotA } = playerA;
+    const { role: roleB, roleSlot: roleSlotB } = playerB;
+    setSquad(
+      squad.map((p) => {
+        if (p === playerA)
+          return { ...p, role: roleB, roleSlot: roleSlotB, position: ROLE_TO_POSITION[roleB] };
+        if (p === playerB)
+          return { ...p, role: roleA, roleSlot: roleSlotA, position: ROLE_TO_POSITION[roleA] };
+        return p;
+      }),
+    );
     setSelection(null);
   }
 
+  // Always opens a selection rather than auto-placing even a single-role
+  // player straight into their only eligible slot (e.g. a goalkeeper, who
+  // only ever has one role and — in most formations — only one slot to
+  // begin with) — the user asked for placement to always be an explicit,
+  // cancelable choice (click the empty slot to confirm, or the player's
+  // own card again to back out), never an implicit side effect of picking
+  // the card, no matter how few eligible slots there are.
   function handlePick(player) {
     if (selection?.player === player) {
       setSelection(null);
@@ -312,11 +314,7 @@ export default function SquadScreen({ club, onComplete }) {
     if (pickedPersonIds.has(player.personId ?? player.id)) return;
     const eligible = eligibleRolesFor(player);
     if (eligible.length === 0) return;
-    if (eligible.length === 1) {
-      addToSquad(player, eligible[0]);
-    } else {
-      setSelection({ player, eligible, fromRole: null });
-    }
+    setSelection({ player, eligible, fromRole: null });
   }
 
   // Clicking an already-placed player starts (or, clicked a second time,
@@ -327,8 +325,9 @@ export default function SquadScreen({ club, onComplete }) {
   // reposition is already active and the newly-clicked player is a valid
   // swap partner for it, swap immediately instead of restarting the
   // selection on them. A player with nowhere else to go at all (no open
-  // slot and no swap partner) just does nothing — same "no real choice"
-  // shortcut a single-role fresh pick already gets in handlePick.
+  // slot and no swap partner — genuinely nothing to choose between, unlike
+  // handlePick, which always opens a selection even for a single eligible
+  // slot) just does nothing.
   function handlePlacedPlayerClick(player) {
     if (selection?.player === player) {
       setSelection(null);
@@ -341,11 +340,7 @@ export default function SquadScreen({ club, onComplete }) {
       swapInSquad(selection.player, player);
       return;
     }
-    const eligible = allRolesFor(player, player.role);
-    // A single-role player (e.g. roles: ['ZAG']) has no OTHER role to list
-    // here, but can still have somewhere to go: a same-role swap with
-    // another ZAG. Only bail out when there's truly neither an empty-slot
-    // role nor a swap partner available.
+    const eligible = eligibleRolesFor(player);
     if (eligible.length === 0 && swapTargetsFor(player, player.role).length === 0) return;
     setSelection({ player, eligible, fromRole: player.role });
   }
@@ -353,13 +348,16 @@ export default function SquadScreen({ club, onComplete }) {
   // Only ever called for a role in the active selection's own `eligible`
   // list (see LineupPanel's isTarget check), so no further validation
   // needed here — just route to whichever placement means for this
-  // selection's origin.
-  function handleSlotClick(role) {
+  // selection's origin. `roleSlot` comes straight from the specific empty
+  // row/dot that was clicked (see buildDisplaySlots/buildPitchSlots), so
+  // this always addresses the exact slot instance the player clicked, not
+  // just "some open slot of this role."
+  function handleSlotClick(role, roleSlot) {
     if (!selection) return;
     if (selection.fromRole) {
-      repositionInSquad(selection.player, role);
+      repositionInSquad(selection.player, role, roleSlot);
     } else {
-      addToSquad(selection.player, role);
+      addToSquad(selection.player, role, roleSlot);
     }
   }
 
@@ -488,14 +486,11 @@ export default function SquadScreen({ club, onComplete }) {
           <div className="rounded-lg border border-emerald-500 bg-slate-900 px-4 py-3 text-sm text-slate-300">
             {selection.fromRole ? (
               <>
-                Movendo <span className="font-semibold">{selection.player.name}</span> — clique numa
-                vaga vazia destacada em verde, num jogador destacado em amarelo pra trocar de lugar
-                com ele, ou nele de novo para cancelar.
+                Movendo <span className="font-semibold">{selection.player.name}</span>
               </>
             ) : (
               <>
-                Escalando <span className="font-semibold">{selection.player.name}</span> — clique
-                numa vaga destacada ao lado.
+                Escalando <span className="font-semibold">{selection.player.name}</span>
               </>
             )}
           </div>
