@@ -76,6 +76,13 @@ engano alguém que de fato jogou. Colocar um jogador na época errada é um
 erro pior do que deixar um jogador real de fora por falta de confirmação.
 Ver decisão 69 em `info/DECISOES.md`.
 
+**Apelido junto do nome.** Quando um jogador real é mais conhecido por um
+apelido, o campo `name` deve refletir isso — nome e apelido juntos (ex.:
+"Aloísio Chulapa") quando o nome completo ainda ajuda a identificar a
+pessoa, ou só o apelido (ex.: "Vampeta", "Geraldão") quando é assim que o
+jogador é universalmente reconhecido, sem que o nome de registro agregue
+nada. Ver decisão 73 em `info/DECISOES.md`.
+
 ## Traços (características)
 
 Traços dão personalidade ao time sorteado — dois times de overall parecido
@@ -86,14 +93,26 @@ Conjunto inicial (começar com 6-8, não 20 — cada traço é curadoria manual)
 
 | slug | efeito |
 |---|---|
-| `batedor_faltas` | mais chance de gol em falta |
+| `batedor_faltas` | qualquer jogador pode bater falta direta e acertar, mas um batedor de verdade é bem mais provável de converter |
 | `pavio_curto` | escolhido como infrator mais vezes E mais chance de cartão |
-| `catimbeiro` | aumenta a eficácia da catimba do time |
+| `catimbeiro` | aumenta a eficácia da catimba do time inteiro (segurar resultado) |
+| `flopper` | cava falta: aumenta a taxa de falta do time inteiro E mais chance de ser escolhido como quem sofre a falta |
 | `artilheiro` | mais chance de ser o finalizador e de converter |
 | `garcom` | aumenta a chance de a jogada virar chance clara |
 | `muralha` | goleiro/zagueiro decisivo, reduz conversão adversária |
-| `driblador` | provoca mais faltas, cria mais chances |
+| `driblador` | aumenta a taxa de falta do time inteiro E (menos que `flopper`) mais chance de ser escolhido como quem sofre a falta; cria mais chances |
 | `lider` | reage melhor quando o time está atrás |
+
+Quem bate a falta direta quando não há um `batedor_faltas` dedicado é
+sempre um meio-campista ou atacante — nunca zagueiro ou goleiro, a não ser
+que ele próprio tenha o traço (caso real: Rogério Ceni, goleiro do São
+Paulo, tinha `freeKickSpecialist`).
+
+`catimbeiro` e `flopper` são dois traços mecânicos diferentes, não um só —
+ambos são formas de ser "manhoso"/cínico em campo (segurar o jogo em grupo
+vs. cavar falta individualmente), mas cada um com sua própria intensidade,
+independente um do outro. Ver decisão 74 (e a correção dela) em
+`info/DECISOES.md`.
 
 Cada traço tem `intensidade` de 1 a 3 (evita criar "batedor bom" e "batedor
 excepcional" como traços separados).
@@ -117,8 +136,14 @@ Mecânica diferencial do jogo. Precisa ser um trade-off real, não um botão de
 - Catimba alta → mais eventos que queimam tempo e quebram ritmo do adversário
   (faltas táticas, demora na reposição, provocação). Bom para segurar resultado.
 - Em troca → mais risco de cartão e expulsão.
-- **Eficácia depende de ter catimbeiros em campo.** Time sorteado sem nenhum
-  catimbeiro com catimba nível 3 só coleciona cartão sem ganhar nada.
+- **Catimbeiro amplifica, mas não é pré-requisito.** Segurar o jogo é uma
+  escolha tática comum que qualquer time consegue fazer até certo ponto — não
+  um traço de personalidade raro. Todo time com catimba ligada já rouba um
+  pouco de ritmo do adversário; um catimbeiro em campo torna isso bem mais
+  eficaz. Ver decisão 72 em `info/DECISOES.md` para a calibragem: num teste
+  de time fraco segurando resultado contra um mais forte, catimba 3 sem
+  catimbeiro já supera não usar catimba nenhuma (53.4% x 49.7% de taxa de
+  vitória-ou-empate); com catimbeiro, sobe bem mais (60.3%).
 
 Isso faz o sorteio importar para a decisão tática: você olha os 11 que saíram e
 decide a postura em função deles.

@@ -17,7 +17,14 @@ import { getTraitIntensity } from '../traits.js';
 import { EVENT_TYPES } from '../narration/index.js';
 import { activePlayers, scoreSituation } from './teamState.js';
 import { pushEvent } from './events.js';
-import { pickOffender, pickFinisher, pickTauntVictim, pickGoalkeeper } from './playerPicking.js';
+import {
+  pickOffender,
+  pickFinisher,
+  pickTauntVictim,
+  pickFouledPlayer,
+  pickGoalkeeper,
+  pickFreeKickTaker,
+} from './playerPicking.js';
 import {
   sendOff,
   issueYellowCard,
@@ -160,7 +167,7 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     rng.chance(shortFuseIntensity * COMEDY.SCANDALOUS_FOUL_CHANCE_PER_SHORT_FUSE_INTENSITY);
 
   if (isScandalous) {
-    const victim = pickTauntVictim(fouledTeam, rng);
+    const victim = pickFouledPlayer(fouledTeam, rng);
     pushEvent(
       events,
       minute,
@@ -175,10 +182,10 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     // itself), but some do ("agarrou a camisa" needs to say whose shirt) —
     // picking one here and always passing it through is cheaper and safer
     // than threading a second pushEvent variant just for those templates.
-    // Reuses pickTauntVictim's same defender-leaning pick as
-    // SCANDALOUS_FOUL above, for the same reason (a fouled outfield player
-    // is usually a defender contesting the ball).
-    const victim = pickTauntVictim(fouledTeam, rng);
+    // pickFouledPlayer, same as SCANDALOUS_FOUL above: any outfield player
+    // can be picked, weighted up for `dribbler`/`flopper` (see its own doc
+    // comment).
+    const victim = pickFouledPlayer(fouledTeam, rng);
     pushEvent(
       events,
       minute,
@@ -318,35 +325,41 @@ export function resolveFoul(offendingTeam, fouledTeam, minute, score, rng, stats
     goalkeeperForwardBoost = DESPERATION.GOAL_CHANCE_WEIGHT;
   }
 
-  const specialists = activePlayers(fouledTeam).filter(
-    (p) => getTraitIntensity(p, 'freeKickSpecialist') > 0,
-  );
-  if (specialists.length > 0) {
-    const specialist = rng.pick(specialists);
-    const intensity = getTraitIntensity(specialist, 'freeKickSpecialist');
-    const goalChance =
-      TRAIT_WEIGHTS.FREE_KICK_GOAL_CHANCE *
-      (1 + intensity * TRAIT_WEIGHTS.FREE_KICK_SPECIALIST_WEIGHT) *
-      goalkeeperForwardBoost;
-    if (rng.chance(goalChance)) {
-      const wasWinningBefore = scoreSituation(fouledTeam.side, score) === 'winning';
-      if (fouledTeam.side === 'home') score.home++;
-      else score.away++;
-      const tookTheLead = !wasWinningBefore && scoreSituation(fouledTeam.side, score) === 'winning';
+  // Any team can attempt a direct free kick — this used to require at least
+  // one freeKickSpecialist on the pitch, making it literally impossible
+  // otherwise (0% across 1000 simulated matches). pickFreeKickTaker always
+  // returns someone, weighted toward sharpshooter/freeKickSpecialist when
+  // present, so the attempt itself is never gated on having a specialist —
+  // only the conversion chance is, and steeply: an ordinary player taking a
+  // hopeful free kick should score one only rarely
+  // (FREE_KICK_GOAL_CHANCE_NO_SPECIALIST), while a real specialist converts
+  // at a much higher, intensity-scaled rate (FREE_KICK_GOAL_CHANCE).
+  const taker = pickFreeKickTaker(fouledTeam, rng);
+  const intensity = getTraitIntensity(taker, 'freeKickSpecialist');
+  const goalChance =
+    intensity > 0
+      ? TRAIT_WEIGHTS.FREE_KICK_GOAL_CHANCE *
+        (1 + intensity * TRAIT_WEIGHTS.FREE_KICK_SPECIALIST_WEIGHT) *
+        goalkeeperForwardBoost
+      : TRAIT_WEIGHTS.FREE_KICK_GOAL_CHANCE_NO_SPECIALIST * goalkeeperForwardBoost;
+  if (rng.chance(goalChance)) {
+    const wasWinningBefore = scoreSituation(fouledTeam.side, score) === 'winning';
+    if (fouledTeam.side === 'home') score.home++;
+    else score.away++;
+    const tookTheLead = !wasWinningBefore && scoreSituation(fouledTeam.side, score) === 'winning';
 
-      pushEvent(
-        events,
-        minute,
-        EVENT_TYPES.FREE_KICK_GOAL,
-        fouledTeam.side,
-        { player: specialist.name },
-        rng,
-        {
-          playerId: specialist.id,
-        },
-      );
-      events.push(...maybeSilenceCrowd(fouledTeam, tookTheLead, specialist, minute, rng, stats));
-    }
+    pushEvent(
+      events,
+      minute,
+      EVENT_TYPES.FREE_KICK_GOAL,
+      fouledTeam.side,
+      { player: taker.name },
+      rng,
+      {
+        playerId: taker.id,
+      },
+    );
+    events.push(...maybeSilenceCrowd(fouledTeam, tookTheLead, taker, minute, rng, stats));
   }
 
   return events;

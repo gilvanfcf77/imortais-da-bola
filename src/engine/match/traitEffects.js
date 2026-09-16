@@ -40,12 +40,18 @@ export function effectiveGamesmanship(team, opponent, minute, score) {
   return configured;
 }
 
+// Every team playing for time gets a baseline rhythm-break benefit — see
+// RHYTHM_BREAK_BASE_PER_LEVEL's own comment for why this isn't gated on
+// cynicalFouler the way it used to be. cynicalFouler intensity stacks on
+// top as a pure amplifier, so a team built around nasty operators still
+// gets meaningfully more out of the same catimba level than one without.
 export function rhythmBreakReduction(team, opponent, minute, score) {
   const level = effectiveGamesmanship(team, opponent, minute, score);
   if (level === 0) return 0;
   const cynicalIntensity = sumTraitIntensity(activePlayers(team), 'cynicalFouler');
-  if (cynicalIntensity === 0) return 0; // gamesmanship without a cynicalFouler buys nothing
-  const reduction = level * cynicalIntensity * GAMESMANSHIP.RHYTHM_BREAK_PER_CYNICAL_INTENSITY;
+  const reduction =
+    level * GAMESMANSHIP.RHYTHM_BREAK_BASE_PER_LEVEL +
+    level * cynicalIntensity * GAMESMANSHIP.RHYTHM_BREAK_PER_CYNICAL_INTENSITY;
   return Math.min(GAMESMANSHIP.RHYTHM_BREAK_CAP, reduction);
 }
 

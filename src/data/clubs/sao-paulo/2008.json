@@ -203,12 +203,15 @@
     {
       "id": "spa08-fw-1",
       "personId": "aloisio-sp-n7ud",
-      "name": "Aloísio",
+      "name": "Aloísio Chulapa",
       "position": "FW",
       "roles": ["CA"],
       "overall": 83,
       "number": 14,
-      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "traits": [
+        { "slug": "sharpshooter", "intensity": 2 },
+        { "slug": "flopper", "intensity": 3 }
+      ],
       "specialAbility": null
     },
     {

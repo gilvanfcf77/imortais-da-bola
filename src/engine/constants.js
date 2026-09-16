@@ -73,6 +73,11 @@ export const ATTACK = {
 export const FOUL = {
   BASE_CHANCE_PER_MINUTE: 0.07,
   DRIBBLER_OPPONENT_FOUL_WEIGHT: 0.06, // per point of opponent dribbler intensity
+  // A `flopper` manufactures fouls on purpose (see traits.js), so this is
+  // deliberately a bit stronger per point than DRIBBLER_OPPONENT_FOUL_WEIGHT
+  // above, which is a real dribbler's incidental side effect of beating
+  // defenders. Not yet calibrated.
+  FLOPPER_OPPONENT_FOUL_WEIGHT: 0.08,
 };
 
 export const CARDS = {
@@ -144,9 +149,18 @@ export const GAMESMANSHIP = {
   // Flat card-risk increase per gamesmanship level (0-3), regardless of
   // having cynicalFouler players — the risk always applies.
   CARD_RISK_PER_LEVEL: 0.05,
-  // Rhythm-breaking benefit (reduces opponent attack chance this minute)
-  // ONLY scales with cynicalFouler intensity on the team using gamesmanship.
-  // A team with gamesmanship 3 and zero cynicalFouler gets none of this.
+  // Rhythm-breaking benefit (reduces opponent attack chance this minute).
+  // Any team playing for time gets SOME of this, regardless of personnel —
+  // in real football, slowing a match down is an ordinary tactical choice
+  // any side can make, not a rare personality trait. cynicalFouler is the
+  // amplifier on top: a team built around nasty operators does this far
+  // more effectively than one just going through the motions. Confirmed via
+  // a throwaway simulation (1000 matches, a weak underdog vs. a much
+  // stronger side) that gamesmanship 3 with zero cynicalFouler used to make
+  // the underdog's win-or-draw rate WORSE than not using gamesmanship at
+  // all (44.9% vs. 49.5% baseline) — all cost (extra fouls/cards), no
+  // benefit. RHYTHM_BREAK_BASE_PER_LEVEL fixes that floor.
+  RHYTHM_BREAK_BASE_PER_LEVEL: 0.07,
   RHYTHM_BREAK_PER_CYNICAL_INTENSITY: 0.02,
   RHYTHM_BREAK_CAP: 0.35,
   TIME_WASTING_EVENT_CHANCE_PER_LEVEL: 0.02, // flavor event, no extra mechanical effect
@@ -211,8 +225,15 @@ export const TRAIT_WEIGHTS = {
   PLAYMAKER_CLEAR_CHANCE_WEIGHT: 0.15, // per point of intensity
   WALL_REDUCTION_PER_INTENSITY: 0.1, // per point of intensity, capped below
   WALL_REDUCTION_CAP: 0.55,
-  FREE_KICK_GOAL_CHANCE: 0.04, // base chance a foul in range becomes a scored free kick
-  FREE_KICK_SPECIALIST_WEIGHT: 0.1, // per point of intensity
+  // Chance a direct free kick in range is actually converted, when the
+  // taker (pickFreeKickTaker) has at least 1 point of freeKickSpecialist —
+  // multiplied up further per point via FREE_KICK_SPECIALIST_WEIGHT below.
+  // When the taker has none, FREE_KICK_GOAL_CHANCE_NO_SPECIALIST applies
+  // instead — a real free-kick goal from an ordinary player should be rare,
+  // not routine. Not yet calibrated.
+  FREE_KICK_GOAL_CHANCE: 0.05,
+  FREE_KICK_GOAL_CHANCE_NO_SPECIALIST: 0.0015,
+  FREE_KICK_SPECIALIST_WEIGHT: 0.3, // per point of intensity
   SET_PIECE_SPECIALIST_WEIGHT: 1, // extra selection weight per point for corners and penalties
   PLAYMAKER_ASSIST_WEIGHT: 0.5, // extra weight per point of intensity, when picking who gets credited with the assist
   DRIBBLER_INDIVIDUAL_GOAL_WEIGHT: 0.5, // multiplies GOAL_STYLE.WEIGHTS.individual, per point of the scorer's dribbler intensity
@@ -227,6 +248,16 @@ export const TRAIT_WEIGHTS = {
   // that pool entirely rather than just heavily deprioritized. Not yet
   // calibrated.
   GOALKEEPER_ASSIST_WEIGHT: 0.08,
+  // Extra weight per point of `dribbler`/`flopper` intensity when picking
+  // who gets fouled (see playerPicking.js's pickFouledPlayer) — on top of
+  // the flat weight of 1 every candidate in the (whole-team, not just
+  // defenders) pool starts at. dribbler's weight is lower than flopper's:
+  // a dribbler draws real fouls as a side effect of beating defenders,
+  // while a flopper's whole point is winning the foul itself, so the same
+  // max intensity (3) should stand out more for flopper. Neither
+  // calibrated yet.
+  DRIBBLER_FOULED_SELECTION_WEIGHT: 0.6,
+  FLOPPER_FOULED_SELECTION_WEIGHT: 1,
 };
 
 // A `wall` trait's last-ditch save reads very differently depending on who

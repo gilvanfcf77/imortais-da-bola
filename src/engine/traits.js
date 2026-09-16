@@ -6,12 +6,21 @@
 // English slug -> Portuguese slug from CLAUDE.md/DECISOES.md:
 //   freeKickSpecialist -> batedor_faltas
 //   shortFuse          -> pavio_curto
-//   cynicalFouler      -> catimbeiro
+//   cynicalFouler      -> catimbeiro (team-wide gamesmanship effectiveness)
+//   flopper            -> catimbeiro (draws fouls onto himself specifically)
 //   sharpshooter       -> artilheiro
 //   playmaker          -> garcom
 //   wall               -> muralha
 //   dribbler           -> driblador
 //   leader             -> lider
+//
+// cynicalFouler and flopper are two DIFFERENT mechanical traits, not one —
+// see decision 74's correction in DECISOES.md. "Catimbeiro" (crafty/cynical
+// player) is the umbrella Portuguese archetype both fall under in prose —
+// a team-wide operator who holds a result (cynicalFouler) vs. an individual
+// who wins free kicks by going down easily (flopper) — but there's no third
+// "catimbeiro" trait slug in the data; a player can have either, both, or
+// neither, each with its own intensity.
 
 export const TRAITS = {
   freeKickSpecialist: {
@@ -27,6 +36,11 @@ export const TRAITS = {
   cynicalFouler: {
     name: 'Cynical fouler',
     description: "Boosts the team's gamesmanship effectiveness.",
+  },
+  flopper: {
+    name: 'Flopper',
+    description:
+      'Draws fouls onto himself more often — more likely to be picked as the one fouled.',
   },
   sharpshooter: {
     name: 'Sharpshooter',

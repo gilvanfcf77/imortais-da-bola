@@ -46,10 +46,17 @@ export function simulateMinute(minute, home, away, score, rng, stats, isSecondHa
   ]) {
     const gamesmanshipLevel = effectiveGamesmanship(offender, fouled, minute, score);
     const dribblerIntensity = sumTraitIntensity(activePlayers(fouled), 'dribbler');
+    // A `flopper` manufactures fouls on purpose, not just as a side effect
+    // of beating defenders like `dribbler` — so it raises the team's own
+    // foul rate too, on top of pickFouledPlayer weighting who specifically
+    // it happens to once a foul is already rolled (playerPicking.js).
+    const flopperIntensity = sumTraitIntensity(activePlayers(fouled), 'flopper');
     const foulChance =
       FOUL.BASE_CHANCE_PER_MINUTE *
       (1 + gamesmanshipLevel * GAMESMANSHIP.TACTICAL_FOUL_RATE_PER_LEVEL) *
-      (1 + dribblerIntensity * FOUL.DRIBBLER_OPPONENT_FOUL_WEIGHT);
+      (1 +
+        dribblerIntensity * FOUL.DRIBBLER_OPPONENT_FOUL_WEIGHT +
+        flopperIntensity * FOUL.FLOPPER_OPPONENT_FOUL_WEIGHT);
 
     if (rng.chance(foulChance)) {
       events.push(...resolveFoul(offender, fouled, minute, score, rng, stats));
