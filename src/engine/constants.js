@@ -195,6 +195,19 @@ export const GAMESMANSHIP = {
 
 export const TRAIT_WEIGHTS = {
   SHARPSHOOTER_FINISH_WEIGHT: 0.18, // per point of intensity
+  // Separate from SHARPSHOOTER_FINISH_WEIGHT above: that one boosts
+  // conversion odds once a player already has the ball at their feet, this
+  // one boosts how often they get picked to shoot in the first place.
+  // ATTACK.FINISHER_WEIGHT gives forwards a 3-vs-1 head start over
+  // midfielders purely by position — before this weight existed, a
+  // legendary shooting midfielder (a Marcelinho Carioca, a Ricardinho) at
+  // max sharpshooter intensity only added 0.54 (3 * the 0.18 above) to
+  // that base 1, nowhere near a plain forward's 3, so a great MF finisher
+  // would shoot far less than an unremarkable FW just for being a
+  // midfielder. At 0.7/point, max intensity (3) now lands at 3.1 —
+  // matching a plain forward's shot volume, as it should for a player
+  // whose whole trait is being trusted to shoot from deep.
+  SHARPSHOOTER_FINISHER_SELECTION_WEIGHT: 0.7, // per point of intensity
   PLAYMAKER_CLEAR_CHANCE_WEIGHT: 0.15, // per point of intensity
   WALL_REDUCTION_PER_INTENSITY: 0.1, // per point of intensity, capped below
   WALL_REDUCTION_CAP: 0.55,
@@ -364,6 +377,16 @@ export const COMEDY = {
   // Cut to a third (2026-08-29, base seed 20260829) to bring it in line with
   // the other highlight-tier events. Re-run landed at ~0.29/match.
   WHIFF_CHANCE: 0.03,
+  // Whiffing is a blunder, so it should hit lousy finishers far more than
+  // legends. WHIFF_CHANCE above is the rate at a "decent squad player"
+  // overall (WHIFF_OVERALL_REFERENCE); actual chance scales exponentially
+  // by how far the finisher's overall sits from that reference, then gets
+  // clamped so a scrub isn't guaranteed to whiff and a 99-overall legend
+  // still whiffs occasionally (it's comedy, not a stat sheet).
+  WHIFF_OVERALL_REFERENCE: 70,
+  WHIFF_OVERALL_RATE: 0.05,
+  WHIFF_OVERALL_MULTIPLIER_MIN: 0.15,
+  WHIFF_OVERALL_MULTIPLIER_MAX: 3,
   // Out of the fouls attributed to a shortFuse player, chance it escalates
   // into assaulting the referee (EVENT_TYPES.OFFICIAL_ASSAULTED) instead of
   // a normal card outcome — the other way into that same event is

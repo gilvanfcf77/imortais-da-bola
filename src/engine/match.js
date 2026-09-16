@@ -31,6 +31,22 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+// Bad finishers whiff far more often than legends do. The multiplier is
+// exponential rather than linear so it stays smooth in both directions —
+// a few overall points below the reference nudges the rate up gently, but
+// a truly poor finisher's rate climbs fast — while the clamp keeps a scrub
+// from whiffing near-guaranteed and a 99-overall legend whiffing at all.
+function whiffChance(finisher) {
+  const multiplier = clamp(
+    Math.exp(
+      (COMEDY.WHIFF_OVERALL_REFERENCE - finisher.overall) * COMEDY.WHIFF_OVERALL_RATE,
+    ),
+    COMEDY.WHIFF_OVERALL_MULTIPLIER_MIN,
+    COMEDY.WHIFF_OVERALL_MULTIPLIER_MAX,
+  );
+  return COMEDY.WHIFF_CHANCE * multiplier;
+}
+
 function createTeamState(config, side) {
   return {
     config, // { name, lineup, posture, gamesmanship }
@@ -289,7 +305,7 @@ function pickFinisher(team, rng, exclude) {
   const weights = candidates.map(
     (p) =>
       ATTACK.FINISHER_WEIGHT[p.position] +
-      getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT,
+      getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISHER_SELECTION_WEIGHT,
   );
   return rng.pickWeighted(candidates, weights);
 }
@@ -302,7 +318,8 @@ function pickSetPieceTaker(team, rng, exclude) {
     pool.map(
       (p) =>
         1 +
-        getTraitIntensity(p, 'sharpshooter') * TRAIT_WEIGHTS.SHARPSHOOTER_FINISH_WEIGHT +
+        getTraitIntensity(p, 'sharpshooter') *
+          TRAIT_WEIGHTS.SHARPSHOOTER_FINISHER_SELECTION_WEIGHT +
         getTraitIntensity(p, 'freeKickSpecialist') * TRAIT_WEIGHTS.SET_PIECE_SPECIALIST_WEIGHT,
     ),
   );
@@ -869,7 +886,7 @@ function resolveAttack(attackingTeam, defendingTeam, minute, score, rng, stats) 
         },
       );
     }
-  } else if (rng.chance(COMEDY.WHIFF_CHANCE)) {
+  } else if (rng.chance(whiffChance(finisher))) {
     // The crowd reacting is always the home crowd — the dominant presence
     // in the stadium in this abstraction. Booing only makes sense directed
     // at the rival: an away finisher gets jeered by the home crowd
