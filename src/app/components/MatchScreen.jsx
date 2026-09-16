@@ -4,9 +4,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { EVENT_TYPES, GOAL_EVENT_TYPES, ROLE_TO_POSITION } from '../../engine/index.js';
 
 const SPEEDS = [
-  { label: 'lenta', msPerMinute: 600 },
-  { label: 'normal', msPerMinute: 300 },
-  { label: 'rápida', msPerMinute: 120 },
+  { label: 'lenta', msPerMinute: 900 },
+  { label: 'normal', msPerMinute: 500 },
+  { label: 'rápida', msPerMinute: 200 },
 ];
 
 // Goalkeeper first, then defenders, then midfielders, then forwards —
@@ -332,7 +332,7 @@ export default function MatchScreen({ matchData, onFinished }) {
   // shootout (there's no such thing as "minute 97" in real football), so
   // anything from this index on skips the minute prefix in the log.
   const shootoutStartIndex = result.events.length;
-  const [msPerMinute, setMsPerMinute] = useState(300);
+  const [msPerMinute, setMsPerMinute] = useState(500);
   const [visibleCount, setVisibleCount] = useState(0);
   // Bumped whenever that side's score changes — used as a `key` on the
   // score span so React remounts it, which restarts the CSS pulse animation

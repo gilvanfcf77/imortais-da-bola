@@ -50,7 +50,7 @@ export const TEMPLATES = {
     '{player} finaliza, mas {defender} faz uma defesaça.',
     '{player} bate forte, mas {defender} sai bem e evita o gol com uma defesa espetacular.',
     'Na hora certa, {defender} aparece para defender o chute de {player}.',
-    'Chute colocado! {defender} se estica todo e bloqueia a finalização de {player} com o corpo.',
+    'Chute colocado! {defender} se estica todo e tira o chute de {player} com a ponta dos dedos!',
     '{player} tenta o arremate, mas {defender} se joga na bola e salva o time!',
     'Olha o chute... {defender} trava no momento exato e impede o gol de {player}!',
     '{player} pega a sobra e manda pro gol, mas {defender} aparece milagrosamente para evitar o gol!',
