@@ -38,7 +38,7 @@
       "name": "Miranda",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 80,
+      "overall": 82,
       "number": 5,
       "traits": [{ "slug": "wall", "intensity": 2 }],
       "specialAbility": null
@@ -49,7 +49,7 @@
       "name": "André Dias",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 79,
+      "overall": 81,
       "number": 3,
       "traits": [{ "slug": "wall", "intensity": 1 }],
       "specialAbility": null
@@ -94,7 +94,7 @@
       "name": "Jorge Wagner",
       "position": "FB",
       "roles": ["LE"],
-      "overall": 77,
+      "overall": 80,
       "number": 7,
       "traits": [{ "slug": "freeKickSpecialist", "intensity": 2 }],
       "specialAbility": null
@@ -105,7 +105,7 @@
       "name": "Joílson",
       "position": "FB",
       "roles": ["LD"],
-      "overall": 72,
+      "overall": 75,
       "number": 12,
       "traits": [],
       "specialAbility": null
@@ -139,7 +139,7 @@
       "name": "Zé Luís",
       "position": "MF",
       "roles": ["VOL"],
-      "overall": 71,
+      "overall": 74,
       "number": 23,
       "traits": [],
       "specialAbility": null
@@ -150,7 +150,7 @@
       "name": "Hernanes",
       "position": "MF",
       "roles": ["MC", "MAT"],
-      "overall": 82,
+      "overall": 85,
       "number": 15,
       "traits": [{ "slug": "playmaker", "intensity": 2 }],
       "specialAbility": null
@@ -161,7 +161,7 @@
       "name": "Richarlyson",
       "position": "MF",
       "roles": ["MD", "ME"],
-      "overall": 75,
+      "overall": 78,
       "number": 20,
       "traits": [
         { "slug": "dribbler", "intensity": 1 },
@@ -209,7 +209,7 @@
       "name": "Aloísio Chulapa",
       "position": "FW",
       "roles": ["CA"],
-      "overall": 83,
+      "overall": 86,
       "number": 14,
       "traits": [
         { "slug": "sharpshooter", "intensity": 2 },
@@ -223,7 +223,7 @@
       "name": "Borges",
       "position": "FW",
       "roles": ["CA", "PD"],
-      "overall": 77,
+      "overall": 80,
       "number": 17,
       "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
       "specialAbility": null
@@ -234,7 +234,7 @@
       "name": "Dagoberto",
       "position": "FW",
       "roles": ["CA", "PE"],
-      "overall": 72,
+      "overall": 75,
       "number": 11,
       "traits": [],
       "specialAbility": null

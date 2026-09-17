@@ -1,0 +1,241 @@
+{
+  "slug": "vasco-da-gama",
+  "name": "Vasco da Gama",
+  "playable": true,
+  "era": 1997,
+  "legendary": true,
+  "cupEligible": true,
+  "pool": [
+    {
+      "id": "vas97-gk-1",
+      "personId": "carlos-germano-q4vt",
+      "name": "Carlos Germano",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 85,
+      "number": 1,
+      "traits": [{ "slug": "wall", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-gk-2",
+      "personId": "marcio-vas-n7kf",
+      "name": "Márcio",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 62,
+      "number": 12,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "vas97-cb-1",
+      "personId": "mauro-galvao-h9lp",
+      "name": "Mauro Galvão",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 85,
+      "number": 4,
+      "traits": [{ "slug": "wall", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-cb-2",
+      "personId": "odvan-vas-c3rw",
+      "name": "Odvan",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 81,
+      "number": 3,
+      "traits": [{ "slug": "wall", "intensity": 1 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-cb-3",
+      "personId": "cesar-prates-vas-y8mq",
+      "name": "César Prates",
+      "position": "FB",
+      "roles": ["LD", "ZAG"],
+      "overall": 60,
+      "number": 15,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "vas97-fb-1",
+      "personId": "valber-roel-vas-t2xn",
+      "name": "Válber",
+      "position": "FB",
+      "roles": ["LD", "ZAG"],
+      "overall": 80,
+      "number": 2,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fb-2",
+      "personId": "felipe-maestro-vas-k6dz",
+      "name": "Felipe \"Maestro\"",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 81,
+      "number": 6,
+      "traits": [{ "slug": "dribbler", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fb-3",
+      "personId": "cafezinho-vas-p9wl",
+      "name": "Cafezinho",
+      "position": "FB",
+      "roles": ["LD", "LE"],
+      "overall": 63,
+      "number": 16,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "vas97-mf-1",
+      "personId": "luisinho-quintanilha-vas-b4jr",
+      "name": "Luisinho",
+      "position": "MF",
+      "roles": ["VOL", "LE"],
+      "overall": 82,
+      "number": 14,
+      "traits": [{ "slug": "wall", "intensity": 1 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-mf-2",
+      "personId": "nasa-vas-d7fq",
+      "name": "Nasa",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 76,
+      "number": 5,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-mf-3",
+      "personId": "ramon-vas97-m3kt",
+      "name": "Ramon",
+      "position": "MF",
+      "roles": ["MC", "MAT"],
+      "overall": 82,
+      "number": 8,
+      "traits": [{ "slug": "freeKickSpecialist", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-mf-4",
+      "personId": "juninho-pernambucano-r5wx",
+      "name": "Juninho Pernambucano",
+      "position": "MF",
+      "roles": ["MC", "MAT"],
+      "overall": 84,
+      "number": 10,
+      "traits": [
+        { "slug": "freeKickSpecialist", "intensity": 2 },
+        { "slug": "playmaker", "intensity": 2 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-mf-5",
+      "personId": "pedrinho-vas97-h2ny",
+      "name": "Pedrinho",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 79,
+      "number": 7,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-mf-6",
+      "personId": "nelson-vas-t8qc",
+      "name": "Nelson",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 58,
+      "number": 21,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "vas97-fw-1",
+      "personId": "edmundo-f9yl",
+      "name": "Edmundo",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 91,
+      "number": 9,
+      "traits": [
+        { "slug": "sharpshooter", "intensity": 3 },
+        { "slug": "shortFuse", "intensity": 3 },
+        { "slug": "dribbler", "intensity": 2 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fw-2",
+      "personId": "evair-plm-t8mn",
+      "name": "Evair",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 82,
+      "number": 11,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fw-3",
+      "personId": "sorato-vas-w4pk",
+      "name": "Sorato",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 60,
+      "number": 17,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fw-4",
+      "personId": "mauricinho-vas-l9bv",
+      "name": "Mauricinho",
+      "position": "FW",
+      "roles": ["CA", "PE"],
+      "overall": 60,
+      "number": 18,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fw-5",
+      "personId": "brener-vas-x6qm",
+      "name": "Brener",
+      "position": "FW",
+      "roles": ["CA", "PD"],
+      "overall": 60,
+      "number": 19,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "vas97-fw-6",
+      "personId": "luiz-claudio-vas-f3rp",
+      "name": "Luiz Cláudio",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 58,
+      "number": 20,
+      "traits": [],
+      "specialAbility": null
+    }
+  ]
+}
