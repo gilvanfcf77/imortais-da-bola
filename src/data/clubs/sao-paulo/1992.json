@@ -57,7 +57,7 @@
       "name": "Antônio Carlos",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 78,
+      "overall": 81,
       "number": 3,
       "traits": [],
       "specialAbility": null
@@ -284,7 +284,10 @@
       "roles": ["CA"],
       "overall": 88,
       "number": 7,
-      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
+      "traits": [
+        { "slug": "sharpshooter", "intensity": 3 },
+        { "slug": "dribbler", "intensity": 1 }
+      ],
       "specialAbility": null
     },
     {
@@ -317,7 +320,7 @@
       "roles": ["PE"],
       "overall": 75,
       "number": 11,
-      "traits": [],
+      "traits": [{ "slug": "dribbler", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -345,7 +348,7 @@
     {
       "id": "spa92-fw-7",
       "personId": "cuca-a5pr",
-      "name": "Cuca",
+      "name": "Flávio Cuca",
       "position": "FW",
       "roles": ["CA", "PE"],
       "overall": 58,

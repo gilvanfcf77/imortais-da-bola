@@ -38,9 +38,9 @@
       "name": "Miranda",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 79,
+      "overall": 80,
       "number": 5,
-      "traits": [{ "slug": "wall", "intensity": 1 }],
+      "traits": [{ "slug": "wall", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -49,9 +49,9 @@
       "name": "André Dias",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 76,
+      "overall": 79,
       "number": 3,
-      "traits": [],
+      "traits": [{ "slug": "wall", "intensity": 1 }],
       "specialAbility": null
     },
     {
@@ -94,9 +94,9 @@
       "name": "Jorge Wagner",
       "position": "FB",
       "roles": ["LE"],
-      "overall": 74,
+      "overall": 77,
       "number": 7,
-      "traits": [],
+      "traits": [{ "slug": "freeKickSpecialist", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -163,7 +163,10 @@
       "roles": ["MD", "ME"],
       "overall": 75,
       "number": 20,
-      "traits": [{ "slug": "dribbler", "intensity": 1 }],
+      "traits": [
+        { "slug": "dribbler", "intensity": 1 },
+        { "slug": "shortFuse", "intensity": 2 }
+      ],
       "specialAbility": null
     },
     {
@@ -220,9 +223,9 @@
       "name": "Borges",
       "position": "FW",
       "roles": ["CA", "PD"],
-      "overall": 68,
+      "overall": 77,
       "number": 17,
-      "traits": [],
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
       "specialAbility": null
     },
     {

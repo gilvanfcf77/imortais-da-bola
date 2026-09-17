@@ -37,7 +37,7 @@
       "roles": ["ZAG"],
       "overall": 81,
       "number": 3,
-      "traits": [],
+      "traits": [{ "slug": "cynicalFouler", "intensity": 1 }],
       "specialAbility": null
     },
     {
@@ -135,7 +135,7 @@
       "name": "Givanildo Oliveira",
       "position": "MF",
       "roles": ["VOL"],
-      "overall": 72,
+      "overall": 78,
       "number": 5,
       "traits": [],
       "specialAbility": null
@@ -193,7 +193,7 @@
       "roles": ["CA"],
       "overall": 82,
       "number": 9,
-      "traits": [{ "slug": "sharpshooter", "intensity": 1 }],
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -204,7 +204,7 @@
       "roles": ["PD", "PE"],
       "overall": 81,
       "number": 7,
-      "traits": [],
+      "traits": [{ "slug": "dribbler", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -259,7 +259,7 @@
       "roles": ["CA", "PE"],
       "overall": 73,
       "number": 9,
-      "traits": [],
+      "traits": [{ "slug": "shortFuse", "intensity": 2 }],
       "specialAbility": null
     }
   ]

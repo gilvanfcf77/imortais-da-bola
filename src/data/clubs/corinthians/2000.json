@@ -37,7 +37,7 @@
       "roles": ["ZAG"],
       "overall": 76,
       "number": 16,
-      "traits": [],
+      "traits": [{ "slug": "leader", "intensity": 1 }],
       "specialAbility": null
     },
     {
@@ -46,9 +46,9 @@
       "name": "Adílson",
       "position": "CB",
       "roles": ["ZAG", "VOL"],
-      "overall": 74,
+      "overall": 76,
       "number": 3,
-      "traits": [],
+      "traits": [{ "slug": "leader", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -284,7 +284,7 @@
       "roles": ["CA", "PD"],
       "overall": 55,
       "number": 9,
-      "traits": [],
+      "traits": [{ "slug": "dribbler", "intensity": 1 }],
       "specialAbility": null
     }
   ]

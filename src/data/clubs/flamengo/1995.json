@@ -64,7 +64,7 @@
     },
     {
       "id": "fla95-cb-3",
-      "personId": "marcio-costa-fla-k5ur",
+      "personId": "marcio-costa-w7dl",
       "name": "Márcio Costa",
       "position": "CB",
       "roles": ["ZAG", "LD"],
@@ -82,7 +82,10 @@
       "roles": ["LE"],
       "overall": 88,
       "number": 6,
-      "traits": [{ "slug": "leader", "intensity": 2 }],
+      "traits": [
+        { "slug": "leader", "intensity": 2 },
+        { "slug": "freeKickSpecialist", "intensity": 2 }
+      ],
       "specialAbility": null
     },
     {
@@ -116,7 +119,7 @@
       "roles": ["MC"],
       "overall": 79,
       "number": 8,
-      "traits": [],
+      "traits": [{ "slug": "playmaker", "intensity": 2 }],
       "specialAbility": null
     },
     {
@@ -172,7 +175,10 @@
       "roles": ["CA"],
       "overall": 96,
       "number": 11,
-      "traits": [{ "slug": "sharpshooter", "intensity": 3 }],
+      "traits": [
+        { "slug": "sharpshooter", "intensity": 3 },
+        { "slug": "shortFuse", "intensity": 2 }
+      ],
       "specialAbility": null
     },
     {
@@ -183,7 +189,10 @@
       "roles": ["CA"],
       "overall": 87,
       "number": 7,
-      "traits": [{ "slug": "dribbler", "intensity": 2 }],
+      "traits": [
+        { "slug": "dribbler", "intensity": 2 },
+        { "slug": "shortFuse", "intensity": 3 }
+      ],
       "specialAbility": null
     },
     {
@@ -203,9 +212,9 @@
       "name": "Nélio",
       "position": "FW",
       "roles": ["PE"],
-      "overall": 64,
+      "overall": 71,
       "number": 11,
-      "traits": [],
+      "traits": [{ "slug": "sharpshooter", "intensity": 1 }],
       "specialAbility": null
     }
   ]
