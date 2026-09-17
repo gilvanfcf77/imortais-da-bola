@@ -83,6 +83,17 @@ pessoa, ou só o apelido (ex.: "Vampeta", "Geraldão") quando é assim que o
 jogador é universalmente reconhecido, sem que o nome de registro agregue
 nada. Ver decisão 73 em `info/DECISOES.md`.
 
+**Pesquisar estilo de jogo pra traços, não só currículo pro overall.**
+Pesquisar o currículo de um jogador (seleção, títulos, artilharia) pra
+calibrar o `overall` não é suficiente — é preciso uma pergunta separada,
+por jogador, sobre o **estilo de jogo/personalidade** dele em campo,
+cruzando com a lista de traços existentes (`batedor_faltas`, `pavio_curto`,
+`catimbeiro`, `flopper`, `artilheiro`, `garcom`, `muralha`, `driblador`,
+`lider`). Já aconteceu de um jogador com reputação real forte pra um traço
+(ex.: Júnior Baiano, conhecido por jogo duro/violento — `pavio_curto`) ficar
+sem nenhum traço porque a pesquisa de elenco original não tinha perguntado
+isso especificamente.
+
 ## Traços (características)
 
 Traços dão personalidade ao time sorteado — dois times de overall parecido

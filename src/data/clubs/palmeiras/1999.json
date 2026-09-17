@@ -1,0 +1,306 @@
+{
+  "slug": "palmeiras",
+  "name": "Palmeiras",
+  "playable": true,
+  "era": 1999,
+  "legendary": true,
+  "cupEligible": true,
+  "pool": [
+    {
+      "id": "plm99-gk-1",
+      "personId": "marcos-plm-h7qw",
+      "name": "Marcos",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 91,
+      "number": 12,
+      "traits": [{ "slug": "wall", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-gk-2",
+      "personId": "velloso-plm-k2ru",
+      "name": "Velloso",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 79,
+      "number": 1,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-gk-3",
+      "personId": "sergio-plm-b8oy",
+      "name": "Sérgio",
+      "position": "GK",
+      "roles": ["GOL"],
+      "overall": 60,
+      "number": 22,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "plm99-cb-1",
+      "personId": "junior-baiano-c4mz",
+      "name": "Júnior Baiano",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 80,
+      "number": 3,
+      "traits": [{ "slug": "shortFuse", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-cb-2",
+      "personId": "roque-junior-t9fl",
+      "name": "Roque Júnior",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 80,
+      "number": 5,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-cb-3",
+      "personId": "cleber-plm-w3nh",
+      "name": "Cléber",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 76,
+      "number": 4,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-cb-4",
+      "personId": "catalino-rivarola-d6pe",
+      "name": "Catalino Rivarola",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 68,
+      "number": 14,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-cb-5",
+      "personId": "agnaldo-liz-y1uq",
+      "name": "Agnaldo",
+      "position": "CB",
+      "roles": ["ZAG"],
+      "overall": 61,
+      "number": 23,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "plm99-fb-1",
+      "personId": "francisco-arce-r5jx",
+      "name": "Arce",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 83,
+      "number": 2,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fb-2",
+      "personId": "junior-nagata-s7km",
+      "name": "Júnior",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 78,
+      "number": 6,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fb-3",
+      "personId": "nenem-plm-f2vc",
+      "name": "Neném",
+      "position": "FB",
+      "roles": ["LD"],
+      "overall": 62,
+      "number": 25,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fb-4",
+      "personId": "rubens-junior-plm-q9wz",
+      "name": "Rubens Júnior",
+      "position": "FB",
+      "roles": ["LE"],
+      "overall": 58,
+      "number": 21,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "plm99-mf-1",
+      "personId": "cesar-sampaio-m3bx",
+      "name": "César Sampaio",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 85,
+      "number": 8,
+      "traits": [{ "slug": "leader", "intensity": 3 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-2",
+      "personId": "alex-plm-h4dt",
+      "name": "Alex",
+      "position": "MF",
+      "roles": ["MC", "MAT"],
+      "overall": 85,
+      "number": 10,
+      "traits": [
+        { "slug": "playmaker", "intensity": 2 },
+        { "slug": "freeKickSpecialist", "intensity": 2 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-3",
+      "personId": "zinho-plm-n8yv",
+      "name": "Zinho",
+      "position": "MF",
+      "roles": ["ME", "MAT"],
+      "overall": 83,
+      "number": 11,
+      "traits": [{ "slug": "playmaker", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-4",
+      "personId": "rogerio-fidelis-e6lp",
+      "name": "Rogério",
+      "position": "MF",
+      "roles": ["MD", "ME"],
+      "overall": 76,
+      "number": 16,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-5",
+      "personId": "galeano-plm-j5rc",
+      "name": "Galeano",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 74,
+      "number": 15,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-6",
+      "personId": "jackson-plm-p7tw",
+      "name": "Jackson",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 70,
+      "number": 20,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-7",
+      "personId": "pedrinho-jose-pedro-x2fq",
+      "name": "Pedrinho",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 64,
+      "number": 19,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-8",
+      "personId": "juliano-vicentini-b9nk",
+      "name": "Juliano",
+      "position": "MF",
+      "roles": ["MC"],
+      "overall": 60,
+      "number": 24,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-mf-9",
+      "personId": "tiago-silva-plm-l4gv",
+      "name": "Tiago Silva",
+      "position": "MF",
+      "roles": ["VOL"],
+      "overall": 55,
+      "number": 18,
+      "traits": [],
+      "specialAbility": null
+    },
+
+    {
+      "id": "plm99-fw-1",
+      "personId": "paulo-nunes-w6hz",
+      "name": "Paulo Nunes",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 80,
+      "number": 7,
+      "traits": [
+        { "slug": "sharpshooter", "intensity": 2 },
+        { "slug": "dribbler", "intensity": 2 }
+      ],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fw-2",
+      "personId": "oseas-plm-d3ky",
+      "name": "Oséas",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 78,
+      "number": 9,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fw-3",
+      "personId": "evair-plm-t8mn",
+      "name": "Evair",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 80,
+      "number": 17,
+      "traits": [{ "slug": "sharpshooter", "intensity": 2 }],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fw-4",
+      "personId": "euller-plm-r2wq",
+      "name": "Euller",
+      "position": "FW",
+      "roles": ["CA", "PE"],
+      "overall": 75,
+      "number": 13,
+      "traits": [],
+      "specialAbility": null
+    },
+    {
+      "id": "plm99-fw-5",
+      "personId": "edmilson-matias-y9jc",
+      "name": "Edmílson Matias",
+      "position": "FW",
+      "roles": ["CA"],
+      "overall": 62,
+      "number": 26,
+      "traits": [],
+      "specialAbility": null
+    }
+  ]
+}
