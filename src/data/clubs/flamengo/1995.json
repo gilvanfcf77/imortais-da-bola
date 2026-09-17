@@ -12,7 +12,7 @@
       "name": "Emerson",
       "position": "GK",
       "roles": ["GOL"],
-      "overall": 76,
+      "overall": 79,
       "number": 1,
       "traits": [],
       "specialAbility": null
@@ -46,7 +46,7 @@
       "name": "Agnaldo",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 76,
+      "overall": 79,
       "number": 4,
       "traits": [],
       "specialAbility": null
@@ -57,7 +57,7 @@
       "name": "Jorge Luís",
       "position": "CB",
       "roles": ["ZAG"],
-      "overall": 73,
+      "overall": 77,
       "number": 3,
       "traits": [],
       "specialAbility": null
@@ -106,7 +106,7 @@
       "name": "Fabinho",
       "position": "MF",
       "roles": ["VOL", "LE"],
-      "overall": 76,
+      "overall": 79,
       "number": 6,
       "traits": [],
       "specialAbility": null
